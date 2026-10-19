@@ -1,0 +1,11 @@
+{
+  "rows": {
+    "COUNT-LESS": 2,
+    "COUNT-MORE": 3,
+    "COUNT-EQUAL": 4,
+    "COUNT-DECIMAL": 5,
+    "P-A": 6,
+    "COUNT-UNKNOWN": 7,
+    "COUNT-BLANK": 8
+  }
+}

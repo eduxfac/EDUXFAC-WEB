@@ -1,0 +1,165 @@
+{
+  "fecha_lima": "2026-10-16",
+  "tipo": "Auditoría estática y aritmética en memoria; no son pruebas integración/UI ni certificación fiscal",
+  "app_importada": false,
+  "db_conectada": false,
+  "servidor_iniciado": false,
+  "pruebas": 36,
+  "aprobadas": 36,
+  "fallidas": 0,
+  "checks": [
+    {
+      "name": "Los cinco selectores de documento existen",
+      "ok": true
+    },
+    {
+      "name": "Checkout común registra /api/sales y tipo_comprobante",
+      "ok": true
+    },
+    {
+      "name": "Sin ramificación de stock/pagos por documento en alta de venta",
+      "ok": true
+    },
+    {
+      "name": "Alta de venta no valida RUC, razón social ni enum fiscal",
+      "ok": true
+    },
+    {
+      "name": "Alta de venta verifica empresa de cliente",
+      "ok": true
+    },
+    {
+      "name": "Existe secuencia con clave empresa/sucursal/tipo/serie",
+      "ok": true
+    },
+    {
+      "name": "Alta de venta no consume secuencias ni guarda serie/número",
+      "ok": true
+    },
+    {
+      "name": "Esquema de ventas no tiene restricción única fiscal",
+      "ok": true
+    },
+    {
+      "name": "Subtotal es suma redondeada de cantidad por precio",
+      "ok": true
+    },
+    {
+      "name": "Total es subtotal menos descuento, sin sumar/desglosar IGV",
+      "ok": true
+    },
+    {
+      "name": "Descuento global existe API pero no se envía en checkout",
+      "ok": true
+    },
+    {
+      "name": "Observación visual no enviada por checkout",
+      "ok": true
+    },
+    {
+      "name": "Monto recibido y vuelto no se guardan en payload",
+      "ok": true
+    },
+    {
+      "name": "Snapshot actual contiene precio/cantidad/costo/presentación",
+      "ok": true
+    },
+    {
+      "name": "Receipt consulta maestros actuales de producto/cliente/emisor",
+      "ok": true
+    },
+    {
+      "name": "Receipt utiliza total bruto por detalle",
+      "ok": true
+    },
+    {
+      "name": "Impresión no desglosa IGV y tiene fallback UUID",
+      "ok": true
+    },
+    {
+      "name": "Clientes tienen documento, nombre, contacto y dirección",
+      "ok": true
+    },
+    {
+      "name": "Clientes carecen de campos separados fiscal/geografía",
+      "ok": true
+    },
+    {
+      "name": "Factura solo valida 11 dígitos en selección UI",
+      "ok": true
+    },
+    {
+      "name": "Devolución opera sobre venta bloqueada y motivo",
+      "ok": true
+    },
+    {
+      "name": "Devolución conserva costo por factor y repone stock",
+      "ok": true
+    },
+    {
+      "name": "Devolución exige caja y total mismo día Lima",
+      "ok": true
+    },
+    {
+      "name": "Devolución deja rastro, egreso y estado operativo",
+      "ok": true
+    },
+    {
+      "name": "Reportes netos restan devoluciones y pagos reembolso",
+      "ok": true
+    },
+    {
+      "name": "RLS clasifica secuencias y rama, rechaza tablas desconocidas",
+      "ok": true
+    },
+    {
+      "name": "Permisos actuales cierran APIs desconocidas",
+      "ok": true
+    },
+    {
+      "name": "Sin módulos productivos XML/CDR/proveedor en fuentes auditadas",
+      "ok": true
+    },
+    {
+      "name": "Caracterización 118 no recibe IGV adicional",
+      "ok": true
+    },
+    {
+      "name": "Caracterización dos unidades a 59 = 118",
+      "ok": true
+    },
+    {
+      "name": "Caracterización descuento global 18 sobre 118 = 100",
+      "ok": true
+    },
+    {
+      "name": "Caracterización cantidad API decimal .125 x 19.99 = 2.50",
+      "ok": true
+    },
+    {
+      "name": "Caracterización redondeo monetario extraído 1.005 = 1.01",
+      "ok": true
+    },
+    {
+      "name": "Riesgo analítico split 3 lotes: importe detalle 117.99 frente cabecera 118",
+      "ok": true,
+      "detail": {
+        "solo_formula": true,
+        "impacto_datos_reales": "no consultado"
+      }
+    },
+    {
+      "name": "Caracterización devolución acumulativa conserva residuo final",
+      "ok": true
+    },
+    {
+      "name": "Ejemplo de diseño gravado inclusivo: 118 = base100 + impuesto18",
+      "ok": true,
+      "detail": {
+        "propuesto": true,
+        "no_aplicado": true
+      }
+    }
+  ],
+  "nota_harness": "Primer intento incluía la función posterior de Configuración en la búsqueda de validaciones fiscales. Se acotó al handler exacto de alta de venta y se repitió solo esa comprobación. No hubo cambios de aplicación."
+}

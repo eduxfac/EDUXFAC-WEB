@@ -1,0 +1,1 @@
+{"ok":true,"preflight":true,"checks":["PILOT_READ_ONLY","EXISTING_PILOT_USER_ACTIVE","BRANCH_ASSIGNED","TENANT_ROLE_UNIQUE","RUNTIME_NO_BYPASS","44_FORCE_RLS","RLS_FOREIGN_SALES_INVISIBLE","EXISTING_AUTH_HTTP_200"],"force_rls":44,"read_only":true,"token_exported":false}

@@ -1,0 +1,30 @@
+{
+  "status": "DEPLOYED_WEB_PILOTO_V2_GO_MANUAL",
+  "date": "2026-10-13",
+  "tests": {
+    "passed": 176,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "duration_ms": 47202.4671,
+    "fixture_databases_only": true
+  },
+  "sha256": {
+    "server/src/app.js": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7",
+    "server/src/sale-profitability.js": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220",
+    "public/index.html": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e",
+    "public/sale-profitability.js": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407",
+    "tests/sale-profitability.test.js": "a4803b6d7fd3f9b725a83ecf76ac908f6bef5653b37f051a3e4ec028113cbfbe"
+  },
+  "vps_modified": true,
+  "real_data_modified": false,
+  "missing_cost_policy": "BLOCK_WITHOUT_VERIFIABLE_COST",
+  "admin_override": false,
+  "precision_rule": "NET_REVENUE_MINUS_ACTUAL_BASE_UNITS_COST_POSTGRES_NUMERIC",
+  "native_linux_validation": "PASSED_338_0",
+  "deployment_go": true,
+  "deployed": true,
+  "deployment_attempt_status": "V2_OK",
+  "deployment_report": "DESPLIEGUE_RENTABILIDAD_V2_RESULTADO.md",
+  "post_deploy_validation": "PASSED_338_0_LOCAL_ISOLATED"
+}

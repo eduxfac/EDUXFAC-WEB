@@ -1,0 +1,75 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import jwt from 'jsonwebtoken';
+import {createFixture,ids,PASSWORD,TEST_SESSION,serviceToken} from './helpers/initial-inventory-template-fixture.js';
+import {randomUUID} from 'node:crypto';
+test('Aislamiento real SQL y HTTP Empresa A / Empresa B',async t=>{
+ const f=await createFixture();t.after(()=>f.close());const beforeB=await f.snapshotB();
+ const own=(route,options={})=>f.request(route,{token:f.tokenA,...options});
+ await t.test('login exige empresa y resuelve homónimos sin selección arbitraria',async()=>{
+  assert.equal((await f.request('/api/auth/login',{method:'POST',body:{usuario:'admin',password:PASSWORD}})).status,400);
+  assert.equal((await f.login('A')).data.user.empresa_id,ids.empresaA);assert.equal((await f.login('B')).data.user.empresa_id,ids.empresaB);
+  const ruc=await f.request('/api/auth/login',{method:'POST',body:{ruc:'20111111111',usuario:'admin',password:PASSWORD}});assert.equal(ruc.data.user.empresa_id,ids.empresaA);
+  assert.equal((await f.request('/api/setup/complete',{method:'POST',body:{empresa:'No autorizada'}})).status,403);
+ });
+ await t.test('A solo consulta sus productos; B no aparece',async()=>{
+  const result=await own('/api/products?sucursal_id='+ids.sucursalA);assert.equal(result.status,200);assert.ok(result.data.some(p=>p.id===ids.productoA));assert.ok(!result.data.some(p=>p.id===ids.productoB));
+ });
+ await t.test('A no consulta sucursal B ni presentaciones de producto B',async()=>{
+  assert.equal((await own('/api/products?sucursal_id='+ids.sucursalB)).status,403);
+  assert.ok((await own('/api/products/'+ids.productoB+'/presentations?sucursal_id='+ids.sucursalA)).status>=400);
+ });
+ await t.test('A no lista, consulta ni modifica usuarios B',async()=>{
+  const list=await own('/api/admin/users');assert.equal(list.status,200);assert.ok(!list.data.some(u=>u.id===ids.usuarioB));
+  assert.equal((await own('/api/admin/users/'+ids.usuarioB+'/permissions')).status,404);
+  assert.ok((await own('/api/admin/users/'+ids.usuarioB+'/status',{method:'PATCH',body:{activo:false}})).status>=400);
+  assert.ok((await own('/api/admin/users/'+ids.usuarioB+'/assignments',{method:'PUT',body:{asignaciones:[{sucursal_id:ids.sucursalA,rol_id:1}]}})).status>=400);
+ });
+ await t.test('A no asigna usuario A a sucursal B y la transacción revierte',async()=>{
+  const before=(await f.query('select * from usuario_sucursal where usuario_id=$1 order by sucursal_id',[ids.usuarioA])).rows;
+  const r=await own('/api/admin/users/'+ids.usuarioA+'/assignments',{method:'PUT',body:{asignaciones:[{sucursal_id:ids.sucursalB,rol_id:1}]}});assert.ok(r.status>=400);
+  assert.deepEqual((await f.query('select * from usuario_sucursal where usuario_id=$1 order by sucursal_id',[ids.usuarioA])).rows,before);
+ });
+ await t.test('A no modifica producto B',async()=>{
+  assert.ok((await own('/api/admin/products/'+ids.productoB,{method:'DELETE',body:{}})).status>=400);
+  assert.ok((await own('/api/admin/products/'+ids.productoB,{method:'PUT',body:{nombre:'Cambio indebido'}})).status>=400);
+ });
+ await t.test('A no usa producto B en orden ni solicitud; no deja cabeceras',async()=>{
+  assert.equal((await own('/api/purchase-orders',{method:'POST',body:{sucursal_id:ids.sucursalA,items:[{producto_id:ids.productoB,cantidad:1,costo_referencia:2}]}})).status,403);
+  assert.equal((await own('/api/internal-requests',{method:'POST',body:{sucursal_solicitante_id:ids.sucursalA,items:[{producto_id:ids.productoB,cantidad:1}]}})).status,403);
+  assert.equal((await f.query('select count(*)::int n from ordenes_compra where empresa_id=$1',[ids.empresaA])).rows[0].n,0);
+  assert.equal((await f.query('select count(*)::int n from solicitudes_internas where empresa_id=$1',[ids.empresaA])).rows[0].n,0);
+ });
+ await t.test('A no usa sucursal B para órdenes, solicitudes o transferencias',async()=>{
+  const items=[{producto_id:ids.productoA,cantidad:1}];
+  assert.equal((await own('/api/purchase-orders',{method:'POST',body:{sucursal_id:ids.sucursalB,items}})).status,403);
+  assert.equal((await own('/api/internal-requests',{method:'POST',body:{sucursal_solicitante_id:ids.sucursalB,items}})).status,403);
+  assert.ok((await own('/api/transfers',{method:'POST',body:{sucursal_origen_id:ids.sucursalA,sucursal_destino_id:ids.sucursalB,items}})).status>=400);
+ });
+ await t.test('A no transfiere producto B ni atiende solicitud B; conserva sus detalles',async()=>{
+  assert.equal((await own('/api/transfers',{method:'POST',body:{sucursal_origen_id:ids.sucursalA,sucursal_destino_id:ids.sucursalA2,items:[{producto_id:ids.productoB,cantidad:1}]}})).status,403);
+  assert.equal((await own('/api/transfers',{method:'POST',body:{sucursal_origen_id:ids.sucursalA,sucursal_destino_id:ids.sucursalA2,solicitud_id:ids.solicitudB,items:[{producto_id:ids.productoA,cantidad:1}]}})).status,403);
+  assert.equal((await f.query('select count(*)::int n from transferencias where empresa_id=$1',[ids.empresaA])).rows[0].n,0);
+ });
+ await t.test('JWT A no funciona como usuario/empresa B ni acepta manipulación',async()=>{
+  const claims=jwt.decode(f.tokenA);const mismatched=jwt.sign({empresa_id:ids.empresaB,auth_version:claims.auth_version,type:'web_user'},TEST_SESSION,{subject:ids.usuarioA,audience:'eduxfac-web',expiresIn:'1h'});
+  assert.equal((await f.request('/api/bootstrap',{token:mismatched})).status,401);
+  const parts=f.tokenA.split('.');parts[1]=Buffer.from(JSON.stringify({...claims,empresa_id:ids.empresaB})).toString('base64url');assert.equal((await f.request('/api/bootstrap',{token:parts.join('.')})).status,401);
+ });
+ await t.test('operaciones propias válidas siguen funcionando',async()=>{
+  const order=await own('/api/purchase-orders',{method:'POST',body:{sucursal_id:ids.sucursalA,items:[{producto_id:ids.productoA,cantidad:1,costo_referencia:2}]}});assert.equal(order.status,201);
+  const request=await own('/api/internal-requests',{method:'POST',body:{sucursal_solicitante_id:ids.sucursalA2,sucursal_origen_id:ids.sucursalA,items:[{producto_id:ids.productoA,cantidad:1}]}});assert.equal(request.status,201);
+  const transfer=await own('/api/transfers',{method:'POST',body:{sucursal_origen_id:ids.sucursalA,sucursal_destino_id:ids.sucursalA2,solicitud_id:request.data.id,items:[{producto_id:ids.productoA,cantidad:1}]}});assert.equal(transfer.status,201);
+  assert.equal((await f.query('select estado from solicitudes_internas where id=$1',[request.data.id])).rows[0].estado,'ATENDIDA');
+ });
+ await t.test('suspensión invalida sesión abierta y reactivar exige nuevo login; B sigue intacta',async()=>{
+  const original=f.tokenA;assert.equal((await f.request('/api/internal/admin/v1/empresas/'+ids.empresaA+'/suspender',{method:'POST',token:serviceToken(),body:{command_id:randomUUID(),motivo:'PRUEBA AISLADA'}})).status,200);
+  assert.equal((await own('/api/bootstrap')).status,403);assert.equal((await f.login('A')).status,403);
+  assert.equal((await own('/api/purchase-orders',{method:'POST',body:{sucursal_id:ids.sucursalA,items:[{producto_id:ids.productoA,cantidad:1}]}})).status,403);
+  assert.equal((await f.request('/api/bootstrap',{token:f.tokenB})).status,200);
+  assert.equal((await f.request('/api/internal/admin/v1/empresas/'+ids.empresaA+'/reactivar',{method:'POST',token:serviceToken(),body:{command_id:randomUUID(),motivo:'PRUEBA AISLADA'}})).status,200);
+  assert.equal((await f.request('/api/bootstrap',{token:original})).status,401);
+  const fresh=await f.login('A');assert.equal(fresh.status,200);assert.equal((await f.request('/api/bootstrap',{token:fresh.data.token})).status,200);
+  assert.deepEqual(await f.snapshotB(),beforeB);
+ });
+});

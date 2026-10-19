@@ -1,0 +1,18 @@
+{
+  "passed": 35,
+  "failed": 0,
+  "fixed_fonts": true,
+  "global_overflow": false,
+  "report_table_contained_scroll": true,
+  "scope": "isolated official DOM; CSS fetched from deployed HTTPS; fictitious data; no authenticated session or data writes",
+  "inventory_filter_768": {
+    "left": 25,
+    "right": 728,
+    "viewport": 753
+  },
+  "product_modal_375": {
+    "left": 8,
+    "right": 352,
+    "viewport": 360
+  }
+}

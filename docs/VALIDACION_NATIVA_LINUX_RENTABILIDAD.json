@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-13",
+  "result": "GO_FOR_CONTROLLED_DEPLOYMENT",
+  "deployed": false,
+  "vps_accessed": false,
+  "postgres_native": "16.15",
+  "node_linux": "v24.21.0",
+  "linux": "Ubuntu 24.04",
+  "container": "eduxfac-profit-native-20261013",
+  "network": "none",
+  "host_mounts": [],
+  "tests": {
+    "linux_regression": {
+      "passed": 300,
+      "failed": 0,
+      "skipped": 0
+    },
+    "native_profit": {
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0
+    },
+    "production_profile_global_rls": {
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0
+    },
+    "total_passed": 338,
+    "total_failed": 0
+  },
+  "rls": {
+    "tables": 49,
+    "force_rls": 44,
+    "separate_roles": 5,
+    "runtime_superuser": false,
+    "runtime_bypassrls": false,
+    "real_server_no_test_adapter": true
+  },
+  "source_manifest_files": 91,
+  "candidate_functional_changes": false,
+  "concurrency": "ONE_PROFITABLE_ACCEPTED_ONE_UNPROFITABLE_ROLLED_BACK",
+  "deployment_prepared_only": true,
+  "blockers": [],
+  "container_stopped": true,
+  "oom_killed": false
+}

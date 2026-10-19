@@ -1,0 +1,10 @@
+{
+  "work": "/home/eduxadmin/.local/share/eduxfac/cost_consistency_deploy_20261014_005646",
+  "uploaded_files": 11,
+  "all_hashes_verified": true,
+  "tool_hashes": {
+    "DEPLOY_COSTS_V2.py": "80e9a404efa23748d08865dec80316a075fb4fbc42953fbc7cd6261d646b6da2",
+    "ROLLBACK_RENTABILIDAD_V2.py": "ab7a941e3d2c59d5f831abf009257b314ded0837331f9366659cddf7fd6b1a9b",
+    "MIGRATE_COSTS.mjs": "f1074ebcb722fda98e0ad20a54ab45b2a92020c3bcbb403e7b4443ae8413b4e6"
+  }
+}

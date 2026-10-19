@@ -1,0 +1,8 @@
+{
+  "server/src/app.js": "7c32762622b79f77c5b3cb03ce0bc16f355eaf7c4766d865e6c29aab51ad02ab",
+  "public/index.html": "3e73a96aa412757b51409f2783fa84e8112fff8af623664a1d3bfecacb0a3295",
+  "server/src/sale-profitability.js": "0eb7a95cfe300f8649fb6e8dd5c6a71795bb0fec52b6018a1d7803644eafae5b",
+  "server/src/inventory-entry.js": "0b3a49ac0ea077db9bc29fb8dbc08aa2d92d20aa8761a47f81652eb1c4de897f",
+  "server/src/stock-cost.js": "f2f1bb2c8f05f8ee4b1a9b6a2d468a141575281680afb0b41e43c871819ddab8",
+  "database/schema.sql": "693f6f2ba6f4b2aa35d7103375d9780c7db80b63d78ccd24b24886a6b2225e40"
+}

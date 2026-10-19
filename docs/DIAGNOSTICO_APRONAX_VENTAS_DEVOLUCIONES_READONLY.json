@@ -1,0 +1,112 @@
+{
+  "read_only": true,
+  "sales": [
+    {
+      "id": "e9692f8b-498e-4dfb-b6e0-6ee728c828e3",
+      "numero": null,
+      "created_at": "2026-10-13T18:08:20.062Z",
+      "estado": "ANULADA",
+      "total": "185.00",
+      "nombre": "APRONAX 550MG",
+      "detalle_id": "f128db98-e08a-4884-8787-890d8b12efa9",
+      "lote_id": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+      "cantidad": "1.000000000000",
+      "cantidad_base": "120.000",
+      "factor_unidades": "120.000",
+      "presentacion_venta": "CAJA",
+      "precio_unitario": "185.00",
+      "costo_snapshot": "188.4000",
+      "importe_neto": "185.00"
+    },
+    {
+      "id": "15f16366-68b4-4de0-8b33-8b740ab39f20",
+      "numero": null,
+      "created_at": "2026-10-13T23:33:55.307Z",
+      "estado": "ANULADA",
+      "total": "230.00",
+      "nombre": "APRONAX 550MG",
+      "detalle_id": "df14166b-be8c-4919-ab06-7cac5b42384f",
+      "lote_id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+      "cantidad": "1.000000000000",
+      "cantidad_base": "120.000",
+      "factor_unidades": "120.000",
+      "presentacion_venta": "CAJA",
+      "precio_unitario": "230.00",
+      "costo_snapshot": "0.0000",
+      "importe_neto": "230.00"
+    },
+    {
+      "id": "4e0bbb6f-8a05-45ed-9f50-5afa729f1e7e",
+      "numero": null,
+      "created_at": "2026-10-13T23:41:00.821Z",
+      "estado": "ANULADA",
+      "total": "190.00",
+      "nombre": "APRONAX 550MG",
+      "detalle_id": "f4ff280a-5dff-472f-92d9-d623cdf37db4",
+      "lote_id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+      "cantidad": "1.000000000000",
+      "cantidad_base": "120.000",
+      "factor_unidades": "120.000",
+      "presentacion_venta": "CAJA",
+      "precio_unitario": "190.00",
+      "costo_snapshot": "0.0000",
+      "importe_neto": "190.00"
+    }
+  ],
+  "returns": [
+    {
+      "id": "ca671fba-6053-424f-a54c-02e161722b3c",
+      "venta_id": "4e0bbb6f-8a05-45ed-9f50-5afa729f1e7e",
+      "created_at": "2026-10-13T23:41:28.676Z",
+      "tipo": "TOTAL",
+      "motivo": "DEVOLUCION",
+      "monto": "190.00",
+      "venta_detalle_id": "f4ff280a-5dff-472f-92d9-d623cdf37db4",
+      "cantidad": "1.000000000000",
+      "cantidad_base": "120.000",
+      "monto_linea": "190.00"
+    },
+    {
+      "id": "67bdb729-2d96-4a1d-a1f0-9bbfd8063b84",
+      "venta_id": "e9692f8b-498e-4dfb-b6e0-6ee728c828e3",
+      "created_at": "2026-10-13T23:41:43.065Z",
+      "tipo": "TOTAL",
+      "motivo": "DEVOLUCION",
+      "monto": "185.00",
+      "venta_detalle_id": "f128db98-e08a-4884-8787-890d8b12efa9",
+      "cantidad": "1.000000000000",
+      "cantidad_base": "120.000",
+      "monto_linea": "185.00"
+    },
+    {
+      "id": "15d03e60-f814-44a2-b496-8ab03a0ceb24",
+      "venta_id": "15f16366-68b4-4de0-8b33-8b740ab39f20",
+      "created_at": "2026-10-13T23:41:58.787Z",
+      "tipo": "TOTAL",
+      "motivo": "DEVOLUCION",
+      "monto": "230.00",
+      "venta_detalle_id": "df14166b-be8c-4919-ab06-7cac5b42384f",
+      "cantidad": "1.000000000000",
+      "cantidad_base": "120.000",
+      "monto_linea": "230.00"
+    }
+  ],
+  "balance_by_lot": [
+    {
+      "id": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+      "numero_lote": "DFDF",
+      "costo_unitario": "1.5700",
+      "cantidad_disponible": "0.000",
+      "sum_movimientos": "0.000",
+      "valor_movimientos": "0.00"
+    },
+    {
+      "id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+      "numero_lote": null,
+      "costo_unitario": "0.0000",
+      "cantidad_disponible": "120.000",
+      "sum_movimientos": "120.000",
+      "valor_movimientos": "188.40"
+    }
+  ]
+}

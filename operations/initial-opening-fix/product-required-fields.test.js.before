@@ -1,0 +1,94 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import {readFileSync} from 'node:fs';
+const native=process.platform==='linux'&&process.env.EDUXFAC_PROFIT_NATIVE==='yes';
+const {createFixture,ids}=await import(native?'./helpers/native-profit-fixture.js':'./helpers/isolated-web.js');
+const html=readFileSync(new URL('../public/index.html',import.meta.url),'utf8');
+function ui(){
+ const elements=new Map();const context={$:id=>{if(!elements.has(id))elements.set(id,{value:'',options:[],classList:{toggle(){}},setAttribute(){},focus(){}});return elements.get(id);}};
+ vm.createContext(context);
+ vm.runInContext(html.slice(html.indexOf('function validateProductForm(){'),html.indexOf('async function saveProduct()')),context);
+ return {context,el:context.$,set(values){for(const [k,v]of Object.entries(values))context.$(k).value=v;}};
+}
+const requiredUI={paCode:'P000003',paName:'Producto mínimo',paUnit:'UNIDAD',paMin:'0',paPrice:'2.50'};
+test('Formulario: solamente cinco obligatorios, opcionales vacíos y cero válido',()=>{
+ const f=ui();f.set(requiredUI);assert.doesNotThrow(()=>f.context.validateProductForm());
+ for(const id of Object.keys(requiredUI)){f.el(id).value='';assert.throws(()=>f.context.validateProductForm(),/obligatorios/);f.el(id).value=requiredUI[id];}
+ for(const id of ['paBarcode','paActive','paConcentration','paPresentation','paMax','paCategory','paLab']){
+  assert.doesNotThrow(()=>f.context.validateProductForm());assert.ok(!new RegExp('id="'+id+'"[^>]*\\brequired\\b').test(html));
+ }
+ for(const id of Object.keys(requiredUI))assert.match(html,new RegExp('id="'+id+'"[^>]*\\brequired\\b'));
+ for(const [id,value]of [['paMin','-1'],['paMin','abc'],['paPrice','Infinity'],['paPrice','-0.01'],['paMax','abc'],['paUnit','INVENTADA']]){
+  f.el(id).value=value;assert.throws(()=>f.context.validateProductForm(),/inválido|válida/);f.el(id).value=requiredUI[id]??'';
+ }
+ assert.match(html,/const body=\{codigo_interno:String\(\$\('paCode'\)\.value\)\.trim\(\)/);
+});
+test('API productos: cinco campos, nulos, restricciones y duplicados reales',async t=>{
+ const f=await createFixture();t.after(()=>f.close());let sequence=0;
+ const base=()=>({sucursal_id:ids.sucursalA,codigo_interno:'REQ-'+(++sequence),nombre:'Producto cinco campos '+sequence,unidad_medida:'UNIDAD',stock_minimo:0,precio:2.5});
+ const post=body=>f.request('/api/admin/products',{method:'POST',token:f.tokenA,body});
+ async function saved(body){
+  const r=await post(body);assert.equal(r.status,201,JSON.stringify(r.data));
+  const p=(await f.query('select * from productos where id=$1',[r.data.id])).rows[0];
+  const ps=(await f.query('select * from producto_sucursal where producto_id=$1 and sucursal_id=$2',[p.id,ids.sucursalA])).rows[0];
+  const prices=(await f.query('select * from precios_producto where producto_id=$1 and vigente_hasta is null',[p.id])).rows;
+  assert.equal(p.codigo_interno,body.codigo_interno.trim());assert.equal(Number(ps.stock_minimo),0);
+  assert.equal(Number(ps.stock_maximo),0);assert.equal(prices.length,1);assert.equal(Number(prices[0].precio_venta),Number(body.precio));
+  return p;
+ }
+ await t.test('solo cinco campos de usuario: guardado completo y sin equivalencias',async()=>{
+  const p=await saved(base());
+  for(const k of ['codigo_barras','principio_activo','concentracion','presentacion','categoria_id','laboratorio_id'])assert.equal(p[k],null);
+ });
+ for(const [key,label]of [['codigo_interno','código'],['nombre','nombre'],['unidad_medida','unidad'],['stock_minimo','stock mínimo'],['precio','precio']]){
+  await t.test('falta '+label+' se rechaza sin crear producto/precio/vínculo',async()=>{
+   const b=base();delete b[key];
+   const before=(await f.query("select (select count(*) from productos)::int products,(select count(*) from precios_producto)::int prices,(select count(*) from producto_sucursal)::int links")).rows[0];
+   const r=await post(b);assert.equal(r.status,400);assert.match(r.data.error,/obligatorios/);
+   assert.deepEqual((await f.query("select (select count(*) from productos)::int products,(select count(*) from precios_producto)::int prices,(select count(*) from producto_sucursal)::int links")).rows[0],before);
+  });
+ }
+ for(const [key,label]of [['codigo_barras','código de barras'],['stock_maximo','stock máximo'],['categoria_id','categoría'],['laboratorio_id','laboratorio'],['principio_activo','principio activo'],['concentracion','concentración'],['presentacion','presentación']]){
+  await t.test(label+' vacío, null u omitido válido',async()=>{
+   for(const v of ['',null,'   '])await saved({...base(),[key]:v});
+  });
+ }
+ await t.test('todos los opcionales vacíos simultáneamente',async()=>{
+  await saved({...base(),codigo_barras:'',principio_activo:'',concentracion:'',presentacion:'',stock_maximo:'',categoria_id:'',laboratorio_id:'',equivalencias:[]});
+ });
+ await t.test('mínimo 0 y precio explícito 0 conservan regla no negativa actual',async()=>{
+  await saved({...base(),stock_minimo:'0',precio:'0'});
+ });
+ for(const key of ['stock_minimo','precio']){
+  await t.test(key+' vacío/null no se convierte silenciosamente a cero',async()=>{
+   for(const v of ['',null,'   '])assert.equal((await post({...base(),[key]:v})).status,400);
+  });
+  await t.test(key+' rechaza texto, negativos, infinito y booleanos',async()=>{
+   for(const v of ['abc',-1,'Infinity','0x10',true,[]])assert.equal((await post({...base(),[key]:v})).status,400);
+  });
+ }
+ await t.test('unidad inexistente rechazada por API directa',async()=>assert.equal((await post({...base(),unidad_medida:'INVENTADA'})).status,400));
+ await t.test('duplicado de código se rechaza aunque nombre y barra sean distintos',async()=>{
+  const b=base();await saved(b);const r=await post({...base(),codigo_interno:b.codigo_interno});assert.equal(r.status,409);
+ });
+ await t.test('duplicado nombre mantiene regla de espacios y mayúsculas',async()=>{
+  const b=base();await saved(b);assert.equal((await post({...base(),nombre:'  '+b.nombre.toUpperCase().replaceAll(' ','   ')+'  '})).status,409);
+ });
+ await t.test('barra duplicada solo cuando se informa; blancos repetidos permitidos',async()=>{
+  const p=await saved({...base(),codigo_barras:'1234567891234'});
+  assert.equal((await post({...base(),codigo_barras:' '+p.codigo_barras+' '})).status,409);
+  await saved({...base(),codigo_barras:''});await saved({...base(),codigo_barras:null});
+ });
+ await t.test('categoría/laboratorio informados deben pertenecer a empresa',async()=>{
+  const category=(await f.query("insert into categorias(empresa_id,nombre) values($1,'Otra empresa') returning id",[ids.empresaB])).rows[0];
+  const lab=(await f.query("insert into laboratorios(empresa_id,nombre) values($1,'Otro laboratorio') returning id",[ids.empresaB])).rows[0];
+  assert.equal((await post({...base(),categoria_id:category.id})).status,400);
+  assert.equal((await post({...base(),laboratorio_id:lab.id})).status,400);
+ });
+ await t.test('índices y nulabilidad existentes soportan los opcionales sin migración',async()=>{
+  const columns=(await f.query("select column_name,is_nullable from information_schema.columns where table_name='productos' and table_schema='public'")).rows;
+  for(const key of ['codigo_barras','principio_activo','concentracion','presentacion','categoria_id','laboratorio_id'])assert.equal(columns.find(c=>c.column_name===key).is_nullable,'YES');
+  assert.equal(columns.find(c=>c.column_name==='stock_maximo').is_nullable,'NO');
+ });
+});

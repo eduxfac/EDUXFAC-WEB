@@ -1,0 +1,25 @@
+{
+  "all_three_deployed_files_match_D": true,
+  "HTTPS_HTML_matches_D_LF": true,
+  "UI_heading_present": true,
+  "template_download_hash_verified": true,
+  "template_columns": [
+    "C\u00f3digo interno",
+    "C\u00f3digo de barras",
+    "Producto",
+    "Principio activo",
+    "Concentraci\u00f3n",
+    "Presentaci\u00f3n",
+    "Unidad de medida",
+    "Categor\u00eda",
+    "Laboratorio",
+    "Stock del lote",
+    "Stock m\u00ednimo",
+    "Precio de compra",
+    "Precio de venta",
+    "Lote",
+    "Vencimiento"
+  ],
+  "template_information_sheet": true,
+  "template_two_lot_example": true
+}

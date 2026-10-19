@@ -1,0 +1,29 @@
+{
+  "path": "D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\docs\\physical_count_excel\\Conteo_Fisico_FICTICIO_MATRIZ.xlsx",
+  "opened_original_path": true,
+  "original_sha256": "34E9DDD8BFA49B49C9268550269B2677AFB47F243EB9255543357024E83BA6D1",
+  "length": 120,
+  "events": [
+    {
+      "utc": "2026-10-14T22:33:40.2692898Z",
+      "operation": "Workbooks",
+      "result": "ready_non_null_private"
+    },
+    {
+      "utc": "2026-10-14T22:33:40.7921987Z",
+      "operation": "Workbooks.Open",
+      "result": "success"
+    },
+    {
+      "utc": "2026-10-14T22:33:40.8323871Z",
+      "operation": "Workbook.Close",
+      "result": "success"
+    },
+    {
+      "utc": "2026-10-14T22:33:40.8331474Z",
+      "operation": "Excel.Quit",
+      "result": "success"
+    }
+  ],
+  "source_unchanged": true
+}

@@ -1,0 +1,86 @@
+{
+  "before": {
+    "product": {
+      "id": "9a284d0f-ea6c-4bce-ac1e-6c9d6b5341fc",
+      "empresa_id": "d931a031-83d4-4c18-a1a8-ba2e2ee79580",
+      "codigo_interno": "P-A",
+      "codigo_anterior": null,
+      "codigo_barras": null,
+      "nombre": "Producto exclusivo A",
+      "principio_activo": null,
+      "concentracion": null,
+      "presentacion": null,
+      "unidad_medida": null,
+      "categoria_id": null,
+      "laboratorio_id": null,
+      "stock_minimo": "0.000",
+      "stock_maximo": "0.000",
+      "tipo_afectacion_igv": null,
+      "favorito": false,
+      "precio_venta_dolares": "0.0000",
+      "recargo_propina": "0.0000",
+      "requiere_lote": true,
+      "activo": true,
+      "created_at": "2026-10-15T00:18:26.703Z",
+      "updated_at": "2026-10-15T00:18:26.703Z"
+    },
+    "lots": [
+      {
+        "id": "d7165e54-fe43-4b60-9f16-5c5ac3b0328e",
+        "producto_id": "9a284d0f-ea6c-4bce-ac1e-6c9d6b5341fc",
+        "sucursal_id": "8c6b2fbe-1b59-44b1-aaf0-bfb3bb01d38c",
+        "numero_lote": "LOTE-A",
+        "fecha_vencimiento": null,
+        "costo_unitario": "0",
+        "valor_base_costos": null,
+        "cantidad_inicial": "10.000",
+        "cantidad_disponible": "10.000",
+        "compra_detalle_id": null
+      }
+    ],
+    "prices": [],
+    "stock": 10
+  },
+  "after": {
+    "product": {
+      "id": "9a284d0f-ea6c-4bce-ac1e-6c9d6b5341fc",
+      "empresa_id": "d931a031-83d4-4c18-a1a8-ba2e2ee79580",
+      "codigo_interno": "P-A",
+      "codigo_anterior": null,
+      "codigo_barras": null,
+      "nombre": "Producto exclusivo A",
+      "principio_activo": null,
+      "concentracion": null,
+      "presentacion": null,
+      "unidad_medida": null,
+      "categoria_id": null,
+      "laboratorio_id": null,
+      "stock_minimo": "0.000",
+      "stock_maximo": "0.000",
+      "tipo_afectacion_igv": null,
+      "favorito": false,
+      "precio_venta_dolares": "0.0000",
+      "recargo_propina": "0.0000",
+      "requiere_lote": true,
+      "activo": true,
+      "created_at": "2026-10-15T00:18:26.703Z",
+      "updated_at": "2026-10-15T00:18:26.703Z"
+    },
+    "lots": [
+      {
+        "id": "d7165e54-fe43-4b60-9f16-5c5ac3b0328e",
+        "producto_id": "9a284d0f-ea6c-4bce-ac1e-6c9d6b5341fc",
+        "sucursal_id": "8c6b2fbe-1b59-44b1-aaf0-bfb3bb01d38c",
+        "numero_lote": "LOTE-A",
+        "fecha_vencimiento": null,
+        "costo_unitario": "0",
+        "valor_base_costos": null,
+        "cantidad_inicial": "10.000",
+        "cantidad_disponible": "10.000",
+        "compra_detalle_id": null
+      }
+    ],
+    "prices": [],
+    "stock": 10
+  }
+}

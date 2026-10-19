@@ -1,0 +1,74 @@
+{
+  "status": "NO_GO_STOPPED_ROLLBACK_VERIFIED",
+  "candidate_modified": false,
+  "candidate_sha256": "d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656",
+  "deployed_then_restored": true,
+  "active_sha256": "1e99adfc02152a633bcc3724d5fdc5f5d7f6b3871ff1f6feaf30fa2ddb488e65",
+  "backup": "/home/eduxadmin/.local/share/eduxfac/physical_count_deploy_20261014_165735/backup/server/src/inventory-count.js",
+  "postdeploy_checks": {
+    "actual_deployed_excel": 12,
+    "Windows_isolated": 19,
+    "passed": 31,
+    "linux_harness_startup_failed": 1,
+    "Linux_business_cases_executed": 0,
+    "native_Excel_repeat_executed": false
+  },
+  "cause": "Local Docker harness placed WEB code in /stage/EDUXFAC/WEB without its node_modules; ERR_MODULE_NOT_FOUND pg. Not a demonstrated WEB PILOTO application failure. Failed test triggered required rollback; no automatic redeploy.",
+  "recovery": {
+    "result": "ROLLBACK_VERIFIED_OK",
+    "current_sha256": "1e99adfc02152a633bcc3724d5fdc5f5d7f6b3871ff1f6feaf30fa2ddb488e65",
+    "original_restored": true,
+    "readiness": {
+      "loopback": {
+        "url": "http://127.0.0.1:3001/api/health",
+        "attempts": 3,
+        "pid": 349879,
+        "restarts": 15,
+        "stable_samples": 3
+      },
+      "https": {
+        "url": "https://app.eduxfac.com/api/health",
+        "attempts": 3,
+        "pid": 349879,
+        "restarts": 15,
+        "stable_samples": 3
+      }
+    },
+    "pm2": {
+      "id": 4,
+      "pid": 349879,
+      "status": "online",
+      "restarts": 15,
+      "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+      "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+      "mode": "PILOTO",
+      "port": "3001",
+      "worker": "false",
+      "mutation": "no"
+    },
+    "database_unchanged": true,
+    "other_processes_unchanged": true,
+    "app_admin_eduxfac_https_200": true,
+    "rollback_done": {
+      "ok": true,
+      "readiness": {
+        "loopback": {
+          "url": "http://127.0.0.1:3001/api/health",
+          "attempts": 4,
+          "pid": 349879,
+          "restarts": 15,
+          "stable_samples": 3
+        },
+        "https": {
+          "url": "https://app.eduxfac.com/api/health",
+          "attempts": 3,
+          "pid": 349879,
+          "restarts": 15,
+          "stable_samples": 3
+        }
+      }
+    }
+  },
+  "qa_container_removed": true,
+  "next_step": "Correct and preflight local isolated Linux dependencies before requesting/retrying deployment. No further changes performed."
+}

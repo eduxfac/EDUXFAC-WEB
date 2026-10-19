@@ -1,0 +1,5 @@
+{
+  "private_pid": 26240,
+  "checks_completed": [],
+  "error": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+}

@@ -1,0 +1,26 @@
+{
+  "suites": {
+    "NATIVO_POST_DEPLOY_CONSISTENCIA_COSTOS.log": {
+      "tests": 71,
+      "suites": 0,
+      "pass": 71,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "LINUX_POST_DEPLOY_CONSISTENCIA_COSTOS.log": {
+      "tests": 300,
+      "suites": 0,
+      "pass": 300,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    }
+  },
+  "total_passed": 371,
+  "total_failed": 0,
+  "skipped": 0,
+  "isolated": true,
+  "network": "none",
+  "real_customer_transactions": false
+}

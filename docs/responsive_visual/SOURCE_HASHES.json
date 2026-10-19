@@ -1,0 +1,14 @@
+{
+  "public/desktop-responsive.css": {
+    "before": "2f14c508ae82fc96843e63dde768aabf8884565b584e36a8064672fab9f2a0f9",
+    "after": "3309210a7c0602c7559171c7f04183191a6e4ad55c798a0bd72a3217de20fe7c"
+  },
+  "public/index.html": {
+    "before": "4ead28dfbf60c2af42c30ddb373c24c269e8fbb565601450816d1ecb2d16ea9e",
+    "after": "4ead28dfbf60c2af42c30ddb373c24c269e8fbb565601450816d1ecb2d16ea9e"
+  },
+  "server/src/app.js": {
+    "before": "fd0f19d0837546630626a825b66c6cd3c72496faa25319f8cc9feab9327666d1",
+    "after": "fd0f19d0837546630626a825b66c6cd3c72496faa25319f8cc9feab9327666d1"
+  }
+}

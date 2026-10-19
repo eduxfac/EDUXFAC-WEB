@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-14T15:11:42.026781+00:00",
+  "all_48_table_fingerprints_unchanged": true,
+  "RLS_policies_grants_schema_unchanged": true,
+  "apronax_unchanged": [
+    {
+      "id": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+      "cantidad_disponible": "117.000",
+      "costo_unitario": "1.5700"
+    },
+    {
+      "id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+      "cantidad_disponible": "0.000",
+      "costo_unitario": "1.57"
+    }
+  ],
+  "account_unchanged": true
+}

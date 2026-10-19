@@ -1,0 +1,6 @@
+import {existsSync,readFileSync} from 'node:fs';
+export function dataMode(environment=process.env){const mode=environment.EDUXFAC_DATA_MODE||(environment.NODE_ENV==='production'?'NO_DECLARADO':'DEMO');if(!['DEMO','PILOTO','PRODUCCION','NO_DECLARADO'].includes(mode))throw Error('DATA_MODE_INVALID');return mode;}
+export function assertPilotConfiguration(environment=process.env){if(environment.WEB_RLS_PROFILE==='global'&&environment.WEB_RLS_ENABLED!=='true')throw Error('GLOBAL_RLS_MUST_BE_ENABLED');if(environment.WEB_RLS_PROFILE==='global'&&dataMode(environment)==='NO_DECLARADO')throw Error('DATA_MODE_REQUIRED_FOR_GLOBAL_RLS');return dataMode(environment);}
+
+export function assertOperationalProfile(environment=process.env){let isolated=false;if(process.platform==='linux'&&existsSync('/.dockerenv')&&environment.EDUXFAC_F9_ISOLATED==='yes'){try{isolated=JSON.parse(readFileSync('/artifacts/FASE9_STAGING.json')).purpose==='FASE9_ISOLATED_LINUX';}catch{}}
+if(environment.NODE_ENV==='production'&&!isolated&&(environment.WEB_RLS_ENABLED!=='true'||environment.WEB_RLS_PROFILE!=='global'))throw Error('PRODUCTION_REQUIRES_GLOBAL_RLS');if(environment.WEB_RLS_PROFILE==='global')assertPilotConfiguration(environment);return {isolated,mode:dataMode(environment)};}

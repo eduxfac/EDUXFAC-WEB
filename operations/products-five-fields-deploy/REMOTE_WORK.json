@@ -1,0 +1,11 @@
+{
+  "work": "/home/eduxadmin/.local/share/eduxfac/products_five_fields_deploy_20261014_015653",
+  "all_hashes_verified": true,
+  "payload_files": 2,
+  "tool_hashes": {
+    "DEPLOY_PRODUCTS.py": "e4b68097cbda7e1da29b19064514a5c47c478b201e5af2414534c5b35290ca48",
+    "READONLY_DB.mjs": "87ce50a144daaa4b2b48ca8ef122f656e11ae1c80e044e53734f7d1a1d1c68cc",
+    "ROLLBACK_RENTABILIDAD_V2.py": "33a30d3c91ee5b194744ba31bfecd8909f3f1fa66143e985d95adedce025ab7e",
+    "MANIFEST.json": "7f94963991b193dee7f36a49f7fc532a223333413bcba326f882d20bb12d262f"
+  }
+}

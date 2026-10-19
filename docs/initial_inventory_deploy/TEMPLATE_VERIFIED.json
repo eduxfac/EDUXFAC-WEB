@@ -1,0 +1,25 @@
+{
+  "status": 200,
+  "headers": [
+    "Código interno",
+    "Código de barras",
+    "Producto",
+    "Principio activo",
+    "Concentración",
+    "Presentación",
+    "Unidad de medida",
+    "Categoría",
+    "Laboratorio",
+    "Stock del lote",
+    "Stock mínimo",
+    "Precio de compra",
+    "Precio de venta",
+    "Lote",
+    "Vencimiento"
+  ],
+  "informationSheet": true,
+  "twoLotsExample": true,
+  "source": "Actual API on isolated fictitious database; source hashes identical to deployed files",
+  "bytes": 8788,
+  "sha256": "22d6668dc6072ac55b9e08c9cf2da9f0e01a4b9821a42ee123100fd1771fc1f8"
+}

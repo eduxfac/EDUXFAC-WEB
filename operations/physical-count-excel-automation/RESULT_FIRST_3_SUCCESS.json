@@ -1,0 +1,573 @@
+{
+  "source_sha256": "34E9DDD8BFA49B49C9268550269B2677AFB47F243EB9255543357024E83BA6D1",
+  "runs": [
+    {
+      "events": [
+        {
+          "utc": "2026-10-14T22:27:05.9009878Z",
+          "operation": "Workbooks",
+          "result": "ready_non_null_private"
+        },
+        {
+          "utc": "2026-10-14T22:27:06.4446016Z",
+          "operation": "Workbooks.Open",
+          "result": "success"
+        },
+        {
+          "utc": "2026-10-14T22:27:06.7863538Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:07.0486231Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:07.3839604Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:07.6483516Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:07.9107150Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:08.1755660Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:08.4410392Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:08.7077301Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:08.9591152Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:09.2197931Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:09.4860284Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:09.7514959Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:10.0029479Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:10.2675091Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:10.5188511Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:10.7717177Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:11.0227838Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:11.2876979Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:11.5395449Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:11.7951143Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:12.0484912Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:12.3012874Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:12.5569240Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:12.8095705Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:13.0632856Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:13.3174190Z",
+          "operation": "Formula",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:14.4937461Z",
+          "operation": "SaveCopyAs",
+          "result": "success"
+        },
+        {
+          "utc": "2026-10-14T22:27:14.5287297Z",
+          "operation": "Workbook.Close",
+          "result": "success"
+        },
+        {
+          "utc": "2026-10-14T22:27:14.5297225Z",
+          "operation": "Excel.Quit",
+          "result": "success"
+        }
+      ],
+      "path": "D:\\ExcelQA\\97c1ad665c66\\count1.xlsx",
+      "existing_user_processes_untouched": [
+        19068
+      ],
+      "passed": 10,
+      "cleanup": true,
+      "path_length": 35,
+      "checks": [
+        {
+          "passed": true,
+          "name": "100/95: Falta5, precio7.85, valorizado149.15"
+        },
+        {
+          "passed": true,
+          "name": "100/105: Sobra5, precio10, valorizado210"
+        },
+        {
+          "passed": true,
+          "name": "100/100: Falta0/Sobra0"
+        },
+        {
+          "passed": true,
+          "name": "Milésimas y redondeo monetario"
+        },
+        {
+          "passed": true,
+          "name": "Ponderado 1.61 y cálculo"
+        },
+        {
+          "passed": true,
+          "name": "Costo desconocido: importes vacíos"
+        },
+        {
+          "passed": true,
+          "name": "E vacío: fórmulas vacías"
+        },
+        {
+          "passed": true,
+          "name": "12 columnas, fórmulas, protección, S/ e Información"
+        },
+        {
+          "passed": true,
+          "name": "Falta naranja / Sobra verde"
+        },
+        {
+          "passed": true,
+          "name": "Apertura, recálculo completo y copia calculada"
+        }
+      ],
+      "private_pid": 3136,
+      "run": 1
+    },
+    {
+      "events": [
+        {
+          "utc": "2026-10-14T22:27:16.2046622Z",
+          "operation": "Workbooks",
+          "result": "ready_non_null_private"
+        },
+        {
+          "utc": "2026-10-14T22:27:16.7401815Z",
+          "operation": "Workbooks.Open",
+          "result": "success"
+        },
+        {
+          "utc": "2026-10-14T22:27:17.0260474Z",
+          "operation": "Count",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:17.2857457Z",
+          "operation": "Count",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:17.5485843Z",
+          "operation": "Count",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:17.8149720Z",
+          "operation": "Count",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:18.0784409Z",
+          "operation": "Count",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:18.3431638Z",
+          "operation": "Count",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:18.6077339Z",
+          "operation": "Count",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:19.3923201Z",
+          "operation": "SaveCopyAs",
+          "result": "success"
+        },
+        {
+          "utc": "2026-10-14T22:27:19.4146172Z",
+          "operation": "Workbook.Close",
+          "result": "success"
+        },
+        {
+          "utc": "2026-10-14T22:27:19.4153973Z",
+          "operation": "Excel.Quit",
+          "result": "success"
+        }
+      ],
+      "path": "D:\\ExcelQA\\97c1ad665c66\\count2.xlsx",
+      "existing_user_processes_untouched": [
+        19068
+      ],
+      "passed": 10,
+      "cleanup": true,
+      "path_length": 35,
+      "checks": [
+        {
+          "passed": true,
+          "name": "100/95: Falta5, precio7.85, valorizado149.15"
+        },
+        {
+          "passed": true,
+          "name": "100/105: Sobra5, precio10, valorizado210"
+        },
+        {
+          "passed": true,
+          "name": "100/100: Falta0/Sobra0"
+        },
+        {
+          "passed": true,
+          "name": "Milésimas y redondeo monetario"
+        },
+        {
+          "passed": true,
+          "name": "Ponderado 1.61 y cálculo"
+        },
+        {
+          "passed": true,
+          "name": "Costo desconocido: importes vacíos"
+        },
+        {
+          "passed": true,
+          "name": "E vacío: fórmulas vacías"
+        },
+        {
+          "passed": true,
+          "name": "12 columnas, fórmulas, protección, S/ e Información"
+        },
+        {
+          "passed": true,
+          "name": "Falta naranja / Sobra verde"
+        },
+        {
+          "passed": true,
+          "name": "Apertura, recálculo completo y copia calculada"
+        }
+      ],
+      "private_pid": 23800,
+      "run": 2
+    },
+    {
+      "events": [
+        {
+          "utc": "2026-10-14T22:27:21.0931307Z",
+          "operation": "Workbooks",
+          "result": "ready_non_null_private"
+        },
+        {
+          "utc": "2026-10-14T22:27:21.7005669Z",
+          "operation": "Workbooks.Open",
+          "result": "success"
+        },
+        {
+          "utc": "2026-10-14T22:27:21.9626864Z",
+          "operation": "Worksheets",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:22.2675822Z",
+          "operation": "Worksheets",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:22.5202609Z",
+          "operation": "Worksheets",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:22.7721737Z",
+          "operation": "Worksheets",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:23.0229771Z",
+          "operation": "Worksheets",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:23.2755417Z",
+          "operation": "Worksheets",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:23.5388157Z",
+          "operation": "Worksheets",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80010001",
+          "message": "La llamada fue rechazada por el destinatario. (0x80010001 (RPC_E_CALL_REJECTED))"
+        },
+        {
+          "utc": "2026-10-14T22:27:24.2592216Z",
+          "operation": "SaveCopyAs",
+          "result": "success"
+        },
+        {
+          "utc": "2026-10-14T22:27:24.2799127Z",
+          "operation": "Workbook.Close",
+          "result": "success"
+        },
+        {
+          "utc": "2026-10-14T22:27:24.2808250Z",
+          "operation": "Excel.Quit",
+          "result": "success"
+        }
+      ],
+      "path": "D:\\ExcelQA\\97c1ad665c66\\count3.xlsx",
+      "existing_user_processes_untouched": [
+        19068
+      ],
+      "passed": 10,
+      "cleanup": true,
+      "path_length": 35,
+      "checks": [
+        {
+          "passed": true,
+          "name": "100/95: Falta5, precio7.85, valorizado149.15"
+        },
+        {
+          "passed": true,
+          "name": "100/105: Sobra5, precio10, valorizado210"
+        },
+        {
+          "passed": true,
+          "name": "100/100: Falta0/Sobra0"
+        },
+        {
+          "passed": true,
+          "name": "Milésimas y redondeo monetario"
+        },
+        {
+          "passed": true,
+          "name": "Ponderado 1.61 y cálculo"
+        },
+        {
+          "passed": true,
+          "name": "Costo desconocido: importes vacíos"
+        },
+        {
+          "passed": true,
+          "name": "E vacío: fórmulas vacías"
+        },
+        {
+          "passed": true,
+          "name": "12 columnas, fórmulas, protección, S/ e Información"
+        },
+        {
+          "passed": true,
+          "name": "Falta naranja / Sobra verde"
+        },
+        {
+          "passed": true,
+          "name": "Apertura, recálculo completo y copia calculada"
+        }
+      ],
+      "private_pid": 12640,
+      "run": 3
+    }
+  ],
+  "requested_runs": 3,
+  "candidate_sha256": "D244957D7B5C6983B4E7F2A1C3037E2E99D90E8D403678A1CDF9203AA83B5656",
+  "successful_openings": 3,
+  "errors": [],
+  "no_office_global_settings_changed": true,
+  "short_directory": "D:\\ExcelQA\\97c1ad665c66",
+  "failed": 0,
+  "passed": 30.0
+}

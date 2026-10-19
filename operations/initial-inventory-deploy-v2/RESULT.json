@@ -1,0 +1,98 @@
+{
+  "GO_manual_small_Excel_test": true,
+  "deployed": true,
+  "only_authorized_three_files": true,
+  "before": {
+    "server/src/app.js": "7c32762622b79f77c5b3cb03ce0bc16f355eaf7c4766d865e6c29aab51ad02ab",
+    "server/src/initial-inventory.js": null,
+    "public/index.html": "3e73a96aa412757b51409f2783fa84e8112fff8af623664a1d3bfecacb0a3295"
+  },
+  "after": {
+    "server/src/app.js": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab",
+    "server/src/initial-inventory.js": "57abcde45bc6b165875e1f8b6ad6c956e87bc4759a4483476f3bfef159b62377",
+    "public/index.html": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32"
+  },
+  "html_hashes": {
+    "hash_D_LF": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32",
+    "hash_VPS": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32",
+    "hash_HTTPS": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32",
+    "all_three_equal": true,
+    "strict_byte_comparison": true,
+    "normalization_during_comparison": false,
+    "old_CRLF_candidate_rejected": true
+  },
+  "backup": "/home/eduxadmin/.local/share/eduxfac/initial_inventory_deploy_v2_20261014_204239/backup",
+  "rollback_command": "/usr/bin/python3 /home/eduxadmin/.local/share/eduxfac/initial_inventory_deploy_v2_20261014_204239/ROLLBACK_RENTABILIDAD_V2.py --apply",
+  "readiness": {
+    "loopback": {
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempts": 4,
+      "pid": 345824,
+      "restarts": 13,
+      "stable_samples": 3
+    },
+    "https": {
+      "url": "https://app.eduxfac.com/api/health",
+      "attempts": 3,
+      "pid": 345824,
+      "restarts": 13,
+      "stable_samples": 3
+    }
+  },
+  "readiness_seconds": 7.892,
+  "pm2": {
+    "id": 4,
+    "pid": 345824,
+    "status": "online",
+    "restarts": 13,
+    "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+    "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+    "mode": "PILOTO",
+    "port": "3001",
+    "worker": "false",
+    "mutation": "no"
+  },
+  "tests": {
+    "Windows": 129,
+    "Linux_PostgreSQL_native_RLS": 27,
+    "strict_integrity": 7,
+    "total_passed": 163,
+    "failed": 0,
+    "skipped": 0
+  },
+  "template": {
+    "source": "Actual deployed module initialTemplate; no database connection, no production login, no real imports",
+    "columns": [
+      "Código interno",
+      "Código de barras",
+      "Producto",
+      "Principio activo",
+      "Concentración",
+      "Presentación",
+      "Unidad de medida",
+      "Categoría",
+      "Laboratorio",
+      "Stock del lote",
+      "Stock mínimo",
+      "Precio de compra",
+      "Precio de venta",
+      "Lote",
+      "Vencimiento"
+    ],
+    "column_count": 15,
+    "stock_maximo_column": false,
+    "valor_stock_column": false,
+    "information_sheet": true,
+    "two_lot_same_product_example": true,
+    "sha256": "717d0167ef5432d35d6b390e2f7a707e8c0283803986b3691afa33177cfbf0e6",
+    "bytes": 8789
+  },
+  "inventory_timeout_seconds": 90,
+  "other_WEB_PILOT_endpoint_read_timeout_seconds": 30,
+  "database_48_table_fingerprints_unchanged": true,
+  "no_real_import": true,
+  "nginx_unchanged": true,
+  "other_processes_unchanged": true,
+  "schema_migration_executed": false,
+  "visual_scope": "Actual HTTPS HTML rendered in isolated local fixture; no production session or data"
+}

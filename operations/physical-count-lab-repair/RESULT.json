@@ -1,0 +1,79 @@
+{
+  "status": "GO_RETRY_DEPLOY_NOT_DEPLOYED",
+  "exact_cause": "Previous Docker run copied WEB source to /stage/EDUXFAC/WEB, a new sibling directory without node_modules, package.json or package-lock.json. Installed WEB dependencies were in the full official WEB path of the image. Not an absent global pg, missing NODE_PATH or candidate code failure.",
+  "corrected_lab_root": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL",
+  "image": "sha256:0a77b086357153cbf0092d178c66f1f4cd882538a246cfed02ce10c5a5b571e2",
+  "runtime": {
+    "node": "v24.21.0",
+    "postgresql": "postgres (PostgreSQL) 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)"
+  },
+  "dependencies": {
+    "bcryptjs": {
+      "declared": "^3.0.2",
+      "installed": "3.0.3",
+      "resolved": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/node_modules/bcryptjs/umd/index.js"
+    },
+    "cors": {
+      "declared": "^2.8.5",
+      "installed": "2.8.6",
+      "resolved": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/node_modules/cors/lib/index.js"
+    },
+    "dotenv": {
+      "declared": "^17.2.2",
+      "installed": "17.4.2",
+      "resolved": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/node_modules/dotenv/lib/main.js"
+    },
+    "exceljs": {
+      "declared": "^4.4.0",
+      "installed": "4.4.0",
+      "resolved": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/node_modules/exceljs/excel.js"
+    },
+    "express": {
+      "declared": "^5.1.0",
+      "installed": "5.2.1",
+      "resolved": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/node_modules/express/index.js"
+    },
+    "jsonwebtoken": {
+      "declared": "^9.0.2",
+      "installed": "9.0.3",
+      "resolved": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/node_modules/jsonwebtoken/index.js"
+    },
+    "pg": {
+      "declared": "^8.16.3",
+      "installed": "8.23.0",
+      "resolved": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/node_modules/pg/lib/index.js"
+    },
+    "@electric-sql/pglite": {
+      "declared": "^0.5.8",
+      "installed": "0.5.8",
+      "resolved": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/node_modules/@electric-sql/pglite/dist/index.cjs"
+    }
+  },
+  "cached_transitive_versions_checked": 192,
+  "package_lock_sha256": "5905d633281f64cd1fdd5ae8e81f3631ea2d522f33b8ec72145eaf0f41f7150e",
+  "tests": {
+    "Windows": 21,
+    "Linux_functional": 21,
+    "Linux_PostgreSQL_native_RLS": 9,
+    "Microsoft_Excel": 10
+  },
+  "passed": 61,
+  "failed": 0,
+  "skipped": 0,
+  "candidate_sha256": "d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656",
+  "candidate_functional_changed": false,
+  "protected_files_unchanged": {
+    "server/src/app.js": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab",
+    "server/src/stock-cost.js": "f2f1bb2c8f05f8ee4b1a9b6a2d468a141575281680afb0b41e43c871819ddab8",
+    "server/src/inventory-entry.js": "0b3a49ac0ea077db9bc29fb8dbc08aa2d92d20aa8761a47f81652eb1c4de897f",
+    "public/index.html": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32",
+    "database/schema.sql": "693f6f2ba6f4b2aa35d7103375d9780c7db80b63d78ccd24b24886a6b2225e40"
+  },
+  "vps_connected": false,
+  "deployed": false,
+  "real_data_modified": false,
+  "global_dependencies_installed": false,
+  "npm_install_needed": false,
+  "NODE_PATH_needed": false,
+  "lab_container_cleaned": true
+}

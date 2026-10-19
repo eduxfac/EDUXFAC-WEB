@@ -1,0 +1,178 @@
+{
+  "precheck": "OK",
+  "utc": "2026-10-13T23:22:10.212023+00:00",
+  "original_hashes": {
+    "server/src/app.js": "58d31e00d2414804e636429a38fdd1662b1888d5dfe7c26f533d798c76e6af0d",
+    "server/src/sale-profitability.js": null,
+    "public/index.html": "981647b74c4c971a498f51dae74e089a2ce8b2e836f9083555ae81ec9b983430",
+    "public/sale-profitability.js": null
+  },
+  "old_backup_verified": true,
+  "old_rollback_sha256": "e880bd2a86b3698beac7b4cf76b8ff7dece16b55b6e4ef9f2a248b6bae9f41a3",
+  "samples": [
+    {
+      "utc": "2026-10-13T23:22:05.650710+00:00",
+      "url": "http://127.0.0.1:3001/api/health",
+      "status": 200,
+      "duration_ms": 125.04,
+      "attempt": 1,
+      "health": {
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:22:05.674140+00:00",
+      "url": "https://app.eduxfac.com/api/health",
+      "status": 200,
+      "duration_ms": 23.36,
+      "attempt": 1,
+      "health": {
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:22:05.697103+00:00",
+      "url": "https://app.eduxfac.com/",
+      "status": 200,
+      "duration_ms": 22.9,
+      "attempt": 1
+    },
+    {
+      "utc": "2026-10-13T23:22:05.716626+00:00",
+      "url": "https://admin.eduxfac.com/",
+      "status": 200,
+      "duration_ms": 19.49,
+      "attempt": 1
+    },
+    {
+      "utc": "2026-10-13T23:22:05.755071+00:00",
+      "url": "https://eduxfac.com/",
+      "status": 200,
+      "duration_ms": 38.48,
+      "attempt": 1
+    },
+    {
+      "utc": "2026-10-13T23:22:06.829743+00:00",
+      "url": "http://127.0.0.1:3001/api/health",
+      "status": 200,
+      "duration_ms": 9.21,
+      "attempt": 2,
+      "health": {
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:22:06.858131+00:00",
+      "url": "https://app.eduxfac.com/api/health",
+      "status": 200,
+      "duration_ms": 28.34,
+      "attempt": 2,
+      "health": {
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:22:06.889685+00:00",
+      "url": "https://app.eduxfac.com/",
+      "status": 200,
+      "duration_ms": 31.47,
+      "attempt": 2
+    },
+    {
+      "utc": "2026-10-13T23:22:06.913717+00:00",
+      "url": "https://admin.eduxfac.com/",
+      "status": 200,
+      "duration_ms": 24.0,
+      "attempt": 2
+    },
+    {
+      "utc": "2026-10-13T23:22:07.040718+00:00",
+      "url": "https://eduxfac.com/",
+      "status": 200,
+      "duration_ms": 127.19,
+      "attempt": 2
+    },
+    {
+      "utc": "2026-10-13T23:22:08.065285+00:00",
+      "url": "http://127.0.0.1:3001/api/health",
+      "status": 200,
+      "duration_ms": 8.07,
+      "attempt": 3,
+      "health": {
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:22:08.101112+00:00",
+      "url": "https://app.eduxfac.com/api/health",
+      "status": 200,
+      "duration_ms": 35.77,
+      "attempt": 3,
+      "health": {
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:22:08.223420+00:00",
+      "url": "https://app.eduxfac.com/",
+      "status": 200,
+      "duration_ms": 122.25,
+      "attempt": 3
+    },
+    {
+      "utc": "2026-10-13T23:22:08.284889+00:00",
+      "url": "https://admin.eduxfac.com/",
+      "status": 200,
+      "duration_ms": 59.05,
+      "attempt": 3
+    },
+    {
+      "utc": "2026-10-13T23:22:08.355572+00:00",
+      "url": "https://eduxfac.com/",
+      "status": 200,
+      "duration_ms": 70.64,
+      "attempt": 3
+    }
+  ],
+  "processes": [
+    {
+      "name": "eduxfac",
+      "id": 0,
+      "pid": 988,
+      "status": "online",
+      "restarts": 0,
+      "cwd": "/var/www/eduxfac",
+      "script": "/usr/bin/npm"
+    },
+    {
+      "name": "EDUXFAC-PANEL-PILOTO",
+      "id": 3,
+      "pid": 269525,
+      "status": "online",
+      "restarts": 4,
+      "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel",
+      "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel/server/start.mjs"
+    },
+    {
+      "name": "EDUXFAC-WEB-PILOTO",
+      "id": 4,
+      "pid": 297349,
+      "status": "online",
+      "restarts": 4,
+      "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+      "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs"
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "result": "CSS_DEPLOY_OK",
+  "utc": "2026-10-14T14:10:19.046157+00:00",
+  "before": "3309210a7c0602c7559171c7f04183191a6e4ad55c798a0bd72a3217de20fe7c",
+  "after": "bd8eb2433919c82b67eb0b9b83603cd7a388b0e441c62018cad89296a1522271",
+  "backup": "/home/eduxadmin/.local/share/eduxfac/sales_compact_deploy_20261014_140844/backup/public/desktop-responsive.css",
+  "health": {
+    "loopback": [
+      {
+        "url": "http://127.0.0.1:3001/api/health",
+        "utc": "2026-10-14T14:10:11.701731+00:00",
+        "status": 200,
+        "sha256": "c23aad1817a41c9f054b3e1b2b14e015a2fcd4b51d6308beac3a49ab589a7287",
+        "body": {
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "error": null,
+        "duration_ms": 157.34,
+        "attempt": 1
+      },
+      {
+        "url": "http://127.0.0.1:3001/api/health",
+        "utc": "2026-10-14T14:10:12.359554+00:00",
+        "status": 200,
+        "sha256": "5b1f488cf9a1e7b7a80fcc9b1d31b876bfcb0f8dfb255bed8c3983e96b2b3d81",
+        "body": {
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "error": null,
+        "duration_ms": 10.92,
+        "attempt": 2
+      },
+      {
+        "url": "http://127.0.0.1:3001/api/health",
+        "utc": "2026-10-14T14:10:12.872614+00:00",
+        "status": 200,
+        "sha256": "f95be661829c68262c1cc488889bc87e20db189ce1a99e7bed3db74bf560d4b0",
+        "body": {
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "error": null,
+        "duration_ms": 5.54,
+        "attempt": 3
+      }
+    ],
+    "https": [
+      {
+        "url": "https://app.eduxfac.com/api/health",
+        "utc": "2026-10-14T14:10:12.878676+00:00",
+        "status": 200,
+        "sha256": "6fc6db77936812f5edfa2c67f032e8c2459a1382d4da850451c37000eed7adb0",
+        "body": {
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "error": null,
+        "duration_ms": 23.31,
+        "attempt": 1
+      },
+      {
+        "url": "https://app.eduxfac.com/api/health",
+        "utc": "2026-10-14T14:10:13.410063+00:00",
+        "status": 200,
+        "sha256": "3372781d8275102002f55340a6b0ee577e9cebe917f4e9cd7c86bf70e786f48f",
+        "body": {
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "error": null,
+        "duration_ms": 179.29,
+        "attempt": 2
+      },
+      {
+        "url": "https://app.eduxfac.com/api/health",
+        "utc": "2026-10-14T14:10:14.090018+00:00",
+        "status": 200,
+        "sha256": "31c113e142de2c9817b72f900ded7491b62f53d506067df8d3db74831faac724",
+        "body": {
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "error": null,
+        "duration_ms": 24.95,
+        "attempt": 3
+      }
+    ],
+    "app": [
+      {
+        "url": "https://app.eduxfac.com/",
+        "utc": "2026-10-14T14:10:14.115266+00:00",
+        "status": 200,
+        "sha256": "4ead28dfbf60c2af42c30ddb373c24c269e8fbb565601450816d1ecb2d16ea9e",
+        "body": {
+          "bytes": 395973
+        },
+        "error": null,
+        "duration_ms": 33.13,
+        "attempt": 1
+      },
+      {
+        "url": "https://app.eduxfac.com/",
+        "utc": "2026-10-14T14:10:14.649108+00:00",
+        "status": 200,
+        "sha256": "4ead28dfbf60c2af42c30ddb373c24c269e8fbb565601450816d1ecb2d16ea9e",
+        "body": {
+          "bytes": 395973
+        },
+        "error": null,
+        "duration_ms": 21.99,
+        "attempt": 2
+      },
+      {
+        "url": "https://app.eduxfac.com/",
+        "utc": "2026-10-14T14:10:15.171833+00:00",
+        "status": 200,
+        "sha256": "4ead28dfbf60c2af42c30ddb373c24c269e8fbb565601450816d1ecb2d16ea9e",
+        "body": {
+          "bytes": 395973
+        },
+        "error": null,
+        "duration_ms": 43.9,
+        "attempt": 3
+      }
+    ],
+    "admin": [
+      {
+        "url": "https://admin.eduxfac.com/",
+        "utc": "2026-10-14T14:10:15.216206+00:00",
+        "status": 200,
+        "sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df",
+        "body": {
+          "bytes": 3821
+        },
+        "error": null,
+        "duration_ms": 22.97,
+        "attempt": 1
+      },
+      {
+        "url": "https://admin.eduxfac.com/",
+        "utc": "2026-10-14T14:10:15.739909+00:00",
+        "status": 200,
+        "sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df",
+        "body": {
+          "bytes": 3821
+        },
+        "error": null,
+        "duration_ms": 18.08,
+        "attempt": 2
+      },
+      {
+        "url": "https://admin.eduxfac.com/",
+        "utc": "2026-10-14T14:10:16.266428+00:00",
+        "status": 200,
+        "sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df",
+        "body": {
+          "bytes": 3821
+        },
+        "error": null,
+        "duration_ms": 26.75,
+        "attempt": 3
+      }
+    ]
+  },
+  "css_http": {
+    "loopback": [
+      {
+        "url": "http://127.0.0.1:3001/desktop-responsive.css",
+        "utc": "2026-10-14T14:10:16.293768+00:00",
+        "status": 200,
+        "sha256": "bd8eb2433919c82b67eb0b9b83603cd7a388b0e441c62018cad89296a1522271",
+        "body": {
+          "bytes": 20336
+        },
+        "error": null,
+        "duration_ms": 5.69,
+        "attempt": 1
+      },
+      {
+        "url": "http://127.0.0.1:3001/desktop-responsive.css",
+        "utc": "2026-10-14T14:10:16.808967+00:00",
+        "status": 200,
+        "sha256": "bd8eb2433919c82b67eb0b9b83603cd7a388b0e441c62018cad89296a1522271",
+        "body": {
+          "bytes": 20336
+        },
+        "error": null,
+        "duration_ms": 36.72,
+        "attempt": 2
+      },
+      {
+        "url": "http://127.0.0.1:3001/desktop-responsive.css",
+        "utc": "2026-10-14T14:10:17.346410+00:00",
+        "status": 200,
+        "sha256": "bd8eb2433919c82b67eb0b9b83603cd7a388b0e441c62018cad89296a1522271",
+        "body": {
+          "bytes": 20336
+        },
+        "error": null,
+        "duration_ms": 20.76,
+        "attempt": 3
+      }
+    ],
+    "https": [
+      {
+        "url": "https://app.eduxfac.com/desktop-responsive.css",
+        "utc": "2026-10-14T14:10:17.369390+00:00",
+        "status": 200,
+        "sha256": "bd8eb2433919c82b67eb0b9b83603cd7a388b0e441c62018cad89296a1522271",
+        "body": {
+          "bytes": 20336
+        },
+        "error": null,
+        "duration_ms": 43.38,
+        "attempt": 1
+      },
+      {
+        "url": "https://app.eduxfac.com/desktop-responsive.css",
+        "utc": "2026-10-14T14:10:17.914569+00:00",
+        "status": 200,
+        "sha256": "bd8eb2433919c82b67eb0b9b83603cd7a388b0e441c62018cad89296a1522271",
+        "body": {
+          "bytes": 20336
+        },
+        "error": null,
+        "duration_ms": 131.13,
+        "attempt": 2
+      },
+      {
+        "url": "https://app.eduxfac.com/desktop-responsive.css",
+        "utc": "2026-10-14T14:10:18.546175+00:00",
+        "status": 200,
+        "sha256": "bd8eb2433919c82b67eb0b9b83603cd7a388b0e441c62018cad89296a1522271",
+        "body": {
+          "bytes": 20336
+        },
+        "error": null,
+        "duration_ms": 59.1,
+        "attempt": 3
+      }
+    ]
+  },
+  "pm2": {
+    "id": 4,
+    "pid": 308466,
+    "status": "online",
+    "restarts": 8,
+    "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+    "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs"
+  },
+  "restart": false,
+  "protected_files_unchanged": true,
+  "other_processes_unchanged": true,
+  "rollback_command": "/usr/bin/python3 /home/eduxadmin/.local/share/eduxfac/sales_compact_deploy_20261014_140844/DEPLOY_CSS.py --rollback"
+}

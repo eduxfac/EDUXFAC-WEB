@@ -1,0 +1,10 @@
+{
+  "result": "BROWSER_EXCEL_OK",
+  "columns": 8,
+  "rows": 1,
+  "manual_quantity": 12,
+  "last_purchase_cost": 4.4,
+  "information_sheet": true,
+  "errors_in_browser": 0,
+  "real_data_used": false
+}

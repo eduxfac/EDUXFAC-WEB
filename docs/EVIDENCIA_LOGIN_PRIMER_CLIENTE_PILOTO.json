@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-13",
+  "scope": "WEB PILOTO",
+  "candidate_only": true,
+  "vps_modified": false,
+  "db": {
+    "read_only": true,
+    "companies": [
+      {
+        "id": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+        "razon_social": "BOTICA PILOTO EDUXFAC",
+        "ruc": "10460023039",
+        "empresa_codigo": "PILOTO001",
+        "activo": true
+      }
+    ],
+    "users": [
+      {
+        "id": "239be455-5bb8-4334-be0a-d3f95db88fa2",
+        "empresa_id": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+        "nombre": "EDWIN CASTILLO GONZALES",
+        "usuario": "edwinpiloto",
+        "activo": true,
+        "es_administrador_inicial": true,
+        "hash_format_valid": true,
+        "must_change": true
+      }
+    ],
+    "memberships": [
+      {
+        "usuario": "edwinpiloto",
+        "empresa_id": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+        "codigo": "PRINCIPAL",
+        "nombre": "PRINCIPAL",
+        "activo": true,
+        "es_principal": true,
+        "rol": "Administrador"
+      }
+    ],
+    "access": [
+      {
+        "empresa_id": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+        "estado": "ACTIVO",
+        "auth_version": "3",
+        "plan_codigo": "BASICO",
+        "suscripcion_requerida": true,
+        "suscripcion_id": "04398daf-7f11-4f42-94ee-baf350d15606",
+        "estado_suscripcion": "ACTIVA",
+        "fecha_inicio": "2026-10-13T05:00:00.000Z",
+        "fecha_vencimiento": "2026-11-13T05:00:00.000Z",
+        "version_suscripcion": "2",
+        "starts_valid": true,
+        "ends_valid": true
+      }
+    ],
+    "no_hash_output": true
+  },
+  "checks": {
+    "passed": 80,
+    "failed": 0,
+    "baseline_expected_failure": true,
+    "inline_scripts_after_fix": 5,
+    "restored_handlers": 125,
+    "escaped_template_ends": 1
+  },
+  "normalized_html": {
+    "original": "eb07a2bfe13b06698e411dc2cf7c16c27b5af972d1850036b71138823bc66db6",
+    "candidate": "d5c51054a23d2a16fe65b0bf1226fb4cf5d1a6f24b72b88d7f8c4887695b5aa3"
+  }
+}

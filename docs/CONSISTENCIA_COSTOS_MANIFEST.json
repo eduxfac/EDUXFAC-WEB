@@ -1,0 +1,12 @@
+{
+  "server/src/app.js": "aea688d15a8022b8c5fbb38616c4aa50a86c0efe65e14c788a18f0278cd03d16",
+  "server/src/sale-profitability.js": "0eb7a95cfe300f8649fb6e8dd5c6a71795bb0fec52b6018a1d7803644eafae5b",
+  "server/src/inventory-entry.js": "0b3a49ac0ea077db9bc29fb8dbc08aa2d92d20aa8761a47f81652eb1c4de897f",
+  "server/src/stock-cost.js": "f2f1bb2c8f05f8ee4b1a9b6a2d468a141575281680afb0b41e43c871819ddab8",
+  "database/schema.sql": "693f6f2ba6f4b2aa35d7103375d9780c7db80b63d78ccd24b24886a6b2225e40",
+  "database/migrations/007_consistencia_costos.sql": "523f57aaad2cf517158306ae7ca623549cee722cb3f6aee59673a2add7924079",
+  "public/index.html": "a03b1cf10bddd39ccb171accdf0e724498903f3656e20fdc5b31136e460c2392",
+  "tests/cost-consistency-native.test.js": "e0c15abba1aa98f35a78b6e3cc159594b35d486daea52e1aa3e1b737043bb82c",
+  "operations/repair-costs/repair-apronax.mjs": "be7c9bb5c18dbe4bd9e9e55c8b834ed48fc616bc99f3b2a3070b23c2a21fb1dc",
+  "operations/repair-costs/PLAN_APRONAX.json": "5bb692035e0c96c55cb900bfc316951abbdc437b2c85969815d581db6c9c7105"
+}

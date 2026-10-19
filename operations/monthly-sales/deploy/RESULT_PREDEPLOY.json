@@ -1,0 +1,124 @@
+{
+  "date": "2026-10-15",
+  "timezone": "America/Lima",
+  "implementation_complete": true,
+  "release_decision": "GO",
+  "deployment_executed": false,
+  "VPS_accessed": false,
+  "windows_final": {
+    "tests": 480,
+    "pass": 480,
+    "fail": 0,
+    "skipped": 0
+  },
+  "monthly_targeted": {
+    "pass": 29,
+    "fail": 0,
+    "included_in_windows_total": true
+  },
+  "previous_linux_evidence": {
+    "date": "2026-10-14",
+    "pass": 36,
+    "fail": 0,
+    "skipped": 0,
+    "FORCE_RLS_tables": 44,
+    "rerun_today": false
+  },
+  "current_linux_attempt": {
+    "status": "PASSED",
+    "date": "2026-10-15",
+    "tests": 36,
+    "pass": 36,
+    "fail": 0,
+    "skipped": 0,
+    "native_postgresql_rls": 19,
+    "complementary_sql_http": 17
+  },
+  "performance_current_wasm": {
+    "volume": 10000,
+    "refunds": 1000,
+    "http_ms": [
+      75.48680000000058,
+      79.14500000000044,
+      66.5036
+    ],
+    "plan": null
+  },
+  "performance_previous_postgresql": {
+    "volume": 100000,
+    "refunds": 10000,
+    "http_ms": [
+      1104.5503439999993,
+      553.5451709999998,
+      548.873622000001
+    ],
+    "explain_execution_ms": 598.113
+  },
+  "responsive_recovered_widths": [
+    1920,
+    1366,
+    1024,
+    768,
+    375
+  ],
+  "new_index_or_migration": false,
+  "files": {
+    "server/src/app.js": {
+      "sha256": "3a22cf3c1482aceac2788b86c8318aa9efbe70c9ca66e8e4571fefe861209d90",
+      "bytes": 205542
+    },
+    "server/src/monthly-sales.js": {
+      "sha256": "4f7cea2a35b1ddcd82af4db81178c2fb6502c8cad58122ae9af4cf4efa6a001f",
+      "bytes": 2187
+    },
+    "public/index.html": {
+      "sha256": "c2c01c26cd4cd1298e94223f87a64d9901659ac3516e47927aa57398ffb68e06",
+      "bytes": 395937
+    },
+    "public/monthly-sales.js": {
+      "sha256": "158173086da9c1e5b3b0ef0471a7cf68f2c8da1be5e1acbd33fe28ac7eb44a77",
+      "bytes": 3254
+    },
+    "public/desktop-responsive.css": {
+      "sha256": "a3e525f414f396b14e7a98edf995bbd631b496acd0ec4a23604625d64e9bcf25",
+      "bytes": 30878
+    },
+    "tests/monthly-sales.test.js": {
+      "sha256": "47d7f7ec9e5ce2eb37ed9a5983220f9efc571a736ba6f4952d99f982d84a4ade",
+      "bytes": 313
+    },
+    "tests/monthly-sales-native.test.js": {
+      "sha256": "de7fd740c2633fa7a4d939f6aa4a4f4362f3f6cd42761faf1c3a9398ec6d8569",
+      "bytes": 7055
+    },
+    "tests/monthly-sales-ui.test.js": {
+      "sha256": "1759b1cbf6e64fa9d221e75c1c2d9a706f2a267074a01c248923fd82d5a0bb0b",
+      "bytes": 6623
+    },
+    "tests/helpers/monthly-sales-checks.js": {
+      "sha256": "6c9df5c2e8c03d295e8264fc1aed92d9e06de69d6859ccc1cca21a4f2ee2663d",
+      "bytes": 10527
+    },
+    "tests/initial-inventory-lf.test.js": {
+      "sha256": "d8185d8f865e6925dcc76c9d2577d31181714e115f82f1808b724db7ded56073",
+      "bytes": 1802
+    }
+  },
+  "pending": [],
+  "cleanup": {
+    "old_attempt_cleaned": true,
+    "repeat_cleaned": true
+  },
+  "functional_hashes_unchanged": true,
+  "performance_current_postgresql": {
+    "sales": 100000,
+    "refunds": 10000,
+    "http_ms": [
+      916.7054709999993,
+      550.4323430000004,
+      556.8010360000007
+    ],
+    "explain_execution_ms": 636.968
+  },
+  "docker_recovery_evidence": "docker-recovery/RESULT.json"
+}

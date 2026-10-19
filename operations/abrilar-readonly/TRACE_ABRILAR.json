@@ -1,0 +1,184 @@
+{
+  "guard": {
+    "db": "eduxfac_web_piloto",
+    "read_only": "on",
+    "snapshot": "2026-10-15T03:03:46.477Z"
+  },
+  "hashes": {
+    "server/src/app.js": "dfb160b96cce099f89283c221a3671affd3357e87f9b528b3bd2bb100c071576",
+    "server/src/sale-profitability.js": "0eb7a95cfe300f8649fb6e8dd5c6a71795bb0fec52b6018a1d7803644eafae5b",
+    "server/src/stock-cost.js": "f2f1bb2c8f05f8ee4b1a9b6a2d468a141575281680afb0b41e43c871819ddab8",
+    "server/src/inventory-entry.js": "0b3a49ac0ea077db9bc29fb8dbc08aa2d92d20aa8761a47f81652eb1c4de897f",
+    "server/src/initial-inventory.js": "57abcde45bc6b165875e1f8b6ad6c956e87bc4759a4483476f3bfef159b62377",
+    "public/index.html": "06ad9349541563ef990fcf5c8a7ecf63c5db05b28b2688bfe25aaf8b63f524c1"
+  },
+  "products": [
+    {
+      "id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "empresa_id": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+      "codigo_interno": "P000004",
+      "codigo_anterior": null,
+      "nombre": "ABRILAR JARABE 120ML",
+      "unidad_medida": "UNIDAD",
+      "presentacion": "BOTELLA",
+      "activo": true
+    }
+  ],
+  "branches": [
+    {
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "stock_minimo": "4.000",
+      "stock_maximo": "0.000",
+      "activo": true,
+      "origen": "operacion",
+      "created_at": "2026-10-14T21:06:22.800Z",
+      "codigo": "PRINCIPAL",
+      "nombre": "PRINCIPAL"
+    }
+  ],
+  "lots": [
+    {
+      "id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "numero_lote": "EDU1",
+      "fecha_vencimiento": "2026-10-28T23:00:00.000Z",
+      "costo_unitario": "15",
+      "cantidad_inicial": "3.000",
+      "cantidad_disponible": "3.000",
+      "compra_detalle_id": null,
+      "valor_base_costos": "45",
+      "cantidad_movimientos": "3.000",
+      "valor_movimientos": "45.000"
+    },
+    {
+      "id": "16a942c2-9776-4a80-8251-1187421adb6f",
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "numero_lote": "EDU2",
+      "fecha_vencimiento": "2026-11-28T23:00:00.000Z",
+      "costo_unitario": "15",
+      "cantidad_inicial": "4.000",
+      "cantidad_disponible": "3.000",
+      "compra_detalle_id": null,
+      "valor_base_costos": "60",
+      "cantidad_movimientos": "3.000",
+      "valor_movimientos": "45.000"
+    },
+    {
+      "id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "numero_lote": "EDU3",
+      "fecha_vencimiento": "2026-12-28T23:00:00.000Z",
+      "costo_unitario": "15",
+      "cantidad_inicial": "5.000",
+      "cantidad_disponible": "5.000",
+      "compra_detalle_id": null,
+      "valor_base_costos": "75",
+      "cantidad_movimientos": "5.000",
+      "valor_movimientos": "75.000"
+    }
+  ],
+  "movements": [
+    {
+      "id": "8de56af8-071d-47bf-8991-2a02b7369537",
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "lote_id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+      "tipo": "INVENTARIO_INICIAL",
+      "cantidad": "5.000",
+      "costo_unitario": "15",
+      "valor": "75.000",
+      "referencia_tipo": "INVENTARIO_INICIAL",
+      "referencia_id": "1c2a3adb-3a3d-4ec6-8018-c059f7c5f4a8",
+      "created_at": "2026-10-14T21:06:22.800Z"
+    },
+    {
+      "id": "a3c487d1-a387-4498-a268-8c350e813101",
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "lote_id": "16a942c2-9776-4a80-8251-1187421adb6f",
+      "tipo": "INVENTARIO_INICIAL",
+      "cantidad": "4.000",
+      "costo_unitario": "15",
+      "valor": "60.000",
+      "referencia_tipo": "INVENTARIO_INICIAL",
+      "referencia_id": "1c2a3adb-3a3d-4ec6-8018-c059f7c5f4a8",
+      "created_at": "2026-10-14T21:06:22.800Z"
+    },
+    {
+      "id": "db8a7356-a2c0-47c7-b5a6-b9203db6d966",
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "lote_id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+      "tipo": "INVENTARIO_INICIAL",
+      "cantidad": "3.000",
+      "costo_unitario": "15",
+      "valor": "45.000",
+      "referencia_tipo": "INVENTARIO_INICIAL",
+      "referencia_id": "1c2a3adb-3a3d-4ec6-8018-c059f7c5f4a8",
+      "created_at": "2026-10-14T21:06:22.800Z"
+    },
+    {
+      "id": "45a35ca6-fafa-4ac0-98b5-63cbc04ae428",
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "lote_id": "16a942c2-9776-4a80-8251-1187421adb6f",
+      "tipo": "AJUSTE_EXCEL_STOCK",
+      "cantidad": "-1.000",
+      "costo_unitario": "15",
+      "valor": "-15.000",
+      "referencia_tipo": "CONTEO_FISICO",
+      "referencia_id": "3ddff926-780d-465a-ad31-ec0a0f963678",
+      "created_at": "2026-10-14T21:07:53.547Z"
+    }
+  ],
+  "purchases": [],
+  "sales": [],
+  "returns": [],
+  "prices": [
+    {
+      "id": "578626fb-b301-488f-8f2e-cb41cb752332",
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "tipo": "unidad",
+      "factor_unidades": "1.000",
+      "precio_venta": "25.00",
+      "vigente_desde": "2026-10-14T21:06:22.800Z",
+      "vigente_hasta": "2026-10-15T02:57:49.156Z"
+    },
+    {
+      "id": "74591189-1096-4e61-b8c0-a95182ec40f7",
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "tipo": "UNIDAD",
+      "factor_unidades": "1.000",
+      "precio_venta": "25.00",
+      "vigente_desde": "2026-10-15T02:57:49.156Z",
+      "vigente_hasta": null
+    }
+  ],
+  "audit": [
+    {
+      "id": "39",
+      "accion": "IMPORTAR_INVENTARIO_INICIAL",
+      "entidad": "productos",
+      "entidad_id": null,
+      "detalle": {
+        "filas": 3,
+        "lotes": 3,
+        "stock": 12,
+        "valor": 180,
+        "creados": 1,
+        "batch_id": "1c2a3adb-3a3d-4ec6-8018-c059f7c5f4a8",
+        "existentes": 0,
+        "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+        "archivo_sha256": "cd29b5bc646c6d4f0534cee02fc2d9f2d596994c3cdabace0dbcd29e61f13d18"
+      },
+      "created_at": "2026-10-14T21:06:22.800Z"
+    }
+  ],
+  "force_rls": 44
+}

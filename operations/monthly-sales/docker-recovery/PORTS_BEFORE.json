@@ -1,0 +1,112 @@
+[
+  {
+    "LocalAddress": "::",
+    "LocalPort": 55432,
+    "OwningProcess": 4860
+  },
+  {
+    "LocalAddress": "::",
+    "LocalPort": 49670,
+    "OwningProcess": 816
+  },
+  {
+    "LocalAddress": "::1",
+    "LocalPort": 49669,
+    "OwningProcess": 3868
+  },
+  {
+    "LocalAddress": "::",
+    "LocalPort": 49668,
+    "OwningProcess": 3496
+  },
+  {
+    "LocalAddress": "::",
+    "LocalPort": 49667,
+    "OwningProcess": 1436
+  },
+  {
+    "LocalAddress": "::",
+    "LocalPort": 49666,
+    "OwningProcess": 1444
+  },
+  {
+    "LocalAddress": "::",
+    "LocalPort": 49665,
+    "OwningProcess": 744
+  },
+  {
+    "LocalAddress": "::",
+    "LocalPort": 49664,
+    "OwningProcess": 844
+  },
+  {
+    "LocalAddress": "::1",
+    "LocalPort": 42050,
+    "OwningProcess": 18684
+  },
+  {
+    "LocalAddress": "::",
+    "LocalPort": 445,
+    "OwningProcess": 4
+  },
+  {
+    "LocalAddress": "::",
+    "LocalPort": 135,
+    "OwningProcess": 1060
+  },
+  {
+    "LocalAddress": "0.0.0.0",
+    "LocalPort": 55432,
+    "OwningProcess": 4860
+  },
+  {
+    "LocalAddress": "0.0.0.0",
+    "LocalPort": 49670,
+    "OwningProcess": 816
+  },
+  {
+    "LocalAddress": "0.0.0.0",
+    "LocalPort": 49668,
+    "OwningProcess": 3496
+  },
+  {
+    "LocalAddress": "0.0.0.0",
+    "LocalPort": 49667,
+    "OwningProcess": 1436
+  },
+  {
+    "LocalAddress": "0.0.0.0",
+    "LocalPort": 49666,
+    "OwningProcess": 1444
+  },
+  {
+    "LocalAddress": "0.0.0.0",
+    "LocalPort": 49665,
+    "OwningProcess": 744
+  },
+  {
+    "LocalAddress": "0.0.0.0",
+    "LocalPort": 49664,
+    "OwningProcess": 844
+  },
+  {
+    "LocalAddress": "0.0.0.0",
+    "LocalPort": 5040,
+    "OwningProcess": 6756
+  },
+  {
+    "LocalAddress": "192.168.1.3",
+    "LocalPort": 139,
+    "OwningProcess": 4
+  },
+  {
+    "LocalAddress": "172.25.48.1",
+    "LocalPort": 139,
+    "OwningProcess": 4
+  },
+  {
+    "LocalAddress": "0.0.0.0",
+    "LocalPort": 135,
+    "OwningProcess": 1060
+  }
+]

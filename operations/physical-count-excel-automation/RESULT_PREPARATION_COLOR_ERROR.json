@@ -1,0 +1,97 @@
+{
+  "source_sha256": "34E9DDD8BFA49B49C9268550269B2677AFB47F243EB9255543357024E83BA6D1",
+  "runs": [
+    {
+      "path": "D:\\ExcelQA\\884bc34ab3d3\\count1.xlsx",
+      "events": [
+        {
+          "utc": "2026-10-14T22:26:38.6677036Z",
+          "operation": "Workbooks",
+          "result": "ready_non_null_private"
+        },
+        {
+          "utc": "2026-10-14T22:26:39.2367808Z",
+          "operation": "Workbooks.Open",
+          "result": "success"
+        },
+        {
+          "utc": "2026-10-14T22:26:39.7420798Z",
+          "operation": "Item",
+          "result": "error",
+          "type": "System.Runtime.InteropServices.COMException",
+          "hresult": "0x80020003",
+          "message": "No se ha encontrado el miembro. (0x80020003 (DISP_E_MEMBERNOTFOUND))"
+        },
+        {
+          "utc": "2026-10-14T22:26:39.7705993Z",
+          "operation": "Workbook.Close",
+          "result": "success"
+        },
+        {
+          "utc": "2026-10-14T22:26:39.7714322Z",
+          "operation": "Excel.Quit",
+          "result": "success"
+        }
+      ],
+      "passed": 8,
+      "checks": [
+        {
+          "passed": true,
+          "name": "100/95: Falta5, precio7.85, valorizado149.15"
+        },
+        {
+          "passed": true,
+          "name": "100/105: Sobra5, precio10, valorizado210"
+        },
+        {
+          "passed": true,
+          "name": "100/100: Falta0/Sobra0"
+        },
+        {
+          "passed": true,
+          "name": "Milésimas y redondeo monetario"
+        },
+        {
+          "passed": true,
+          "name": "Ponderado 1.61 y cálculo"
+        },
+        {
+          "passed": true,
+          "name": "Costo desconocido: importes vacíos"
+        },
+        {
+          "passed": true,
+          "name": "E vacío: fórmulas vacías"
+        },
+        {
+          "passed": true,
+          "name": "12 columnas, fórmulas, protección, S/ e Información"
+        }
+      ],
+      "path_length": 35,
+      "cleanup": true,
+      "existing_user_processes_untouched": [
+        19068
+      ],
+      "private_pid": 18452,
+      "run": 1
+    }
+  ],
+  "errors": [
+    {
+      "stage": "At D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\operations\\physical-count-excel-automation\\VALIDATE_EXCEL.ps1:46 char:4\r\n+    Assert-True ($session.Color('F'+[int]$map.'COUNT-LESS',$true) -eq  …\r\n+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+      "hresult": "0x80020003",
+      "pid": 18452,
+      "type": "System.Runtime.InteropServices.COMException",
+      "run": 1,
+      "message": "No se ha encontrado el miembro. (0x80020003 (DISP_E_MEMBERNOTFOUND))"
+    }
+  ],
+  "successful_openings": 0,
+  "failed": 1,
+  "candidate_sha256": "D244957D7B5C6983B4E7F2A1C3037E2E99D90E8D403678A1CDF9203AA83B5656",
+  "passed": 8.0,
+  "short_directory": "D:\\ExcelQA\\884bc34ab3d3",
+  "no_office_global_settings_changed": true,
+  "requested_runs": 3
+}

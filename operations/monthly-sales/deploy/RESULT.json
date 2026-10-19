@@ -1,0 +1,370 @@
+{
+  "status": "DEPLOYED_GO_MANUAL_VALIDATION",
+  "completed_lima": "2026-10-15T08:25:38.645821-05:00",
+  "deployment_executed": true,
+  "files": {
+    "before": {
+      "server/src/app.js": "dfb160b96cce099f89283c221a3671affd3357e87f9b528b3bd2bb100c071576",
+      "server/src/monthly-sales.js": null,
+      "public/index.html": "06ad9349541563ef990fcf5c8a7ecf63c5db05b28b2688bfe25aaf8b63f524c1",
+      "public/monthly-sales.js": null,
+      "public/desktop-responsive.css": "f30b44ebf7936886ec7cb75142149ab4370669d287d65fcf06aa7fef00f4584c"
+    },
+    "after": {
+      "server/src/app.js": "3a22cf3c1482aceac2788b86c8318aa9efbe70c9ca66e8e4571fefe861209d90",
+      "server/src/monthly-sales.js": "4f7cea2a35b1ddcd82af4db81178c2fb6502c8cad58122ae9af4cf4efa6a001f",
+      "public/index.html": "c2c01c26cd4cd1298e94223f87a64d9901659ac3516e47927aa57398ffb68e06",
+      "public/monthly-sales.js": "158173086da9c1e5b3b0ef0471a7cf68f2c8da1be5e1acbd33fe28ac7eb44a77",
+      "public/desktop-responsive.css": "a3e525f414f396b14e7a98edf995bbd631b496acd0ec4a23604625d64e9bcf25"
+    }
+  },
+  "backup": {
+    "remote": {
+      "path": "/home/eduxadmin/.local/share/eduxfac/monthly_sales_deploy_20261015_131626_7c68b6/backup.tar.gz",
+      "sha256": "ce7b9878f78b695c9982c008fc93512ffbedb3dc8da4d803c99a6398d409483a",
+      "verified": true
+    },
+    "local_archive": "D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\operations\\monthly-sales\\deploy\\backup.tar.gz",
+    "sha256": "ce7b9878f78b695c9982c008fc93512ffbedb3dc8da4d803c99a6398d409483a",
+    "verified": true,
+    "replaced_files": 3,
+    "new_files_absent": 2
+  },
+  "remote_work": "/home/eduxadmin/.local/share/eduxfac/monthly_sales_deploy_20261015_131626_7c68b6",
+  "rollback_command": "python3 /home/eduxadmin/.local/share/eduxfac/monthly_sales_deploy_20261015_131626_7c68b6/DEPLOY_MONTHLY.py --rollback",
+  "rollback_executed": false,
+  "only_web_pilot_restarted": true,
+  "pm2_before": {
+    "id": 4,
+    "pid": 362852,
+    "status": "online",
+    "restarts": 19,
+    "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+    "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+    "mode": "PILOTO",
+    "port": "3001",
+    "worker": "false",
+    "mutation": "no"
+  },
+  "pm2_after": {
+    "id": 4,
+    "pid": 385070,
+    "status": "online",
+    "restarts": 20,
+    "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+    "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+    "mode": "PILOTO",
+    "port": "3001",
+    "worker": "false",
+    "mutation": "no"
+  },
+  "other_processes_unchanged": true,
+  "database_fingerprints_unchanged": 48,
+  "rls_policies_views_schema_grants_unchanged": true,
+  "force_rls": 44,
+  "local_validated_hashes_unchanged": "10/10",
+  "local_vps_functional_hashes_equal": "5/5",
+  "https_frontend_hashes_equal": "3/3",
+  "http": [
+    {
+      "url": "https://app.eduxfac.com/api/health",
+      "status": 200,
+      "sha256": "e8d6739d4b386cde72974024535d5cb38c04a1558f090b41a41225387e9387cb",
+      "body": {
+        "ok": true,
+        "database": true,
+        "now": "2026-10-15T13:23:28.167Z",
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "url": "https://app.eduxfac.com/",
+      "status": 200,
+      "sha256": "c2c01c26cd4cd1298e94223f87a64d9901659ac3516e47927aa57398ffb68e06",
+      "matches_candidate": true
+    },
+    {
+      "url": "https://app.eduxfac.com/monthly-sales.js",
+      "status": 200,
+      "sha256": "158173086da9c1e5b3b0ef0471a7cf68f2c8da1be5e1acbd33fe28ac7eb44a77",
+      "matches_candidate": true
+    },
+    {
+      "url": "https://app.eduxfac.com/desktop-responsive.css",
+      "status": 200,
+      "sha256": "a3e525f414f396b14e7a98edf995bbd631b496acd0ec4a23604625d64e9bcf25",
+      "matches_candidate": true
+    },
+    {
+      "url": "https://admin.eduxfac.com/",
+      "status": 200,
+      "sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df"
+    }
+  ],
+  "post_deploy_api_sql": {
+    "passed": 46,
+    "failed": 0,
+    "details_file": "PILOT_API_SQL.json"
+  },
+  "responsive": {
+    "passed": 5,
+    "failed": 0,
+    "widths": [
+      1920,
+      1366,
+      1024,
+      768,
+      375
+    ],
+    "global_overflow": false
+  },
+  "ui_report_comparison": {
+    "branch": "PRINCIPAL",
+    "from": "2026-10-01",
+    "to": "2026-10-31",
+    "report_total": "434.40",
+    "monthly_total": "434.40",
+    "equal": true,
+    "visible_total": [
+      "S/ 434.40",
+      "S/ 434.40",
+      "S/ 434.40"
+    ]
+  },
+  "monthly_report_comparison": [
+    {
+      "year": 2026,
+      "month": 1,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 2,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 3,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 4,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 5,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 6,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 7,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 8,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 9,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 10,
+      "monthly": "434.40",
+      "report": "434.40",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 11,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 12,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    }
+  ],
+  "performance": {
+    "first_https_ms": 295.634,
+    "https_ms": [
+      49.125,
+      64.675,
+      96.254
+    ],
+    "native_sql_rls_ms": [
+      5.348,
+      3.59,
+      4.599
+    ]
+  },
+  "observed_data": {
+    "sales_states": [
+      {
+        "estado": "ANULADA",
+        "count": 4
+      },
+      {
+        "estado": "EMITIDA",
+        "count": 6
+      }
+    ],
+    "refunds": 4,
+    "document_types": [
+      {
+        "tipo_comprobante": "ORDEN",
+        "count": 10
+      }
+    ]
+  },
+  "year_validation": {
+    "available": [
+      2026
+    ],
+    "api_other_year": {
+      "year": 2025,
+      "total_year": "0",
+      "months": [
+        {
+          "month": 1,
+          "total": "0"
+        },
+        {
+          "month": 2,
+          "total": "0"
+        },
+        {
+          "month": 3,
+          "total": "0"
+        },
+        {
+          "month": 4,
+          "total": "0"
+        },
+        {
+          "month": 5,
+          "total": "0"
+        },
+        {
+          "month": 6,
+          "total": "0"
+        },
+        {
+          "month": 7,
+          "total": "0"
+        },
+        {
+          "month": 8,
+          "total": "0"
+        },
+        {
+          "month": 9,
+          "total": "0"
+        },
+        {
+          "month": 10,
+          "total": "0"
+        },
+        {
+          "month": 11,
+          "total": "0"
+        },
+        {
+          "month": 12,
+          "total": "0"
+        }
+      ]
+    },
+    "api_empty_year": {
+      "year": 1900,
+      "total_year": "0",
+      "months": [
+        {
+          "month": 1,
+          "total": "0"
+        },
+        {
+          "month": 2,
+          "total": "0"
+        },
+        {
+          "month": 3,
+          "total": "0"
+        },
+        {
+          "month": 4,
+          "total": "0"
+        },
+        {
+          "month": 5,
+          "total": "0"
+        },
+        {
+          "month": 6,
+          "total": "0"
+        },
+        {
+          "month": 7,
+          "total": "0"
+        },
+        {
+          "month": 8,
+          "total": "0"
+        },
+        {
+          "month": 9,
+          "total": "0"
+        },
+        {
+          "month": 10,
+          "total": "0"
+        },
+        {
+          "month": 11,
+          "total": "0"
+        },
+        {
+          "month": 12,
+          "total": "0"
+        }
+      ]
+    },
+    "visual_cross_year_selection": "Only2026 exists; no synthetic data/options added; API empty year and previously validated UI regression cover the other-year path."
+  },
+  "limitations": [
+    "No real credit notes exist (only ORDEN documents); behavior covered by preserved validated source and prior isolated PostgreSQL/RLS tests.",
+    "Only one assigned active branch and one year available in this pilot; no real data was created to expand coverage."
+  ]
+}

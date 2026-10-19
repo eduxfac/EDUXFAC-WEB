@@ -1,0 +1,14 @@
+[
+  {
+    "RegistryPath": "HKCU:\\Software\\Microsoft\\Office\\16.0\\Excel\\Security\\ProtectedView",
+    "Exists": false
+  },
+  {
+    "RegistryPath": "HKCU:\\Software\\Policies\\Microsoft\\Office\\16.0\\Excel\\Security\\ProtectedView",
+    "Exists": false
+  },
+  {
+    "RegistryPath": "HKLM:\\Software\\Policies\\Microsoft\\Office\\16.0\\Excel\\Security\\ProtectedView",
+    "Exists": false
+  }
+]

@@ -1,0 +1,216 @@
+--- server/src/app.js before
++++ server/src/app.js after
+@@ -22,6 +22,7 @@
+ import { linkProduct, inventoryWorkbook } from './branch-catalog.js';
+ import { registerInitialInventory } from './initial-inventory.js';
+ import { inventorySummary, countWorkbook, countPlan } from './inventory-count.js';
++import { registerPurchaseRequirements,lowStockCount } from './purchase-requirement.js';
+ import { applyPositiveStockEntry } from './inventory-entry.js';
+ import { adminServiceApi } from './admin-service-api.js';
+ import { getCompanyAccess, assertCompanyAccess, sendAccessError } from './company-access.js';
+@@ -657,7 +658,7 @@
+     const params=[req.user.empresa_id,branch];
+     const [sales,low,exp,expired,exp30,week,payments,recent]=await Promise.all([
+       pool.query(`select coalesce(sum(total),0)::numeric(14,2) ventas,count(*)::int tickets from reporte_ventas_netas where empresa_id=$1 and estado IN ('EMITIDA','DEVOLUCION_PARCIAL') and (created_at at time zone 'America/Lima')::date=(now() at time zone 'America/Lima')::date and ($2::uuid is null or sucursal_id=$2)`,params),
+-      pool.query(`select count(*)::int cantidad from (select p.id,coalesce(sum(l.cantidad_disponible),0) stock,coalesce((select ps.stock_minimo from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2),p.stock_minimo) stock_minimo from productos p left join lotes l on l.producto_id=p.id and ($2::uuid is null or l.sucursal_id=$2) where ($2::uuid is null or exists(select 1 from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2 and ps.activo=true)) and p.empresa_id=$1 and ($2::uuid is not null or p.activo=true) group by p.id having coalesce(sum(l.cantidad_disponible),0)<=coalesce((select ps.stock_minimo from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2),p.stock_minimo)) x`,params),
++      branch?lowStockCount(pool,req.user.empresa_id,branch):pool.query(`select count(*)::int cantidad from (select p.id,coalesce(sum(l.cantidad_disponible),0) stock,coalesce((select ps.stock_minimo from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2),p.stock_minimo) stock_minimo from productos p left join lotes l on l.producto_id=p.id and ($2::uuid is null or l.sucursal_id=$2) where ($2::uuid is null or exists(select 1 from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2 and ps.activo=true)) and p.empresa_id=$1 and ($2::uuid is not null or p.activo=true) group by p.id having coalesce(sum(l.cantidad_disponible),0)<=coalesce((select ps.stock_minimo from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2),p.stock_minimo)) x`,params),
+       pool.query(`select count(*)::int cantidad from lotes l join productos p on p.id=l.producto_id where ($2::uuid is null or exists(select 1 from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2 and ps.activo=true)) and p.empresa_id=$1 and l.cantidad_disponible>0 and l.fecha_vencimiento between current_date and current_date+interval '90 days' and ($2::uuid is null or l.sucursal_id=$2)`,params),
+       pool.query(`select count(*)::int cantidad from lotes l join productos p on p.id=l.producto_id where ($2::uuid is null or exists(select 1 from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2 and ps.activo=true)) and p.empresa_id=$1 and l.cantidad_disponible>0 and l.fecha_vencimiento<current_date and ($2::uuid is null or l.sucursal_id=$2)`,params),
+       pool.query(`select count(*)::int cantidad from lotes l join productos p on p.id=l.producto_id where ($2::uuid is null or exists(select 1 from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2 and ps.activo=true)) and p.empresa_id=$1 and l.cantidad_disponible>0 and l.fecha_vencimiento between current_date and current_date+interval '30 days' and ($2::uuid is null or l.sucursal_id=$2)`,params),
+@@ -1068,6 +1069,8 @@
+ 
+ 
+ // ===== v6: Órdenes de compra, costos y reposición inteligente =====
++registerPurchaseRequirements(app,{db:pool,auth:requireAuth,branchAccess:ensureBranchAccess});
++
+ app.get('/api/purchasing/replenishment', requireAuth, async (req,res)=>{
+   const branch=req.query.sucursal_id; const coverage=Math.max(1,Math.min(90,Number(req.query.coverage_days||14)));
+   try{await ensureBranchAccess(pool,req.user,branch);}catch(error){return res.status(error.status||400).json({error:error.message});}
+--- server/src/access-policy.js before
++++ server/src/access-policy.js after
+@@ -6,6 +6,7 @@
+   if (/^\/api\/inventory\/(adjustments|set-stock|repair-metadata)$/.test(path)) return ['inventory', 'editar'];
+   if (/^\/api\/import\//.test(path)) return ['inventory', method === 'GET' ? 'ver' : 'editar'];
+   if (/^\/api\/export\//.test(path)) return ['reports', 'ver'];
++  if (/^\/api\/purchasing\/requirements(?:\/(?:generate|export|print))?$/.test(path)) return ['replenishment','ver'];
+   const families = [
+     ['/api/admin/products', 'productsAdmin'], ['/api/admin/clients', 'customers'],
+     ['/api/admin/suppliers', 'suppliers'], ['/api/admin/users', 'usersAdmin'],
+--- public/index.html before
++++ public/index.html after
+@@ -643,7 +643,7 @@
+   </div>
+   <div class="edux-bottom"><span>🛡 Información segura</span><span>☁ Siempre disponible</span><span>♡ Pensado en tu botica</span></div>
+ </section>
+-<div id="app" class="app hidden"><aside class="sidebar"><div class="brand"><span><span>EDUXFAC</span><small>Tu botica, siempre contigo · v44.4</small></span></div><div class="nav" id="nav"><button class="active" data-module="dashboard">⌂ &nbsp; Inicio</button><button data-module="sales">◈ &nbsp; Ventas</button><button data-module="productsAdmin">▦ &nbsp; Productos</button><button data-module="inventory">▤ &nbsp; Inventario</button><button data-module="purchases">↙ &nbsp; Compras</button><button data-module="suppliers">♜ &nbsp; Proveedores</button><button data-module="customers">♙ &nbsp; Clientes</button><button data-module="cash">▰ &nbsp; Caja</button><button data-module="alerts">△ &nbsp; Alertas</button><button data-module="replenishment">◎ &nbsp; Reposición</button><button data-module="transfers">⇄ &nbsp; Transferencias</button><button data-module="reports">⌁ &nbsp; Reportes</button><button data-module="usersAdmin">♟ &nbsp; Usuarios</button><button data-module="settings">⚙ &nbsp; Configuración</button></div><button id="exportAllExcel" class="btn export-all">↓ Exportar TODO a Excel</button><div class="sidebar-foot"><div style="font-weight:900;margin-bottom:8px">EDUXFAC v44.4</div><div id="sideDate">Hoy</div><div id="sideClock" class="sidebar-clock">--:--</div><div id="sideCash" class="sidebar-cash">● Caja por verificar</div><div style="margin-top:8px">Usuario: <span id="currentUser"></span></div><div>Sucursal: <span id="sideBranch">—</span></div></div><button id="logout" class="btn" style="margin-top:10px;width:100%;background:#ef2d2d;color:#fff;font-weight:800">↪ Cerrar sesión</button></aside>
++<div id="app" class="app hidden"><aside class="sidebar"><div class="brand"><span><span>EDUXFAC</span><small>Tu botica, siempre contigo · v44.4</small></span></div><div class="nav" id="nav"><button class="active" data-module="dashboard">⌂ &nbsp; Inicio</button><button data-module="sales">◈ &nbsp; Ventas</button><button data-module="productsAdmin">▦ &nbsp; Productos</button><button data-module="inventory">▤ &nbsp; Inventario</button><button data-module="purchases">↙ &nbsp; Compras</button><button data-module="suppliers">♜ &nbsp; Proveedores</button><button data-module="customers">♙ &nbsp; Clientes</button><button data-module="cash">▰ &nbsp; Caja</button><button data-module="alerts">△ &nbsp; Alertas</button><button data-module="replenishment">◎ &nbsp; Requerimiento de compra</button><button data-module="transfers">⇄ &nbsp; Transferencias</button><button data-module="reports">⌁ &nbsp; Reportes</button><button data-module="usersAdmin">♟ &nbsp; Usuarios</button><button data-module="settings">⚙ &nbsp; Configuración</button></div><button id="exportAllExcel" class="btn export-all">↓ Exportar TODO a Excel</button><div class="sidebar-foot"><div style="font-weight:900;margin-bottom:8px">EDUXFAC v44.4</div><div id="sideDate">Hoy</div><div id="sideClock" class="sidebar-clock">--:--</div><div id="sideCash" class="sidebar-cash">● Caja por verificar</div><div style="margin-top:8px">Usuario: <span id="currentUser"></span></div><div>Sucursal: <span id="sideBranch">—</span></div></div><button id="logout" class="btn" style="margin-top:10px;width:100%;background:#ef2d2d;color:#fff;font-weight:800">↪ Cerrar sesión</button></aside>
+ <main class="main"><div class="bw-topbar"><div class="bw-userbar"><div class="bw-branchbox"><span>📍</span><select id="branch"></select></div><div class="bw-userbox"><span class="bw-avatar">●</span><span><b id="topUser">Usuario</b><small id="topRole">EDUXFAC</small></span></div></div></div>
+ <section id="dashboard" class="module active">
+   <div class="dash-welcome"><div><span class="dash-eyebrow">Panel de control</span><h1>¡Hola, <span id="dashUserName">Administrador</span>!</h1><p>Tu botica en control, siempre contigo.</p></div><div class="dash-welcome-art"><span>EDUXFAC</span><b>Información clara para decidir mejor</b><small id="dashBranchName">Sucursal actual</small></div></div>
+@@ -660,7 +660,7 @@
+   </div>
+   <div class="dash-operational-grid">
+     <article class="dash-card"><div class="dash-card-head"><div><span class="dash-card-icon amber">◷</span><b>Productos por vencer</b><small>Próximos 90 días</small></div><button class="dash-link" data-dash-go="alerts" data-alert-view="expiry">Ver todos</button></div><div id="dashExpiryList" class="dash-data-list"><div class="dash-empty">Cargando...</div></div></article>
+-    <article class="dash-card"><div class="dash-card-head"><div><span class="dash-card-icon red">!</span><b>Stock bajo</b><small>Productos que requieren reposición</small></div><button class="dash-link" data-dash-go="inventory">Ver todos</button></div><div id="dashLowStockList" class="dash-data-list"><div class="dash-empty">Cargando...</div></div></article>
++    <article class="dash-card"><div class="dash-card-head"><div><span class="dash-card-icon red">!</span><b>Stock bajo <span id="dashLowStockCount" aria-label="Productos con stock bajo">0</span></b><small>Productos que requieren reposición</small></div><button class="dash-link" data-dash-go="replenishment">Ver todos</button></div><div id="dashLowStockList" class="dash-data-list"><div class="dash-empty">Cargando...</div></div></article>
+   </div>
+   <div class="dash-bottom-grid">
+     <article class="dash-card dash-recent-card"><div class="dash-card-head"><div><span class="dash-card-icon">◴</span><b>Últimas ventas</b><small>Movimientos recientes de la sucursal</small></div><button class="dash-link" data-dash-go="sales">Ver ventas</button></div><div class="dash-table-head"><span>Hora</span><span>Cliente</span><span>Total</span></div><div id="dashRecent" class="dash-recent"></div></article>
+@@ -719,7 +719,13 @@
+ <div class="purchase-history-kpis"><div class="card"><span class="muted">Total comprado</span><b id="phTotal">S/ 0.00</b></div><div class="card"><span class="muted">Documentos</span><b id="phDocs">0</b></div><div class="card"><span class="muted">Unidades ingresadas</span><b id="phUnits">0</b></div><div class="card"><span class="muted">Proveedores</span><b id="phSuppliers">0</b></div></div>
+ <div class="card"><div style="overflow:auto"><table class="purchase-history-table"><thead><tr><th>Fecha</th><th>Documento</th><th>Proveedor</th><th>Usuario</th><th>Productos</th><th>Unidades</th><th>Total</th><th></th></tr></thead><tbody id="phRows"><tr><td colspan="8" class="muted">Selecciona un periodo y pulsa Buscar.</td></tr></tbody></table></div><div id="phStatus" class="status"></div><div id="phDetail" class="purchase-detail-box hidden"></div></div>
+ </div></section>
+-<section id="replenishment" class="module"><div class="top"><div><h2 style="margin:0">Reposición inteligente</h2><div class="muted">Rotación, cobertura, costos y órdenes de compra</div></div><div style="display:flex;gap:8px;align-items:center"><label class="muted">Cobertura</label><select id="rpCoverage" class="input" style="width:120px"><option value="7">7 días</option><option value="14" selected>14 días</option><option value="21">21 días</option><option value="30">30 días</option></select><button id="rpReload" class="btn secondary">Actualizar</button></div></div><div class="grid kpis"><div class="card kpi"><span class="muted">Productos sugeridos</span><b id="rpSuggested">0</b></div><div class="card kpi"><span class="muted">Compra estimada</span><b id="rpEstimate">S/ 0.00</b></div><div class="card kpi"><span class="muted">Sin movimiento</span><b id="rpNoMove">0</b></div><div class="card kpi"><span class="muted">Órdenes abiertas</span><b id="rpOrders">0</b></div></div><div class="card"><div class="top"><div><h3 style="margin:0">Sugerencia de compra</h3><div class="muted">Basada en ventas de 30 días y cobertura objetivo</div></div><select id="rpSupplier" class="input" style="max-width:300px"><option value="">Selecciona proveedor para generar orden</option></select></div><div style="overflow:auto;max-height:440px;margin-top:12px"><table><thead><tr><th>Producto</th><th>Stock</th><th>Venta 30d</th><th>Prom./día</th><th>Pendiente</th><th>Sugerido</th><th>Costo ant.</th><th>Últ. costo</th><th>Var.</th><th>Margen</th><th></th></tr></thead><tbody id="rpRows"></tbody></table></div><button id="rpCreateOrder" class="btn primary" style="margin-top:12px">Crear orden con seleccionados</button><div id="rpStatus" class="status"></div></div><div class="grid layout" style="margin-top:18px"><div class="card"><h3>Órdenes de compra</h3><div style="overflow:auto;max-height:360px"><table><thead><tr><th>Fecha</th><th>Proveedor</th><th>Items</th><th>Total</th><th>Estado</th></tr></thead><tbody id="rpOrderRows"></tbody></table></div></div><div class="card"><h3>Productos sin movimiento</h3><div style="overflow:auto;max-height:360px"><table><thead><tr><th>Producto</th><th>Stock</th><th>Días sin venta</th></tr></thead><tbody id="rpNoMoveRows"></tbody></table></div></div></div><div class="card" style="margin-top:18px"><h3>Historial de compras por proveedor</h3><div style="overflow:auto;max-height:320px"><table><thead><tr><th>Fecha</th><th>Proveedor</th><th>Documento</th><th>Items</th><th>Total</th></tr></thead><tbody id="rpHistoryRows"></tbody></table></div></div></section>
++<section id="replenishment" class="module">
++<div class="top"><div><h2 style="margin:0">Requerimiento de compra</h2><div class="muted">Stock actual menor o igual al mínimo · Cantidad elegida por usted</div></div><button id="rqReload" class="btn secondary">Actualizar</button></div>
++<div class="card rq-toolbar"><label for="rqSearch">Buscar código o producto<input id="rqSearch" class="input" placeholder="Código o nombre" maxlength="100"></label><div><b id="rqCount">Consultando…</b><div class="muted">Incluye mínimo 0. No se calcula cuánto comprar.</div></div><button id="rqGenerate" class="btn primary">Generar requerimiento</button></div>
++<div class="card"><div class="rq-table-wrap"><table><thead><tr><th>Código</th><th>Producto</th><th>Stock actual</th><th>Stock mínimo</th><th>Sucursal</th><th>Último costo de compra</th><th>Proveedor habitual</th><th>Cantidad a pedir</th></tr></thead><tbody id="rqRows"></tbody></table></div><div class="rq-pagination"><button id="rqPrevious" class="btn secondary">Anterior</button><span id="rqPage">Página 1</span><button id="rqNext" class="btn secondary">Siguiente</button></div><p class="muted">Costo: última compra registrada. Proveedor: última compra con proveedor, en esta misma sucursal. Son datos informativos.</p></div>
++<div id="rqStatus" class="status" role="status" aria-live="polite"></div>
++<div id="rqSummary" class="card hidden"><div class="top"><div><h3>Requerimiento generado</h3><b id="rqSummaryHeading"></b></div><div class="rq-actions"><button id="rqExport" class="btn secondary">Exportar Excel</button><button id="rqPrint" class="btn primary">Imprimir</button></div></div><p id="rqSummaryText"></p><div class="rq-table-wrap"><table><thead><tr><th>Código</th><th>Producto</th><th>Stock actual</th><th>Stock mínimo</th><th>Cantidad a pedir</th><th>Último costo</th><th>Proveedor</th><th>Sucursal</th></tr></thead><tbody id="rqSummaryRows"></tbody></table></div></div>
++</section>
+ <section id="cash" class="module"><div class="top"><div><h2 style="margin:0">Caja</h2><div class="muted">Apertura, efectivo esperado y cierre</div></div><span id="cashState" class="pill">—</span></div><div class="grid kpis"><div class="card kpi"><span class="muted">Fondo inicial</span><b id="opening">S/ 0.00</b></div><div class="card kpi"><span class="muted">Movimientos efectivo</span><b id="cashMoves">S/ 0.00</b></div><div class="card kpi"><span class="muted">Efectivo esperado</span><b id="expected">S/ 0.00</b></div><div class="card kpi"><span class="muted">Sesión</span><b id="sessionLabel" style="font-size:15px">Sin abrir</b></div></div><div class="card"><div id="openBlock"><label class="muted">Monto de apertura</label><input id="openingAmount" class="input" type="number" min="0" step="0.01" value="200"><button id="openCash" class="btn primary" style="margin-top:12px">Abrir caja</button></div><div id="closeBlock" class="hidden"><label class="muted">Efectivo contado</label><input id="counted" class="input" type="number" min="0" step="0.01" placeholder="0.00"><button id="closeCash" class="btn primary" style="margin-top:12px">Cerrar caja</button></div><div id="cashStatus" class="status"></div></div></section>
+ <section id="transfers" class="module"><div class="top"><div><h2 style="margin:0">Transferencias entre sucursales</h2><div class="muted">Mueve stock conservando lote, vencimiento, costo y Kardex</div></div><button id="trReload" class="btn secondary">Actualizar</button></div><div class="grid layout" style="margin-top:18px"><div class="card"><h3>Nueva transferencia</h3><label>Sucursal destino<select id="trDestination" class="input"></select></label><label style="display:block;margin-top:10px">Producto<select id="trProduct" class="input"></select></label><label style="display:block;margin-top:10px">Cantidad<input id="trQty" class="input" type="number" min="0.001" step="0.001" value="1"></label><label style="display:block;margin-top:10px">Observación<input id="trNote" class="input" placeholder="Motivo o referencia"></label><button id="trSend" class="btn primary" style="margin-top:12px">Transferir ahora</button><div id="trStatus" class="status"></div></div><div class="card"><h3>Movimientos recientes</h3><div style="overflow:auto;max-height:520px"><table><thead><tr><th>Fecha</th><th>Origen → destino</th><th>Items</th><th>Unidades</th></tr></thead><tbody id="trRows"></tbody></table></div></div></div><div class="card" style="margin-top:14px"><h3>Solicitudes internas</h3><div class="grid" style="grid-template-columns:2fr 1fr 1fr auto"><select id="irProduct" class="input"></select><input id="irQty" class="input" type="number" min="0.001" step="0.001" value="1"><select id="irOrigin" class="input"><option value="">Cualquier sucursal</option></select><button id="irCreate" class="btn secondary">Solicitar stock</button></div><div style="overflow:auto;margin-top:12px"><table><thead><tr><th>Fecha</th><th>Solicitante</th><th>Origen</th><th>Estado</th><th>Detalle</th></tr></thead><tbody id="irRows"></tbody></table></div><div id="irStatus" class="status"></div></div></section>
+ <section id="reports" class="module">
+@@ -812,6 +818,7 @@
+   </div>
+ </div>
+ 
++<script src="/purchase-requirement.js"></script>
+ <script src="app-dialogs.js"></script>
+ <script>
+ // Compatibility for existing text-entry workflows; shared HTML dialog.
+@@ -1097,7 +1104,7 @@
+     const d=await api('/api/dashboard?sucursal_id='+encodeURIComponent(state.branchId));
+     if($('dSales'))$('dSales').textContent=money(d.ventas_hoy||0);
+     if($('dTickets'))$('dTickets').textContent=Number(d.tickets||0);
+-    if($('dLow'))$('dLow').textContent=Number(d.stock_bajo||0);
++    setDashLowCount(Number(d.stock_bajo||0));
+     if($('dashUserName'))$('dashUserName').textContent=(state.user?.nombre||'Administrador').split(' ')[0];
+     if($('dashBranchName'))$('dashBranchName').textContent=$('branch')?.selectedOptions?.[0]?.textContent||'Sucursal actual';
+     const banner=$('expiryBanner'),expired=Number(d.vencidos||0),critical=Number(d.vencer_30||0);
+@@ -1113,15 +1120,17 @@
+       allowed('purchases')?api('/api/purchases/history?'+new URLSearchParams({sucursal_id:state.branchId,from:monthFrom,to:monthTo,doc_type:'',q:''})):Promise.resolve(null),
+       allowed('productsAdmin')?api('/api/admin/products?sucursal_id='+encodeURIComponent(state.branchId)):Promise.resolve(null),
+       allowed('customers')?api('/api/admin/clients?q='):Promise.resolve(null),
+-      allowed('alerts')?api('/api/inventory/alerts?sucursal_id='+encodeURIComponent(state.branchId)+'&days=90'):Promise.resolve(null)
++      allowed('alerts')?api('/api/inventory/alerts?sucursal_id='+encodeURIComponent(state.branchId)+'&days=90'):Promise.resolve(null),
++      allowed('replenishment')?api('/api/purchasing/requirements?sucursal_id='+encodeURIComponent(state.branchId)+'&limit=5'):Promise.resolve(null)
+     ]);
+     const purchases=optional[0].status==='fulfilled'?optional[0].value:null,products=optional[1].status==='fulfilled'?optional[1].value:null,clients=optional[2].status==='fulfilled'?optional[2].value:null,alerts=optional[3].status==='fulfilled'?optional[3].value:null;
+     if($('dPurchasesMonth'))$('dPurchasesMonth').textContent=purchases?money(purchases.summary?.total||0):'—';
+     if($('dPurchaseDocs'))$('dPurchaseDocs').textContent=purchases?`${Number(purchases.summary?.documentos||0)} documento(s)`:'Dato no disponible';
+     if($('dProductsCount'))$('dProductsCount').textContent=Array.isArray(products)?products.length:'—';
+     if($('dClientsCount'))$('dClientsCount').textContent=Array.isArray(clients)?clients.length:'—';
+-    if(alerts&&$('dLow'))$('dLow').textContent=Number(alerts.stock_bajo?.length||0);
+-    renderDashExpiry(alerts?.por_vencer||[]);renderDashLowStock(alerts?.stock_bajo||[]);
++    const requirements=optional[4].status==='fulfilled'?optional[4].value:null;
++    if(requirements)setDashLowCount(requirements.total);
++    renderDashExpiry(alerts?.por_vencer||[]);renderDashLowStock(requirements?.items||[]);
+   }catch(e){
+     console.error('Dashboard:',e);
+     if($('dSales'))$('dSales').textContent='S/ 0.00'; if($('dTickets'))$('dTickets').textContent='0';
+@@ -1348,7 +1357,7 @@
+ async function loadSuppliers(){
+   try {
+     const all=await api('/api/admin/suppliers?q=');suppliers=all;
+-    for(const [id,label] of [['buySupplier','Sin proveedor'],['rpSupplier','Selecciona proveedor para generar orden']]){
++    for(const [id,label] of [['buySupplier','Sin proveedor']]){
+       const select=$(id),selected=select.value;
+       select.innerHTML=`<option value="">${label}</option>`+all.map(x=>`<option value="${esc(x.id)}">${esc(x.razon_social||'')}${x.ruc?' · '+esc(x.ruc):''}</option>`).join('');
+       if(all.some(x=>x.id===selected))select.value=selected;
+@@ -1573,7 +1582,7 @@
+   }
+ }
+ function installExcelButtons(){
+-  document.querySelectorAll('.module').forEach(module=>{const top=module.querySelector(':scope > .top');if(!top||top.querySelector('[data-excel-module]'))return;const b=document.createElement('button');b.type='button';b.className='btn excel-btn';b.dataset.excelModule=module.id;b.textContent='⬇ Exportar Excel';const right=top.lastElementChild;if(right&&right!==top.firstElementChild&&['INPUT','SELECT'].includes(right.tagName)){const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:8px;align-items:center;flex-wrap:wrap';right.replaceWith(wrap);wrap.append(right,b)}else top.appendChild(b);b.onclick=()=>downloadExcel([module],`EDUXFAC_${module.id}_${peruISODate()}.xlsx`).catch(e=>showAppNotice(e.message));});
++  document.querySelectorAll('.module').forEach(module=>{if(module.id==='replenishment')return;const top=module.querySelector(':scope > .top');if(!top||top.querySelector('[data-excel-module]'))return;const b=document.createElement('button');b.type='button';b.className='btn excel-btn';b.dataset.excelModule=module.id;b.textContent='⬇ Exportar Excel';const right=top.lastElementChild;if(right&&right!==top.firstElementChild&&['INPUT','SELECT'].includes(right.tagName)){const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:8px;align-items:center;flex-wrap:wrap';right.replaceWith(wrap);wrap.append(right,b)}else top.appendChild(b);b.onclick=()=>downloadExcel([module],`EDUXFAC_${module.id}_${peruISODate()}.xlsx`).catch(e=>showAppNotice(e.message));});
+   const all=$('exportAllExcel');if(all)all.onclick=()=>downloadExcel([...document.querySelectorAll('.module')],`EDUXFAC_TODO_${peruISODate()}.xlsx`).catch(e=>showAppNotice(e.message));
+ }
+ 
+@@ -1718,7 +1727,7 @@
+ function initReportDates(){const t=peruISODate();$('repTo').value=t;$('repFrom').value=t}
+ async function bootstrap(){const b=await api('/api/bootstrap');state.branches=b.branches;state.reportBranches=b.report_branches||b.branches;state.permissions=b.permissions||{};state.reportGlobal=b.report_global===true;if(b.user){state.user=b.user;$('currentUser').textContent=b.user.nombre;if($('topUser'))$('topUser').textContent=b.user.nombre;}if(!state.branches.length)throw new Error('No hay sucursales activas.');state.branchId=state.branches[0].id;$('branch').innerHTML=state.branches.map(s=>`<option value="${s.id}">${s.nombre}</option>`).join('');initReportDates();syncBranchSelectors();await Promise.allSettled([loadProducts(''),loadDashboard(),loadCash(),loadRecentSales()]);updateChrome();loadedModules.add('dashboard');loadedModules.add('sales');loadedModules.add('cash');setTimeout(()=>showCashWelcome(),120)}
+ async function showModule(module){closeUserEdit();if(state.permissions&&state.permissions[module]&&state.permissions[module].ver===false){showAccessDeniedNotice();return;}document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.module===module));document.querySelectorAll('.module').forEach(x=>x.classList.toggle('active',x.id===module));await lazyLoadModule(module)}
+-async function lazyLoadModule(module){try{if(module==='dashboard'){await loadDashboard();updateChrome();}else if(module==='inventory')await loadInventoryProducts();else if(module==='productsAdmin'){await loadCatalogs();$('paFormModal')?.classList.add('hidden');$('paFormCard')?.classList.remove('hidden');await loadAdminProducts();setTimeout(()=>$('paSearch')?.focus(),0)}else if(module==='customers')await loadClients();else if(module==='suppliers')await loadSuppliers();else if(module==='alerts')await loadAlerts();else if(module==='purchases'){await loadSuppliers();installPurchaseHistoryControls();}else if(module==='replenishment'){await loadSuppliers();await loadReplenishment()}else if(module==='transfers')await loadTransfers();else if(module==='reports'){syncBranchSelectors();installReportCenter();updateReportCenterUi();}else if(module==='usersAdmin')await loadUsersAdmin();else if(module==='settings')await loadSettings();loadedModules.add(module)}catch(e){console.error(e)}}
++async function lazyLoadModule(module){try{if(module==='dashboard'){await loadDashboard();updateChrome();}else if(module==='inventory')await loadInventoryProducts();else if(module==='productsAdmin'){await loadCatalogs();$('paFormModal')?.classList.add('hidden');$('paFormCard')?.classList.remove('hidden');await loadAdminProducts();setTimeout(()=>$('paSearch')?.focus(),0)}else if(module==='customers')await loadClients();else if(module==='suppliers')await loadSuppliers();else if(module==='alerts')await loadAlerts();else if(module==='purchases'){await loadSuppliers();installPurchaseHistoryControls();}else if(module==='replenishment')await loadReplenishment();else if(module==='transfers')await loadTransfers();else if(module==='reports'){syncBranchSelectors();installReportCenter();updateReportCenterUi();}else if(module==='usersAdmin')await loadUsersAdmin();else if(module==='settings')await loadSettings();loadedModules.add(module)}catch(e){console.error(e)}}
+ async function login(usuario,password,ruc=''){let d=await api('/api/auth/login',{method:'POST',body:JSON.stringify({usuario,password,ruc})});if(d.debe_cambiar_password)d=await window.eduxfacChangeInitialPassword(d.token);$('loginPass').value='';state.token=d.token;state.user=d.user;localStorage.setItem('bw_token',d.token);$('currentUser').textContent=d.user.nombre;if($('topUser'))$('topUser').textContent=d.user.nombre;$('login').classList.add('hidden');$('app').classList.remove('hidden');await bootstrap()}
+ $('loginForm').onsubmit=async e=>{e.preventDefault();$('loginStatus').textContent='';try{await login($('loginUser').value.trim(),$('loginPass').value,$('loginRuc')?.value.trim()||'')}catch(err){$('loginStatus').textContent=err.message}};$('logout').onclick=()=>{localStorage.removeItem('bw_token');location.reload()};
+ $('nav').onclick=async e=>{const b=e.target.closest('button');if(!b)return;if(state.permissions?.[b.dataset.module]?.ver===false){showAccessDeniedNotice();return;}closeUserEdit();document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.module').forEach(x=>x.classList.remove('active'));$(b.dataset.module).classList.add('active');await lazyLoadModule(b.dataset.module);if(b.dataset.module==='sales')setTimeout(()=>{const q=$('search');if(q){q.focus();q.select?.()}},0)};$('branch').onchange=async()=>{state.branchId=$('branch').value;state.cashPromptSkipped=false;state.cart.clear();state.salePrices.clear();state.productCache.clear();$('search').value='';renderCart();syncBranchSelectors();await Promise.allSettled([loadProducts(''),loadDashboard(),loadCash(),loadRecentSales()]);updateChrome();loadedModules.clear();loadedModules.add('dashboard');loadedModules.add('sales');loadedModules.add('cash');masterProducts=[];if($('paFormModal'))$('paFormModal').classList.add('hidden');const activeModule=document.querySelector('.module.active')?.id;if(activeModule)await lazyLoadModule(activeModule);setTimeout(()=>showCashWelcome(),100)};$('saleSearchMore').onclick=()=>loadMoreSalesProducts().catch(()=>{});$('search').oninput=()=>{clearTimeout(saleSearchTimer);const request=++saleSearchRequest;saleSearchTimer=setTimeout(()=>loadProducts(null,request).catch(()=>{}),180)};$('received').oninput=calcChange;function calcChange(){const r=Number($('received').value)||0;$('change').textContent=money(Math.max(0,r-total()))}
+@@ -1760,41 +1769,13 @@
+ if($('cashWelcomeSkip'))$('cashWelcomeSkip').onclick=()=>{state.cashPromptSkipped=true;hideCashWelcome();$('saleStatus').textContent='Puedes vender sin abrir caja. La apertura sigue disponible en el módulo Caja.';renderCashSaleNotice()};
+ 
+ document.addEventListener('click',e=>{const m=e.target.closest('#paFormModal');if(m&&e.target===m)closeProductForm()});
++function setDashLowCount(value){for(const id of ['dLow','dashLowStockCount'])if($(id))$(id).textContent=value;}
++let purchaseRequirementUI;
+ async function loadReplenishment(){
+-  try{
+-    const branch=state.branchId; if(!branch)return;
+-    const coverage=Number($('rpCoverage')?.value||14);
+-    if($('rpStatus'))$('rpStatus').textContent='Cargando reposición...';
+-    const [rows,noMove,orders,history]=await Promise.all([
+-      api(`/api/purchasing/replenishment?sucursal_id=${encodeURIComponent(branch)}&coverage_days=${coverage}`),
+-      api(`/api/purchasing/no-movement?sucursal_id=${encodeURIComponent(branch)}&days=60`),
+-      api(`/api/purchase-orders?sucursal_id=${encodeURIComponent(branch)}`),
+-      api(`/api/purchasing/supplier-history?sucursal_id=${encodeURIComponent(branch)}`)
+-    ]);
+-    window.__replenishmentRows=rows||[];
+-    if($('rpSuggested'))$('rpSuggested').textContent=(rows||[]).filter(x=>Number(x.sugerido)>0).length;
+-    if($('rpEstimate'))$('rpEstimate').textContent=money((rows||[]).reduce((a,x)=>a+Number(x.sugerido||0)*Number(x.ultimo_costo||0),0));
+-    if($('rpNoMove'))$('rpNoMove').textContent=(noMove||[]).length;
+-    if($('rpOrders'))$('rpOrders').textContent=(orders||[]).filter(x=>['BORRADOR','ENVIADA'].includes(String(x.estado))).length;
+-    if($('rpRows'))$('rpRows').innerHTML=(rows||[]).map(x=>`<tr><td><b>${esc(x.nombre)}</b><div class="muted">${esc(x.codigo_interno||'')}</div></td><td>${stockHtml(x.stock)}</td><td>${x.venta_30d}</td><td>${x.promedio_diario}</td><td>${x.pedido_pendiente}</td><td><b>${x.sugerido}</b></td><td>${money(x.costo_anterior)}</td><td>${money(x.ultimo_costo)}</td><td>${x.variacion_costo_pct}%</td><td>${x.margen_pct}%</td><td><input type="checkbox" class="rpPick" data-id="${x.id}" ${Number(x.sugerido)>0?'checked':''}></td></tr>`).join('')||'<tr><td colspan="11">Sin sugerencias.</td></tr>';
+-    if($('rpNoMoveRows'))$('rpNoMoveRows').innerHTML=(noMove||[]).map(x=>`<tr><td>${esc(x.nombre)}</td><td>${stockHtml(x.stock)}</td><td>${x.dias_sin_venta}</td></tr>`).join('')||'<tr><td colspan="3">Sin productos.</td></tr>';
+-    if($('rpOrderRows'))$('rpOrderRows').innerHTML=(orders||[]).map(x=>`<tr><td>${esc(x.fecha||'')}</td><td>${esc(x.proveedor||'—')}</td><td>${x.items}</td><td>${money(x.total_estimado)}</td><td>${esc(x.estado)}</td></tr>`).join('')||'<tr><td colspan="5">Sin órdenes.</td></tr>';
+-    if($('rpHistoryRows'))$('rpHistoryRows').innerHTML=(history||[]).map(x=>`<tr><td>${esc(x.fecha||'')}</td><td>${esc(x.proveedor||'—')}</td><td>${esc([x.tipo_documento,x.serie,x.numero].filter(Boolean).join(' '))}</td><td>${x.items}</td><td>${money(x.total)}</td></tr>`).join('')||'<tr><td colspan="5">Sin compras.</td></tr>';
+-    if($('rpStatus'))$('rpStatus').textContent='✓ Reposición actualizada.';
+-  }catch(e){console.error(e);if($('rpStatus'))$('rpStatus').textContent=e.message;}
+-}
+-async function createSuggestedOrder(){
+-  try{
+-    const supplier=$('rpSupplier')?.value||null;
+-    const selected=[...document.querySelectorAll('.rpPick:checked')].map(c=>(window.__replenishmentRows||[]).find(x=>String(x.id)===String(c.dataset.id))).filter(Boolean).filter(x=>Number(x.sugerido)>0);
+-    if(!selected.length)throw new Error('Selecciona al menos un producto con cantidad sugerida.');
+-    const items=selected.map(x=>({producto_id:x.id,cantidad:Number(x.sugerido),costo_referencia:Number(x.ultimo_costo||0)}));
+-    await api('/api/purchase-orders',{method:'POST',body:JSON.stringify({sucursal_id:state.branchId,proveedor_id:supplier||null,items})});
+-    if($('rpStatus'))$('rpStatus').textContent='✓ Orden de compra creada.';
+-    await loadReplenishment();
+-  }catch(e){console.error(e);if($('rpStatus'))$('rpStatus').textContent=e.message;}
+-}
+-$('paSave').onclick=saveProduct;$('paNew').onclick=()=>showNewProductForm(!!productFormPurchaseParent);$('paCreateMode').onclick=showNewProductForm;$('paModifyMode').onclick=showModifyProductMode;$('paCloseForm').onclick=closeProductForm;$('paClearSearch').onclick=()=>{$('paSearch').value='';loadAdminProducts();$('paSearch').focus()};$('paAddEquiv').onclick=addProductEquivalence;$('presentationClose').onclick=()=>$('presentationModal').classList.add('hidden');$('paSearch').oninput=()=>{clearTimeout(window.__paT);window.__paT=setTimeout(loadAdminProducts,250)};$('clSave').onclick=saveClient;$('clNew').onclick=clearClient;$('clSearch').oninput=()=>{clearTimeout(window.__clT);window.__clT=setTimeout(loadClients,250)};$('spSave').onclick=saveSupplier;$('spNew').onclick=clearSupplier;$('spSearch').oninput=renderSuppliers;$('alReload').onclick=loadAlerts;if($('alRepair'))$('alRepair').onclick=repairInventoryMetadata;$('rpReload').onclick=loadReplenishment;$('rpCoverage').onchange=loadReplenishment;$('rpCreateOrder').onclick=createSuggestedOrder;
++ if(!purchaseRequirementUI)purchaseRequirementUI=window.createPurchaseRequirement({api,getBranchId:()=>state.branchId,getToken:()=>state.token,onCount:(count,unfiltered)=>{if(unfiltered)setDashLowCount(count)}});
++ await purchaseRequirementUI.load();
++}
++$('paSave').onclick=saveProduct;$('paNew').onclick=()=>showNewProductForm(!!productFormPurchaseParent);$('paCreateMode').onclick=showNewProductForm;$('paModifyMode').onclick=showModifyProductMode;$('paCloseForm').onclick=closeProductForm;$('paClearSearch').onclick=()=>{$('paSearch').value='';loadAdminProducts();$('paSearch').focus()};$('paAddEquiv').onclick=addProductEquivalence;$('presentationClose').onclick=()=>$('presentationModal').classList.add('hidden');$('paSearch').oninput=()=>{clearTimeout(window.__paT);window.__paT=setTimeout(loadAdminProducts,250)};$('clSave').onclick=saveClient;$('clNew').onclick=clearClient;$('clSearch').oninput=()=>{clearTimeout(window.__clT);window.__clT=setTimeout(loadClients,250)};$('spSave').onclick=saveSupplier;$('spNew').onclick=clearSupplier;$('spSearch').oninput=renderSuppliers;$('alReload').onclick=loadAlerts;if($('alRepair'))$('alRepair').onclick=repairInventoryMetadata;
+ $('trReload').onclick=loadTransfers;$('trSend').onclick=sendTransfer;$('irCreate').onclick=createInternalRequest;$('repClear').onclick=()=>{$('repSearch').value='';$('repMethod').value='';$('repUser').value='';$('repDocType').value='';initReportDates();$('repSalesRows').innerHTML='<tr><td colspan="12" class="muted">Filtros limpiados. Pulsa Buscar.</td></tr>';$('repStatus').textContent='Filtros limpiados. Pulsa Buscar.'};if($('salesDetailClose'))$('salesDetailClose').onclick=closeSalesDetail;$('repBranch').onchange=()=>{reportCenterData=null;updateReportCenterUi();$('repStatus').textContent='Sucursal cambiada · Pulsa Buscar.';};$('uaReload').onclick=loadUsersAdmin;$('uaEditClose').onclick=closeUserEdit;$('uaEditSave').onclick=saveUserEdit;$('uaChangePassBtn').onclick=toggleUserPasswordEdit;$('uaShowNewPass').onchange=toggleUserPasswordVisibility;
+ document.querySelectorAll('.cfg-tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.cfg-tab').forEach(x=>{x.classList.remove('primary');x.classList.add('secondary')});b.classList.add('primary');b.classList.remove('secondary');document.querySelectorAll('.cfg-panel').forEach(x=>x.classList.add('hidden'));$('cfg-'+b.dataset.cfg).classList.remove('hidden');if(b.dataset.cfg==='branches')loadCfgBranches();if(b.dataset.cfg==='permissions')loadPermissionUsers()});
+ async function saveCfg(extra){try{$('settingsStatus').textContent='Guardando...';await api('/api/settings',{method:'PUT',body:JSON.stringify(extra)});$('settingsStatus').textContent='✓ Configuración guardada correctamente.';await loadSettings()}catch(e){$('settingsStatus').textContent=e.message}}
+@@ -2090,7 +2071,7 @@
+   const MODULES=[
+     ['dashboard','Inicio'],['sales','Ventas'],['productsAdmin','Productos'],['inventory','Inventario'],
+     ['purchases','Compras'],['suppliers','Proveedores'],['customers','Clientes'],['cash','Caja'],
+-    ['alerts','Alertas'],['replenishment','Reposición'],['transfers','Transferencias'],['reports','Reportes'],
++    ['alerts','Alertas'],['replenishment','Requerimiento de compra'],['transfers','Transferencias'],['reports','Reportes'],
+     ['usersAdmin','Usuarios'],['settings','Configuración']
+   ];
+   function val(id){return (document.getElementById(id)?.value||'').trim()}
+--- public/desktop-responsive.css before
++++ public/desktop-responsive.css after
+@@ -462,3 +462,18 @@
+   #reportDocumentModal.purchase-detail-view .document-meta > div:nth-child(10) { grid-column: auto; }
+   #reportDocumentModal.purchase-detail-view #reportDocumentTotals { padding: 16px; }
+ }
++
++
++/* Purchase requirement: scoped styles, fixed readable typography. */
++#replenishment .rq-toolbar{display:grid;grid-template-columns:minmax(220px,1fr) minmax(200px,1fr) auto;align-items:end;gap:16px;margin-bottom:16px}
++#replenishment .rq-toolbar label{display:grid;gap:6px}
++#replenishment .rq-table-wrap{width:100%;overflow-x:auto}
++#replenishment table{min-width:980px;width:100%}
++#replenishment th,#replenishment td{padding:10px 12px;vertical-align:middle}
++#replenishment .rq-quantity{width:145px;background:#fff9db}
++#replenishment .rq-pagination,#replenishment .rq-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
++#replenishment .rq-pagination{justify-content:flex-end;margin-top:14px}
++@media(max-width:1023px){#replenishment .rq-toolbar{grid-template-columns:1fr 1fr}}
++@media(max-width:767px){#replenishment .rq-toolbar{grid-template-columns:minmax(0,1fr)}#replenishment>.top,#replenishment #rqSummary>.top{flex-wrap:wrap;gap:12px}#replenishment .rq-pagination{justify-content:center}}
++
++#dashLowStockCount{display:inline-block;background:#fff0f0;color:#b52130;padding:3px 9px;border-radius:12px;margin-left:5px}

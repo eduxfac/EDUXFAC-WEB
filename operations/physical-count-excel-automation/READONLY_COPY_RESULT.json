@@ -1,0 +1,34 @@
+{
+  "source": "D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\operations\\physical-count-deploy-v2\\CONTEO_PILOTO_SOLO_LECTURA.xlsx",
+  "failed": 0,
+  "copy": "D:\\ExcelQA\\3d70d56e1625\\export.xlsx",
+  "existing_processes_untouched": [],
+  "private_pid": 12616,
+  "original_file_unchanged": true,
+  "source_sha256": "B612BAC34456B296D7840DEBA67903DD18F0C57041C67A771CF9A971ACC9C612",
+  "error": null,
+  "closed": true,
+  "events": [
+    {
+      "utc": "2026-10-14T22:31:51.5010923Z",
+      "operation": "Workbooks",
+      "result": "ready_non_null_private"
+    },
+    {
+      "utc": "2026-10-14T22:31:52.0088621Z",
+      "operation": "Workbooks.Open",
+      "result": "success"
+    },
+    {
+      "utc": "2026-10-14T22:31:52.4397858Z",
+      "operation": "Workbook.Close",
+      "result": "success"
+    },
+    {
+      "utc": "2026-10-14T22:31:52.4406701Z",
+      "operation": "Excel.Quit",
+      "result": "success"
+    }
+  ],
+  "passed": 2
+}

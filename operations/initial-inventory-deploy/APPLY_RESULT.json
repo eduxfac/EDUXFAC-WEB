@@ -1,0 +1,1 @@
+{"result": "FAILED_STOP", "code": "HTTP_CONTENT_HASH_MISMATCH", "details": {}, "failed_phase": "frontend_and_domains", "utc": "2026-10-14T20:28:09.613856+00:00", "rollback_ok": true}

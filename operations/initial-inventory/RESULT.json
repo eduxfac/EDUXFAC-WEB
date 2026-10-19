@@ -1,0 +1,51 @@
+{
+  "GO": true,
+  "deployed": true,
+  "tests": {
+    "TEST_REGRESSION_WINDOWS.log": {
+      "passed": 120,
+      "failed": 0,
+      "skipped": 0
+    },
+    "TEST_NATIVE_LINUX.log": {
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0
+    },
+    "TEST_UI.log": {
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "total_passed": 152,
+  "failed": 0,
+  "omitted": 0,
+  "FORCE_RLS_tables": 44,
+  "performance_parse_5000_ms": 692,
+  "performance_native_5000_ms": 37495,
+  "files": {
+    "server/src/app.js": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab",
+    "server/src/initial-inventory.js": "57abcde45bc6b165875e1f8b6ad6c956e87bc4759a4483476f3bfef159b62377",
+    "public/index.html": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32",
+    "tests/initial-inventory.test.js": "022b24cd8c604f9ac745ac7c2589700278ac29a0e1b38b1dd57115af12d48631",
+    "tests/initial-inventory-ui.test.js": "ac43c2979659d39fe3f7a55c1614ebc400b6adbb6c88b880369741eb86c46961",
+    "tests/initial-inventory-rls-native.test.js": "2f2f3ac364f14d6360c5c012cb830177beadf1195ba7df6a7221a120be11bd54",
+    "tests/helpers/initial-inventory-fixture.js": "80039a5064ad6174c1daf8c085930e1ee56a9927331fa5868888dad7417d5bac"
+  },
+  "no_new_migration": true,
+  "protected_code_unchanged": true,
+  "VPS_accessed": false,
+  "html_line_endings": "LF",
+  "previous_CRLF_html_sha256": "fa057a968001d037e63a41760911a9f5e5adbd1038c2c31ee320b0f700b7031d",
+  "functional_content_unchanged_after_normalization": true,
+  "LF_revalidation": {
+    "approved": 141,
+    "failed": 0,
+    "skipped": 0,
+    "evidence": "operations/initial-inventory-lf/RESULT.json"
+  },
+  "deployment_evidence": "operations/initial-inventory-deploy-v2/RESULT.json",
+  "post_deploy_passed": 163,
+  "post_deploy_failed": 0
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "width": 1920,
+    "buttonsVisible": true,
+    "documentRows": 1,
+    "overlaps": [],
+    "selectedBorder": "2px"
+  },
+  {
+    "width": 1024,
+    "buttonsVisible": true,
+    "documentRows": 1,
+    "overlaps": [],
+    "selectedBorder": "2px"
+  },
+  {
+    "width": 768,
+    "buttonsVisible": true,
+    "documentRows": 1,
+    "overlaps": [],
+    "selectedBorder": "2px"
+  },
+  {
+    "width": 375,
+    "buttonsVisible": true,
+    "documentRows": 3,
+    "overlaps": [],
+    "selectedBorder": "2px"
+  }
+]

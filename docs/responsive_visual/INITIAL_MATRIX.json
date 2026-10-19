@@ -1,0 +1,730 @@
+[
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#checkout": "15px",
+      ".cart-price-input": "16px",
+      ".cart-product-name": "12px",
+      ".sale-product-name b": "13px",
+      ".sale-products-table td": "13px",
+      ".sale-products-table th": "12px"
+    },
+    "layout": "784.422px 830.578px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": "",
+    "screen": "sales",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/sales_1920.jpg"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#productsAdmin .btn": "16px",
+      "#productsAdmin .input": "16px",
+      "#productsAdmin h2": "24px",
+      "#productsAdmin td": "14px"
+    },
+    "layout": "500px 500px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "productsAdmin",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/productsAdmin_1920.jpg"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#inventory .btn": "16px",
+      "#inventory .input": "16px",
+      "#inventory h2": "24px",
+      "#inventory td": "14px"
+    },
+    "layout": "804.5px 804.5px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "inventory",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/inventory_1920.jpg"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#purchases .btn": "16px",
+      "#purchases .input": "16px",
+      "#purchases h2": "24px",
+      "#purchases td": "14px"
+    },
+    "layout": "521px 521px 521px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "purchases",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/purchases_1920.jpg"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#reports .btn": "16px",
+      "#reports .input": "12px",
+      "#reports h2": "25px",
+      "#reports td": "14px"
+    },
+    "layout": "255.5px 255.5px 255.5px 255.5px 255.5px 255.5px 0px 0px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "reports",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/reports_1920.jpg"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#usersAdmin .btn": "16px",
+      "#usersAdmin .input": "16px",
+      "#usersAdmin h2": "24px",
+      "#usersAdmin td": "14px"
+    },
+    "layout": "966.594px 644.406px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "usersAdmin",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/usersAdmin_1920.jpg"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#settings .btn": "16px",
+      "#settings .input": "16px",
+      "#settings h2": "24px",
+      "#settings td": null
+    },
+    "layout": "365px 365px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "settings",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/settings_1920.jpg"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#checkout": "15px",
+      ".cart-price-input": "16px",
+      ".cart-product-name": "12px",
+      ".sale-product-name b": "13px",
+      ".sale-products-table td": "13px",
+      ".sale-products-table th": "12px"
+    },
+    "layout": "515.328px 545.672px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": "",
+    "screen": "sales",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/sales_1366.jpg"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#productsAdmin .btn": "16px",
+      "#productsAdmin .input": "16px",
+      "#productsAdmin h2": "24px",
+      "#productsAdmin td": "14px"
+    },
+    "layout": "500px 500px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "productsAdmin",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/productsAdmin_1366.jpg"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#inventory .btn": "16px",
+      "#inventory .input": "16px",
+      "#inventory h2": "24px",
+      "#inventory td": "14px"
+    },
+    "layout": "527.5px 527.5px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "inventory",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/inventory_1366.jpg"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#purchases .btn": "16px",
+      "#purchases .input": "16px",
+      "#purchases h2": "24px",
+      "#purchases td": "14px"
+    },
+    "layout": "336.328px 336.328px 336.344px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "purchases",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/purchases_1366.jpg"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#reports .btn": "16px",
+      "#reports .input": "12px",
+      "#reports h2": "25px",
+      "#reports td": "14px"
+    },
+    "layout": "198.188px 198.203px 198.203px 198.203px 198.188px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "reports",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/reports_1366.jpg"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#usersAdmin .btn": "16px",
+      "#usersAdmin .input": "16px",
+      "#usersAdmin h2": "24px",
+      "#usersAdmin td": "14px"
+    },
+    "layout": "634.188px 422.812px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "usersAdmin",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/usersAdmin_1366.jpg"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#settings .btn": "16px",
+      "#settings .input": "16px",
+      "#settings h2": "24px",
+      "#settings td": null
+    },
+    "layout": "328.656px 328.672px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "settings",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/settings_1366.jpg"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#checkout": "15px",
+      ".cart-price-input": "16px",
+      ".cart-product-name": "12px",
+      ".sale-product-name b": "13px",
+      ".sale-products-table td": "13px",
+      ".sale-products-table th": "12px"
+    },
+    "layout": "795px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": "",
+    "screen": "sales",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/sales_1024.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#productsAdmin .btn": "16px",
+      "#productsAdmin .input": "16px",
+      "#productsAdmin h2": "24px",
+      "#productsAdmin td": "14px"
+    },
+    "layout": "468.516px 468.516px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": null,
+    "screen": "productsAdmin",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/productsAdmin_1024.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#inventory .btn": "16px",
+      "#inventory .input": "16px",
+      "#inventory h2": "24px",
+      "#inventory td": "14px"
+    },
+    "layout": "795px",
+    "overflows": [
+      {
+        "cls": "",
+        "id": "",
+        "left": 845,
+        "right": 1035,
+        "tag": "LABEL"
+      },
+      {
+        "cls": "input",
+        "id": "inventoryHistoryType",
+        "left": 845,
+        "right": 1035,
+        "tag": "SELECT"
+      },
+      {
+        "cls": "btn secondary",
+        "id": "inventoryHistoryClear",
+        "left": 1045,
+        "right": 1075,
+        "tag": "BUTTON"
+      }
+    ],
+    "pageOverflow": true,
+    "pageWidth": 1075,
+    "productNameClamped": null,
+    "screen": "inventory",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/inventory_1024.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#purchases .btn": "16px",
+      "#purchases .input": "16px",
+      "#purchases h2": "24px",
+      "#purchases td": "14px"
+    },
+    "layout": "379.5px 379.5px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": null,
+    "screen": "purchases",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/purchases_1024.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#reports .btn": "16px",
+      "#reports .input": "12px",
+      "#reports h2": "25px",
+      "#reports td": "14px"
+    },
+    "layout": "181.75px 181.75px 181.75px 181.75px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": null,
+    "screen": "reports",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/reports_1024.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#usersAdmin .btn": "16px",
+      "#usersAdmin .input": "16px",
+      "#usersAdmin h2": "24px",
+      "#usersAdmin td": "14px"
+    },
+    "layout": "392.5px 392.5px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": null,
+    "screen": "usersAdmin",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/usersAdmin_1024.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#settings .btn": "16px",
+      "#settings .input": "16px",
+      "#settings h2": "24px",
+      "#settings td": null
+    },
+    "layout": "176.75px 176.75px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": null,
+    "screen": "settings",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/settings_1024.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#checkout": "15px",
+      ".cart-price-input": "16px",
+      ".cart-product-name": "12px",
+      ".sale-product-name b": "13px",
+      ".sale-products-table td": "13px",
+      ".sale-products-table th": "12px"
+    },
+    "layout": "729px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": "",
+    "screen": "sales",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/sales_768.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#productsAdmin .btn": "16px",
+      "#productsAdmin .input": "16px",
+      "#productsAdmin h2": "24px",
+      "#productsAdmin td": "14px"
+    },
+    "layout": "701.266px",
+    "overflows": [
+      {
+        "cls": "quick-modal-card",
+        "id": "paFormCard",
+        "left": 20,
+        "right": 757.265625,
+        "tag": "DIV"
+      }
+    ],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": null,
+    "screen": "productsAdmin",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/productsAdmin_768.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#inventory .btn": "16px",
+      "#inventory .input": "16px",
+      "#inventory h2": "24px",
+      "#inventory td": "14px"
+    },
+    "layout": "729px",
+    "overflows": [
+      {
+        "cls": "",
+        "id": "",
+        "left": 655,
+        "right": 845,
+        "tag": "LABEL"
+      },
+      {
+        "cls": "input",
+        "id": "inventoryHistoryType",
+        "left": 655,
+        "right": 845,
+        "tag": "SELECT"
+      },
+      {
+        "cls": "btn secondary",
+        "id": "inventoryHistoryClear",
+        "left": 855,
+        "right": 885,
+        "tag": "BUTTON"
+      }
+    ],
+    "pageOverflow": true,
+    "pageWidth": 885,
+    "productNameClamped": null,
+    "screen": "inventory",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/inventory_768.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#purchases .btn": "16px",
+      "#purchases .input": "16px",
+      "#purchases h2": "24px",
+      "#purchases td": "14px"
+    },
+    "layout": "703px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": null,
+    "screen": "purchases",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/purchases_768.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#reports .btn": "16px",
+      "#reports .input": "12px",
+      "#reports h2": "25px",
+      "#reports td": "14px"
+    },
+    "layout": "224.328px 224.328px 224.328px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": null,
+    "screen": "reports",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/reports_768.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#usersAdmin .btn": "16px",
+      "#usersAdmin .input": "16px",
+      "#usersAdmin h2": "24px",
+      "#usersAdmin td": "14px"
+    },
+    "layout": "729px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": null,
+    "screen": "usersAdmin",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/usersAdmin_768.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#settings .btn": "16px",
+      "#settings .input": "16px",
+      "#settings h2": "24px",
+      "#settings td": null
+    },
+    "layout": "703px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": null,
+    "screen": "settings",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/settings_768.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#checkout": "15px",
+      ".cart-price-input": "16px",
+      ".cart-product-name": "12px",
+      ".sale-product-name b": "13px",
+      ".sale-products-table td": "13px",
+      ".sale-products-table th": "12px"
+    },
+    "layout": "340px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": "",
+    "screen": "sales",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/sales_375.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#productsAdmin .btn": "16px",
+      "#productsAdmin .input": "16px",
+      "#productsAdmin h2": "24px",
+      "#productsAdmin td": "14px"
+    },
+    "layout": "321px",
+    "overflows": [
+      {
+        "cls": "quick-modal-card",
+        "id": "paFormCard",
+        "left": 8,
+        "right": 368,
+        "tag": "DIV"
+      }
+    ],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "productsAdmin",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/productsAdmin_375.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#inventory .btn": "16px",
+      "#inventory .input": "16px",
+      "#inventory h2": "24px",
+      "#inventory td": "14px"
+    },
+    "layout": "340px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "inventory",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/inventory_375.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#purchases .btn": "16px",
+      "#purchases .input": "16px",
+      "#purchases h2": "24px",
+      "#purchases td": "14px"
+    },
+    "layout": "314px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "purchases",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/purchases_375.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#reports .btn": "16px",
+      "#reports .input": "12px",
+      "#reports h2": "25px",
+      "#reports td": "14px"
+    },
+    "layout": "308px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "reports",
+    "scrollContainers": [
+      {
+        "client": 338,
+        "cls": "report-center-table",
+        "id": "",
+        "scroll": 640
+      }
+    ],
+    "width": 375,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/reports_375.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#usersAdmin .btn": "16px",
+      "#usersAdmin .input": "16px",
+      "#usersAdmin h2": "24px",
+      "#usersAdmin td": "14px"
+    },
+    "layout": "340px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "usersAdmin",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/usersAdmin_375.jpg",
+    "screenshotScope": "viewport"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#settings .btn": "16px",
+      "#settings .input": "16px",
+      "#settings h2": "24px",
+      "#settings td": null
+    },
+    "layout": "314px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "settings",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "D:/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL/docs/responsive_visual/settings_375.jpg",
+    "screenshotScope": "viewport"
+  }
+]

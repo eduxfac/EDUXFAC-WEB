@@ -1,0 +1,124 @@
+{
+  "read_only": true,
+  "source_D_VPS_equal": true,
+  "snapshot_utc": "2026-10-14T00:05:21.413Z",
+  "exact_cause": "OVERSALE_UNASSIGNED_ZERO_COST_BALANCE_THEN_RETURNS_AND_DEBT_COMPENSATION_LOSE_DURABLE_COST",
+  "actual_origin": "POST /api/sales -> negative unassigned stock; returns -> compensation and positive unassigned stock",
+  "excel_import_or_adjustment_cause": false,
+  "sale_profitability_fallback_does_not_persist_cost_snapshot": true,
+  "confirmed_purchase_qty": "120",
+  "confirmed_purchase_unit_cost": "1.5700",
+  "confirmed_purchase_total": "188.40",
+  "all_three_apronax_sales_fully_cancelled": true,
+  "timeline": [
+    {
+      "lima": "2026-10-13T13:06:13.343000-05:00",
+      "movement_types": [
+        "COMPRA"
+      ],
+      "DFDF": "120.000",
+      "unassigned": "0",
+      "total": "120.000"
+    },
+    {
+      "lima": "2026-10-13T13:08:20.062000-05:00",
+      "movement_types": [
+        "VENTA"
+      ],
+      "DFDF": "0.000",
+      "unassigned": "0",
+      "total": "0.000"
+    },
+    {
+      "lima": "2026-10-13T18:33:55.307000-05:00",
+      "movement_types": [
+        "VENTA"
+      ],
+      "DFDF": "0.000",
+      "unassigned": "-120.000",
+      "total": "-120.000"
+    },
+    {
+      "lima": "2026-10-13T18:41:00.821000-05:00",
+      "movement_types": [
+        "VENTA"
+      ],
+      "DFDF": "0.000",
+      "unassigned": "-240.000",
+      "total": "-240.000"
+    },
+    {
+      "lima": "2026-10-13T18:41:28.676000-05:00",
+      "movement_types": [
+        "DEVOLUCION_VENTA"
+      ],
+      "DFDF": "0.000",
+      "unassigned": "-120.000",
+      "total": "-120.000"
+    },
+    {
+      "lima": "2026-10-13T18:41:43.065000-05:00",
+      "movement_types": [
+        "COMPENSACION_DEUDA",
+        "DEVOLUCION_VENTA"
+      ],
+      "DFDF": "0.000",
+      "unassigned": "0.000",
+      "total": "0.000"
+    },
+    {
+      "lima": "2026-10-13T18:41:58.787000-05:00",
+      "movement_types": [
+        "DEVOLUCION_VENTA"
+      ],
+      "DFDF": "0.000",
+      "unassigned": "120.000",
+      "total": "120.000"
+    }
+  ],
+  "ledger_balance": [
+    {
+      "id": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+      "numero_lote": "DFDF",
+      "costo_unitario": "1.5700",
+      "cantidad_disponible": "0.000",
+      "sum_movimientos": "0.000",
+      "valor_movimientos": "0.00"
+    },
+    {
+      "id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+      "numero_lote": null,
+      "costo_unitario": "0.0000",
+      "cantidad_disponible": "120.000",
+      "sum_movimientos": "120.000",
+      "valor_movimientos": "188.40"
+    }
+  ],
+  "current_inventory_value": "31.20",
+  "expected_inventory_value": "219.60",
+  "purchase_average": {
+    "meaning": "AVERAGE_TOTAL_PER_PURCHASE_DOCUMENT",
+    "documents": 2,
+    "total": "220.40",
+    "average": "110.20",
+    "recommended_label": "Compra promedio por documento"
+  },
+  "repair_executed": false,
+  "code_changed": false,
+  "vps_changed": false,
+  "repair_recommendation": "Backup + isolated exact-case rehearsal + transaction + audited quantity/value reclassification if physical DFDF identity confirmed; otherwise audited cost correction on unassigned balance without inventing batch/expiry. Never alter historic sales/purchases/returns.",
+  "tests_to_add": [
+    "purchase then full sale/cancel restores same quantities and value",
+    "two oversales then three cancellations in every order",
+    "persist verified sale cost and return cost for unassigned stock",
+    "debt settlement preserves monetary valuation",
+    "real stock surplus/missing cost rules",
+    "Excel replace/add with missing cost and different batches",
+    "physical surplus uses real cost or explicit unknown flag",
+    "multi-cost lots weighted exact quantities",
+    "equivalences and partial returns",
+    "concurrent return/purchase idempotency and RLS",
+    "audited repair retains product total, old history and restores value",
+    "purchase average document definition"
+  ]
+}

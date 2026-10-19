@@ -1,0 +1,12 @@
+{
+  "public/index.html": "c2c01c26cd4cd1298e94223f87a64d9901659ac3516e47927aa57398ffb68e06",
+  "public/desktop-responsive.css": "a3e525f414f396b14e7a98edf995bbd631b496acd0ec4a23604625d64e9bcf25",
+  "tests/monthly-sales.test.js": "47d7f7ec9e5ce2eb37ed9a5983220f9efc571a736ba6f4952d99f982d84a4ade",
+  "tests/monthly-sales-native.test.js": "de7fd740c2633fa7a4d939f6aa4a4f4362f3f6cd42761faf1c3a9398ec6d8569",
+  "tests/initial-inventory-lf.test.js": "d8185d8f865e6925dcc76c9d2577d31181714e115f82f1808b724db7ded56073",
+  "server/src/monthly-sales.js": "4f7cea2a35b1ddcd82af4db81178c2fb6502c8cad58122ae9af4cf4efa6a001f",
+  "public/monthly-sales.js": "158173086da9c1e5b3b0ef0471a7cf68f2c8da1be5e1acbd33fe28ac7eb44a77",
+  "tests/helpers/monthly-sales-checks.js": "6c9df5c2e8c03d295e8264fc1aed92d9e06de69d6859ccc1cca21a4f2ee2663d",
+  "tests/monthly-sales-ui.test.js": "1759b1cbf6e64fa9d221e75c1c2d9a706f2a267074a01c248923fd82d5a0bb0b",
+  "server/src/app.js": "3a22cf3c1482aceac2788b86c8318aa9efbe70c9ca66e8e4571fefe861209d90"
+}

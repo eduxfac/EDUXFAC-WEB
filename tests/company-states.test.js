@@ -1,0 +1,87 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {randomUUID,createHash} from 'node:crypto';
+import {ids,serviceToken} from './helpers/isolated-web.js';
+import {createStateFixture,createMemoryPanel} from './helpers/state-fixture.js';
+import {assertStateTransition} from '../server/src/company-state-policy.js';
+const prefix='/api/internal/admin/v1';
+test('Fase 3: estados, sesiones, aislamiento y comandos persistentes',async t=>{
+ const f=await createStateFixture();t.after(()=>f.close());
+ const beforeB=await f.snapshotB();
+ const operational=async()=>{
+  const tables=(await f.query("select tablename from pg_tables where schemaname='public' and tablename not in ('empresa_acceso','acciones_admin','acciones_admin_intentos','web_schema_migrations') order by tablename")).rows;
+  const hashes=[];
+  for(const {tablename}of tables){const rows=(await f.query('select to_jsonb(t) data from "'+tablename+'" t')).rows.map(x=>JSON.stringify(x.data)).sort();hashes.push([tablename,createHash('sha256').update(JSON.stringify(rows)).digest('hex')]);}
+  return hashes;
+ };
+ const beforeData=await operational();
+ let suspensionBody,result,activeToken=f.tokenA;
+ await t.test('1 ACTIVO -> SUSPENDIDO y auditoría antes/después',async()=>{suspensionBody={command_id:randomUUID(),motivo:'Suspensión aislada',administrador:'owner_test'};result=await f.panel.suspender(ids.empresaA,suspensionBody);assert.equal(result.estado,'SUSPENDIDO');const a=(await f.query('select * from acciones_admin where command_id=$1',[suspensionBody.command_id])).rows[0];assert.equal(a.estado_anterior,'ACTIVO');assert.equal(a.estado_nuevo,'SUSPENDIDO');assert.equal(a.actor_servicio,'panel-eduxfac:owner_test');});
+ await t.test('2 suspensión rechaza sesión abierta y login',async()=>{assert.equal((await f.request('/api/bootstrap',{token:activeToken})).status,403);assert.equal((await f.login('A')).status,403);});
+ await t.test('3 SUSPENDIDO -> ACTIVO',async()=>{assert.equal((await f.panel.reactivar(ids.empresaA,{command_id:randomUUID(),motivo:'Prueba'})).estado,'ACTIVO');});
+ await t.test('4 sesión anterior no recupera acceso después de reactivar',async()=>{assert.equal((await f.request('/api/bootstrap',{token:activeToken})).data.code,'SESION_REVOCADA');});
+ await t.test('5 nuevo login funciona',async()=>{const login=await f.login('A');assert.equal(login.status,200);activeToken=login.data.token;assert.equal((await f.request('/api/bootstrap',{token:activeToken})).status,200);});
+ await t.test('6 suspensión conserva todas las tablas operativas',async()=>{assert.deepEqual(await operational(),beforeData);});
+ await t.test('7 suspensión no modifica B',async()=>{assert.deepEqual(await f.snapshotB(),beforeB);assert.equal((await f.request('/api/bootstrap',{token:f.tokenB})).status,200);});
+ await t.test('8 repetición de suspensión no duplica evento ni aplica estado viejo',async()=>{const replay=await f.panel.suspender(ids.empresaA,suspensionBody);assert.equal(replay.replayed,true);assert.equal((await f.panel.estado(ids.empresaA)).estado,'ACTIVO');assert.equal((await f.query('select count(*)::int n from acciones_admin where command_id=$1',[suspensionBody.command_id])).rows[0].n,1);});
+ await t.test('9 ACTIVO -> VENCIDO',async()=>{assert.equal((await f.panel.vencer(ids.empresaA,{command_id:randomUUID(),motivo:'Prueba de vencimiento'})).estado,'VENCIDO');});
+ await t.test('10 vencido bloquea sesión abierta y nuevo login',async()=>{assert.equal((await f.login('A')).data.code,'EMPRESA_VENCIDO');assert.equal((await f.request('/api/bootstrap',{token:activeToken})).status,403);});
+ await t.test('11 vencido no afecta B ni datos operativos',async()=>{assert.deepEqual(await f.snapshotB(),beforeB);assert.deepEqual(await operational(),beforeData);});
+ await t.test('12 VENCIDO -> ACTIVO exige nuevo login',async()=>{await f.panel.reactivar(ids.empresaA,{command_id:randomUUID(),motivo:'Prueba'});assert.equal((await f.request('/api/bootstrap',{token:activeToken})).data.code,'SESION_REVOCADA');activeToken=(await f.login('A')).data.token;assert.ok(activeToken);});
+ let cancel;
+ await t.test('13 ACTIVO -> CANCELADO',async()=>{cancel={command_id:randomUUID(),motivo:'Cancelación aislada'};assert.equal((await f.panel.cancelar(ids.empresaA,cancel)).estado,'CANCELADO');});
+ await t.test('14 cancelado bloquea login y sesión abierta',async()=>{assert.equal((await f.login('A')).data.code,'EMPRESA_CANCELADO');assert.equal((await f.request('/api/bootstrap',{token:activeToken})).status,403);});
+ await t.test('15 CANCELADO no permite reactivación directa',async()=>{await assert.rejects(f.panel.reactivar(ids.empresaA,{command_id:randomUUID(),motivo:'No permitida'}),e=>e.status===409&&e.code==='EMPRESA_CANCELADA');});
+ await t.test('16 cancelado no altera B y conserva TODOS los datos',async()=>{assert.deepEqual(await f.snapshotB(),beforeB);assert.deepEqual(await operational(),beforeData);});
+ await t.test('17 cancelar idempotente mantiene una sola acción y versión',async()=>{const access=await f.panel.estado(ids.empresaA);assert.equal((await f.panel.cancelar(ids.empresaA,cancel)).replayed,true);assert.equal((await f.panel.estado(ids.empresaA)).auth_version,access.auth_version);assert.equal((await f.query('select count(*)::int n from acciones_admin where command_id=$1',[cancel.command_id])).rows[0].n,1);});
+ await t.test('18 JWT de cliente y scopes insuficientes rechazan nuevos endpoints',async()=>{for(const action of ['cancelar','vencer']){const route=prefix+'/empresas/'+ids.empresaA+'/'+action,body={command_id:randomUUID(),motivo:'Prueba'};assert.equal((await f.request(route,{method:'POST',token:f.tokenB,body})).status,401);assert.equal((await f.request(route,{method:'POST',token:serviceToken([]),body})).status,403);}});
+ await t.test('19 exige motivo y no acepta campos arbitrarios',async()=>{for(const body of [{command_id:randomUUID()},{command_id:randomUUID(),motivo:'   '},{command_id:randomUUID(),motivo:'Prueba',password:'no'}])assert.equal((await f.request(prefix+'/empresas/'+ids.empresaB+'/cancelar',{method:'POST',token:serviceToken(['empresas:cancelar']),body})).status,400);});
+ await t.test('20 política central rechaza transiciones incoherentes',()=>{for(const [state,action]of [['PENDIENTE','SUSPENDER'],['PENDIENTE','VENCER'],['SUSPENDIDO','VENCER'],['VENCIDO','SUSPENDER'],['CANCELADO','ACTIVAR']])assert.throws(()=>assertStateTransition(state,action),e=>e.status===409);});
+ await t.test('21 errores WEB quedan registrados sin cambiar el estado',async()=>{const errors=(await f.query('select * from acciones_admin_intentos where empresa_id=$1',[ids.empresaA])).rows;assert.ok(errors.some(x=>x.accion==='REACTIVAR'&&x.resultado==='ERROR'&&x.error==='EMPRESA_CANCELADA'));assert.equal((await f.panel.estado(ids.empresaA)).estado,'CANCELADO');});
+ // Reset explícito solo del registro de la fixture para probar una segunda secuencia independiente.
+ await f.query("update empresa_acceso set estado='ACTIVO',auth_version=auth_version+1 where empresa_id=$1",[ids.empresaA]);
+ const m=await createMemoryPanel(f);t.after(()=>m.db.close());const id=m.companyId;
+ const call=(action,body={},service=m.states)=>service.handle('POST','/api/web/estados/empresas/'+id+'/'+action,body,{},'owner_test');
+ let outage=true;
+ const broken=new Proxy(f.panel,{get(target,key){return key==='suspender'?async(...args)=>{const applied=await target.suspender(...args);if(outage){outage=false;throw Error('FAKE network loss AFTER COMMIT');}return applied;}:target[key];}});
+ const failed=m.createService(broken);let command;
+ await t.test('22 respuesta perdida mantiene Panel ERROR y estado local anterior',async()=>{const r=await call('suspender',{motivo:'Conexión perdida'},failed);assert.equal(r.status,502);assert.equal(r.data.empresa.estado_local,'ACTIVO');assert.equal(r.data.empresa.estado_web,null);assert.equal(r.data.empresa.sincronizacion,'ERROR');command=r.data.command_id;assert.equal((await f.panel.estado(ids.empresaA)).estado,'SUSPENDIDO');});
+ await t.test('23 conciliación detecta DESINCRONIZADO sin fingir aplicado',async()=>{const r=await call('consultar');assert.equal(r.status,200);assert.equal(r.data.empresa.estado_local,'ACTIVO');assert.equal(r.data.empresa.estado_web,'SUSPENDIDO');assert.equal(r.data.empresa.conciliacion,'DESINCRONIZADO');assert.equal(r.data.empresa.pendiente.command_id,command);});
+ await t.test('24 evita otro comando mientras existe uno sin confirmar',async()=>{assert.equal((await call('cancelar',{motivo:'No duplicar'})).status,409);assert.equal(m.db.prepare('select count(*) n from web_state_commands').get().n,1);});
+ await t.test('25 reinicio del servicio y reintento usan mismo comando',async()=>{const restarted=m.createService(f.panel);const r=await call('reintentar',{command_id:command},restarted);assert.equal(r.status,200);assert.equal(r.data.replayed,true);assert.equal(r.data.command_id,command);assert.equal(r.data.empresa.estado_local,'SUSPENDIDO');assert.equal(r.data.empresa.estado_web,'SUSPENDIDO');assert.equal(r.data.empresa.conciliacion,'SINCRONIZADO');assert.equal((await f.query('select count(*)::int n from acciones_admin where command_id=$1',[command])).rows[0].n,1);});
+ await t.test('26 reintentar aplicado no produce otra llamada/evento WEB',async()=>{const count=m.db.prepare('select count(*) n from web_state_history').get().n;assert.equal((await call('reintentar',{command_id:command})).data.replayed,true);assert.equal(m.db.prepare('select count(*) n from web_state_history').get().n,count);});
+ await t.test('27 historial conserva SOLICITADO/PENDIENTE/ERROR/APLICADO y antes/después',async()=>{const history=(await m.states.handle('GET','/api/web/estados/historial',{},{})).data.rows.filter(x=>x.command_id===command);assert.deepEqual(new Set(history.map(x=>x.resultado)),new Set(['SOLICITADO','PENDIENTE','ERROR','APLICADO']));assert.ok(history.every(x=>x.estado_anterior==='ACTIVO'&&x.estado_nuevo==='SUSPENDIDO'&&x.administrador==='owner_test'));});
+ await t.test('28 filtros por empresa/acción/resultado/fecha y paginación',async()=>{const date=m.db.prepare('select substr(created_at,1,10) d from web_state_history limit 1').get().d;const h=await m.states.handle('GET','/api/web/estados/historial',{}, {empresa:id,accion:'SUSPENDER',resultado:'APLICADO',fecha:date,page_size:1});assert.equal(h.data.total,1);assert.equal(h.data.rows.length,1);const list=await m.states.handle('GET','/api/web/estados/empresas',{}, {q:'Comercial A',estado:'SUSPENDIDO',page_size:1});assert.equal(list.data.total,1);assert.equal(list.data.rows[0].empresa_codigo,'EMPRESA-A');});
+ await t.test('29 Panel reactivación/vencimiento/cancelación confirmados',async()=>{assert.equal((await call('reactivar')).data.empresa.estado_web,'ACTIVO');assert.equal((await call('vencer')).data.empresa.estado_web,'VENCIDO');assert.equal((await call('reactivar')).data.empresa.estado_web,'ACTIVO');assert.equal((await call('cancelar',{motivo:'Fin prueba'})).data.empresa.estado_web,'CANCELADO');});
+ await t.test('30 Panel cancelado solo permite consulta y rechaza activar/reactivar',async()=>{const r=await call('consultar');assert.deepEqual(r.data.empresa.acciones,[]);assert.equal((await call('reactivar')).status,409);assert.equal((await call('activar')).status,409);});
+ await t.test('31 confirma empresa/command_id: respuesta ajena no contamina estado',async()=>{await f.query("update empresa_acceso set estado='ACTIVO',auth_version=auth_version+1 where empresa_id=$1",[ids.empresaA]);m.db.prepare("update web_empresas set estado_local='ACTIVO' where id=?").run(id);const wrong=m.createService({...f.panel,suspender:async(_id,b)=>({command_id:b.command_id,empresa_id:ids.empresaB,estado:'SUSPENDIDO',auth_version:100})});const r=await call('suspender',{motivo:'Respuesta ajena'},wrong);assert.equal(r.status,502);assert.equal(r.data.empresa.estado_local,'ACTIVO');assert.equal(r.data.code,'RESPUESTA_INVALIDA');});
+ let draft;
+ await t.test('32 PENDIENTE -> ACTIVO solo con alta completa e idempotencia',async()=>{const c=(await m.onboarding.handle('POST','/api/web/clientes',{nombre:'Cliente C',tipo_documento:'SIN_DOCUMENTO'})).data;draft=(await m.onboarding.handle('POST','/api/web/empresas',{cliente_id:c.id,razon_social:'Empresa C',ruc:'20333333333',empresa_codigo:'EMPRESA-C',sucursal_nombre:'Principal C',administrador_nombre:'Admin C',administrador_usuario:'adminc'})).data.empresa;assert.equal((await m.onboarding.handle('POST','/api/web/empresas/'+draft.id+'/activar',{})).status,409);assert.equal((await m.onboarding.handle('POST','/api/web/empresas/'+draft.id+'/completar',{password_temporal:'FAKE_ONLY_TEMP_PASSWORD_123'})).status,200);const r=await m.states.handle('POST','/api/web/estados/empresas/'+draft.id+'/activar',{}, {},'owner_test');assert.equal(r.status,200);assert.equal(r.data.empresa.estado_web,'ACTIVO');assert.equal((await m.states.handle('POST','/api/web/estados/empresas/'+draft.id+'/reintentar',{command_id:r.data.command_id},{},'owner_test')).status,200);});
+ await t.test('33 PENDIENTE -> CANCELADO conserva alta y usuarios',async()=>{const client=await f.panel.crearCliente({cliente_panel_id:randomUUID(),nombre:'Cliente D',tipo_documento:'SIN_DOCUMENTO',command_id:randomUUID(),motivo:'Prueba'});const empresa=await f.panel.crearEmpresa({cliente_id:client.cliente_id,razon_social:'Pendiente D',ruc:'20444444444',empresa_codigo:'EMPRESA-D',command_id:randomUUID(),motivo:'Prueba'});const r=await f.panel.cancelar(empresa.empresa_id,{command_id:randomUUID(),motivo:'Cancelación pendiente'});assert.equal(r.estado,'CANCELADO');assert.equal((await f.query('select count(*)::int n from empresas where id=$1',[empresa.empresa_id])).rows[0].n,1);});
+ await t.test('34 motivo estándar para vencimiento explícito',async()=>{const r=await f.request(prefix+'/empresas/'+ids.empresaB+'/vencer',{method:'POST',token:serviceToken(['empresas:vencer']),body:{command_id:randomUUID()}});assert.equal(r.status,200);assert.equal(r.data.estado,'VENCIDO');});
+ await t.test('35 migraciones Fase 3 repetibles conservan datos e historial',async()=>{const count=m.db.prepare('select count(*) n from web_state_history').get().n;m.applyWebStateMigrations(m.db);assert.equal(m.db.prepare('select count(*) n from web_state_history').get().n,count);});
+ await t.test('36 error de auditoría revierte cancelación y vencimiento completos',async()=>{
+  await f.query("update empresa_acceso set estado='ACTIVO',fecha_vencimiento=null where empresa_id=$1",[ids.empresaB]);
+  await f.query(`create function test_fase3_reject_audit() returns trigger language plpgsql as $$ begin raise exception 'FAKE_ROLLBACK'; end $$;
+create trigger test_fase3_audit_failure before insert on acciones_admin for each row execute function test_fase3_reject_audit();`);
+  try{for(const action of ['cancelar','vencer']){const before=await f.panel.estado(ids.empresaB);await assert.rejects(f.panel[action](ids.empresaB,{command_id:randomUUID(),motivo:'Rollback prueba'}),e=>e.status===500);const after=await f.panel.estado(ids.empresaB);assert.equal(after.estado,before.estado);assert.equal(after.auth_version,before.auth_version);}}finally{await f.query('drop trigger test_fase3_audit_failure on acciones_admin');}
+ });
+ await t.test('37 activación incompleta registra intento fallido en WEB',async()=>{
+  const client=await f.panel.crearCliente({cliente_panel_id:randomUUID(),nombre:'Cliente incompleto',tipo_documento:'SIN_DOCUMENTO',command_id:randomUUID(),motivo:'Prueba'});
+  const company=await f.panel.crearEmpresa({cliente_id:client.cliente_id,razon_social:'Empresa incompleta',ruc:'20888888888',empresa_codigo:'INCOMPLETA-FASE3',command_id:randomUUID(),motivo:'Prueba'});
+  const command_id=randomUUID();await assert.rejects(f.panel.activar(company.empresa_id,{command_id,motivo:'No completa',administrador:'owner_test'}),e=>e.status===409);
+  const row=(await f.query('select * from acciones_admin_intentos where command_id=$1',[command_id])).rows[0];assert.equal(row.estado_anterior,'PENDIENTE');assert.equal(row.estado_nuevo,'ACTIVO');assert.equal(row.resultado,'ERROR');assert.equal(row.error,'ALTA_INCOMPLETA');assert.equal(row.administrador,'panel-eduxfac:owner_test');
+ });
+ await t.test('38 reintento histórico no sustituye una versión WEB más reciente',async()=>{
+  const fresh=await createMemoryPanel(f);try{
+   await f.query("update empresa_acceso set estado='ACTIVO',auth_version=auth_version+1 where empresa_id=$1",[ids.empresaA]);
+   let lose=true;const api=new Proxy(f.panel,{get(target,key){return key==='suspender'?async(...args)=>{const r=await target.suspender(...args);if(lose){lose=false;throw Error('FAKE network');}return r;}:target[key];}});
+   const call=(service,action,body={})=>service.handle('POST','/api/web/estados/empresas/'+fresh.companyId+'/'+action,body,{},'owner_test');
+   const failed=await call(fresh.createService(api),'suspender',{motivo:'Prueba histórica'});
+   await f.panel.reactivar(ids.empresaA,{command_id:randomUUID(),motivo:'Otro operador'});
+   const consulted=await call(fresh.states,'consultar');assert.equal(consulted.data.empresa.estado_web,'ACTIVO');
+   const retried=await call(fresh.states,'reintentar',{command_id:failed.data.command_id});assert.equal(retried.status,200);assert.equal(retried.data.empresa.estado_local,'SUSPENDIDO');assert.equal(retried.data.empresa.estado_web,'ACTIVO');assert.equal(retried.data.empresa.conciliacion,'DESINCRONIZADO');assert.equal(retried.data.empresa.sincronizacion,'APLICADO');
+  }finally{fresh.db.close();}
+ });
+
+});

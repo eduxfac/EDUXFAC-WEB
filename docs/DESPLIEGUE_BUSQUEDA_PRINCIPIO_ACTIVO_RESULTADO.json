@@ -1,0 +1,171 @@
+{
+  "result": "GO_FOR_MANUAL_VALIDATION",
+  "deployment": {
+    "utc": "2026-10-14T15:07:41.528242+00:00",
+    "result": "ACTIVE_SEARCH_TWO_FILES_DEPLOY_OK",
+    "files": [
+      "server/src/app.js",
+      "public/index.html"
+    ],
+    "before": {
+      "server/src/app.js": "fd0f19d0837546630626a825b66c6cd3c72496faa25319f8cc9feab9327666d1",
+      "public/index.html": "4ead28dfbf60c2af42c30ddb373c24c269e8fbb565601450816d1ecb2d16ea9e"
+    },
+    "after": {
+      "server/src/app.js": "7c32762622b79f77c5b3cb03ce0bc16f355eaf7c4766d865e6c29aab51ad02ab",
+      "public/index.html": "8fc52bdd77b584ddc84dc5c83a8f3022577b2cafbcfd3b5591c5a8416bf35ead"
+    },
+    "backup": "/home/eduxadmin/.local/share/eduxfac/active_search_deploy_20261014_150209/backup",
+    "rollback": "/home/eduxadmin/.local/share/eduxfac/active_search_deploy_20261014_150209/ROLLBACK_RENTABILIDAD_V2.py --apply",
+    "readiness": {
+      "loopback": {
+        "url": "http://127.0.0.1:3001/api/health",
+        "attempts": 6,
+        "pid": 334480,
+        "restarts": 9,
+        "stable_samples": 3
+      },
+      "https": {
+        "url": "https://app.eduxfac.com/api/health",
+        "attempts": 3,
+        "pid": 334480,
+        "restarts": 9,
+        "stable_samples": 3
+      }
+    },
+    "final_readiness": {
+      "loopback": {
+        "url": "http://127.0.0.1:3001/api/health",
+        "attempts": 3,
+        "pid": 334480,
+        "restarts": 9,
+        "stable_samples": 3
+      },
+      "https": {
+        "url": "https://app.eduxfac.com/api/health",
+        "attempts": 3,
+        "pid": 334480,
+        "restarts": 9,
+        "stable_samples": 3
+      }
+    },
+    "restart_and_readiness_seconds": 14.026,
+    "pm2": {
+      "id": 4,
+      "pid": 334480,
+      "status": "online",
+      "restarts": 9,
+      "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+      "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+      "mode": "PILOTO",
+      "port": "3001",
+      "worker": "false",
+      "mutation": "no"
+    },
+    "other_processes_unchanged": true,
+    "database_unchanged": true,
+    "schema_migration_executed": false,
+    "CSP_valid": true,
+    "post_deploy_functional_tests": "PENDING_ISOLATED_NO_REAL_ACTIVE_SEARCH_CREATED"
+  },
+  "final": {
+    "result": "ACTIVE_SEARCH_FINAL_READONLY_OK",
+    "pm2": {
+      "id": 4,
+      "pid": 334480,
+      "status": "online",
+      "restarts": 9,
+      "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+      "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+      "mode": "PILOTO",
+      "port": "3001",
+      "worker": "false",
+      "mutation": "no"
+    },
+    "readiness": {
+      "loopback": {
+        "url": "http://127.0.0.1:3001/api/health",
+        "attempts": 3,
+        "pid": 334480,
+        "restarts": 9,
+        "stable_samples": 3
+      },
+      "https": {
+        "url": "https://app.eduxfac.com/api/health",
+        "attempts": 3,
+        "pid": 334480,
+        "restarts": 9,
+        "stable_samples": 3
+      }
+    },
+    "database_unchanged": true
+  },
+  "pilot_readonly": {
+    "result": "SEARCH_PILOT_READONLY_OK",
+    "checks": 22,
+    "checks_passed": [
+      "READONLY_PILOT_ONLY",
+      "PILOT_ACCOUNT_ACTIVE",
+      "ASSIGNED_BRANCH_PRESENT",
+      "APRONAX_PRESENT",
+      "APRONAX_NAPROXENO_REGISTERED",
+      "TENANT_ROLE_UNIQUE",
+      "TENANT_NO_BYPASS",
+      "44_FORCE_RLS",
+      "DEPLOYED_SEARCH_QUERY_PRESENT",
+      "FIND_APRONAX",
+      "FIND_NAPROXENO",
+      "FIND_NAPRO",
+      "FIND_naproxeno",
+      "FIND_codigo_interno",
+      "ISOLATED_FIXTURE_REQUIRED_codigo_anterior",
+      "FIND_codigo_barras",
+      "PAGE_BOUND_0",
+      "ALL_ACTIVE_MATCHES_FOUND",
+      "NO_DUPLICATE_RESULTS",
+      "NO_OTHER_COMPANY_RESULT",
+      "NO_UNASSIGNED_BRANCH_LOTS",
+      "NULL_INGREDIENT_SAFE"
+    ],
+    "native_SQL_from_deployed_backend": true,
+    "transactions_read_only": true,
+    "HTTP_user_login_executed": false,
+    "force_rls": 44,
+    "real_pilot_matches": 1,
+    "timing_ms": {
+      "samples": 8,
+      "median": 11.59,
+      "max": 26.14
+    }
+  },
+  "pilot_true_checks_passed": 21,
+  "pilot_fields_without_data_tested_in_fixture": [
+    "ISOLATED_FIXTURE_REQUIRED_codigo_anterior"
+  ],
+  "post_tests": {
+    "windows_passed": 27,
+    "linux_passed": 64,
+    "total_passed": 91,
+    "failed": 0,
+    "skipped": 0
+  },
+  "database_unchanged": true,
+  "http": {
+    "app_https": 200,
+    "admin_https": 200,
+    "health_http": 200,
+    "data_mode": "PILOTO",
+    "placeholder_exact": true,
+    "show_more_button_present": true,
+    "HTML_D_equals_HTTPS": true
+  },
+  "native_HTTP_lab_performance": {
+    "catalog_products": 10000,
+    "matched": 67,
+    "page": 30,
+    "samples": 8,
+    "median_ms": 106.35,
+    "max_ms": 519.22
+  },
+  "rollback_available": true
+}

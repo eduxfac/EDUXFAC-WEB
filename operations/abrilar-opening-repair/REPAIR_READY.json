@@ -1,0 +1,579 @@
+{
+  "global": {
+    "tables": [
+      {
+        "relname": "acciones_admin",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_service=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "acciones_admin_intentos",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_service=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "ajustes_inventario",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "auditoria",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=ar/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "cajas",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "categorias",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "clientes",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "clientes_admin",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_service=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "compra_detalles",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "compras",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "devolucion_venta_detalles",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "devoluciones_venta",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "eduxfac_migraciones",
+        "rls": false,
+        "force_rls": false,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "empresa_acceso",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_service=arwd/eduxfac_web_migrator,eduxfac_web_auth=r/eduxfac_web_migrator,eduxfac_web_app=r/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "empresa_config",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "empresa_config_avanzada",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "empresas",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_service=arwd/eduxfac_web_migrator,eduxfac_web_auth=r/eduxfac_web_migrator,eduxfac_web_app=r/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "eventos_comerciales",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_service=arwd/eduxfac_web_migrator,eduxfac_web_app=ar/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "laboratorios",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "legacy_import_runs",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "legacy_mappings",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "lotes",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "movimientos_caja",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "movimientos_inventario",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "operacion_workers",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_service=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "orden_compra_detalles",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "ordenes_compra",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "permisos",
+        "rls": false,
+        "force_rls": false,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_web_app=r/eduxfac_web_migrator,eduxfac_web_service=r/eduxfac_web_migrator,eduxfac_web_auth=r/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "precios_producto",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "producto_sucursal",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "productos",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "proveedores",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "rol_permisos",
+        "rls": false,
+        "force_rls": false,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_web_app=r/eduxfac_web_migrator,eduxfac_web_service=r/eduxfac_web_migrator,eduxfac_web_auth=r/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "roles",
+        "rls": false,
+        "force_rls": false,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_web_app=r/eduxfac_web_migrator,eduxfac_web_service=r/eduxfac_web_migrator,eduxfac_web_auth=r/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "secuencias_documento",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "sesiones_caja",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "solicitud_interna_detalles",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "solicitudes_internas",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "sucursales",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_service=arwd/eduxfac_web_migrator,eduxfac_web_auth=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "suscripcion_eventos",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_service=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "transferencia_detalles",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "transferencias",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "usuario_permisos",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "usuario_sucursal",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_service=arwd/eduxfac_web_migrator,eduxfac_web_auth=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "usuarios",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_service=arwd/eduxfac_web_migrator,eduxfac_web_auth=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "venta_detalles",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "venta_pagos",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "ventas",
+        "rls": true,
+        "force_rls": true,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator,eduxfac_web_app=arwd/eduxfac_web_migrator}"
+      },
+      {
+        "relname": "web_schema_migrations",
+        "rls": false,
+        "force_rls": false,
+        "owner": "eduxfac_web_migrator",
+        "acl": "{eduxfac_web_migrator=arwdDxt/eduxfac_web_migrator,eduxfac_backup=r/eduxfac_web_migrator}"
+      }
+    ],
+    "schemas_sha256": "9b933be61bc590d3482791be6ffdb53c0d4fd1879618beb9991d8b9f26064be6",
+    "policies_sha256": "8ba17c4044a911547f106534f54c018b7ccca1232f0848762b47a7e6244a0e56",
+    "roles_sha256": "856c04dcf875407d1b09b26c4bd35ef7a368b97ba1b50777d03d3b52bd1ab474",
+    "fingerprints": {
+      "acciones_admin": {
+        "rows": 21,
+        "digest": "44016bc110bc077ea795e9989b2c071d"
+      },
+      "acciones_admin_intentos": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "ajustes_inventario": {
+        "rows": 4,
+        "digest": "c73854d3fd264f68db92d417d75e7f39"
+      },
+      "auditoria": {
+        "rows": 40,
+        "digest": "6103df9c32d2146dbc28849c100925b7"
+      },
+      "cajas": {
+        "rows": 1,
+        "digest": "09c33120922e73ba5e4f1fc57e18687e"
+      },
+      "categorias": {
+        "rows": 3,
+        "digest": "bf5db3b667237c410ae0d3d05555be79"
+      },
+      "clientes": {
+        "rows": 1,
+        "digest": "b5667b131de0beab83d18e9f0a5fbed2"
+      },
+      "clientes_admin": {
+        "rows": 3,
+        "digest": "135277a88c297395d2fc4bf6e9cd96e4"
+      },
+      "compra_detalles": {
+        "rows": 5,
+        "digest": "5c122202fce015ac361432de92b1f388"
+      },
+      "compras": {
+        "rows": 5,
+        "digest": "88553a5621b5881dfca00b2e8befff93"
+      },
+      "devolucion_venta_detalles": {
+        "rows": 4,
+        "digest": "7368368dab660ecfc92530aee928551b"
+      },
+      "devoluciones_venta": {
+        "rows": 4,
+        "digest": "1f19036cf8b04c1eb75f458c8514a7a2"
+      },
+      "eduxfac_migraciones": {
+        "rows": 1,
+        "digest": "1edde5e436a18795cc1d0cf66a6c515e"
+      },
+      "empresa_acceso": {
+        "rows": 3,
+        "digest": "381fda79d9473d04f03db383a5935f8c"
+      },
+      "empresa_config": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "empresa_config_avanzada": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "empresas": {
+        "rows": 3,
+        "digest": "cdf5f7b0842be9e6a0d9bf8d2ae42f0d"
+      },
+      "eventos_comerciales": {
+        "rows": 4,
+        "digest": "ce25b253bfb68b3f11bb17a92548ad99"
+      },
+      "laboratorios": {
+        "rows": 4,
+        "digest": "aecab7806daab28542a4316710fe6ad1"
+      },
+      "legacy_import_runs": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "legacy_mappings": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "lotes": {
+        "rows": 6,
+        "digest": "714eab3b5598efb82c97e74b28e15afd"
+      },
+      "movimientos_caja": {
+        "rows": 11,
+        "digest": "bdc8474b843e2920d19925c6c45ce766"
+      },
+      "movimientos_inventario": {
+        "rows": 34,
+        "digest": "2f96703db3fdfa5b2a939d4f528273b7"
+      },
+      "operacion_workers": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "orden_compra_detalles": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "ordenes_compra": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "permisos": {
+        "rows": 10,
+        "digest": "3defee9b573932c368afb67869116ef2"
+      },
+      "precios_producto": {
+        "rows": 22,
+        "digest": "bae14432791b1a390ea0769a2e7aea18"
+      },
+      "producto_sucursal": {
+        "rows": 5,
+        "digest": "7a352af542fce668f7a2e6fda126bdbc"
+      },
+      "productos": {
+        "rows": 5,
+        "digest": "3f9aae25b4bb787b7bcb048e43133dc2"
+      },
+      "proveedores": {
+        "rows": 2,
+        "digest": "f21dfe27f29814d8d133d65441f5d322"
+      },
+      "rol_permisos": {
+        "rows": 17,
+        "digest": "1f70e6f0385006b05c287dbf56f957ef"
+      },
+      "roles": {
+        "rows": 3,
+        "digest": "b932be0b6bdada2deec727820d322598"
+      },
+      "secuencias_documento": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "sesiones_caja": {
+        "rows": 1,
+        "digest": "9b562ae45b3d92a5bd5945817b986b91"
+      },
+      "solicitud_interna_detalles": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "solicitudes_internas": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "sucursales": {
+        "rows": 3,
+        "digest": "29055547da26fa3db7aa05c76b8fee19"
+      },
+      "suscripcion_eventos": {
+        "rows": 6,
+        "digest": "0007415811a3c8f739690bad7ef2702e"
+      },
+      "transferencia_detalles": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "transferencias": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "usuario_permisos": {
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "usuario_sucursal": {
+        "rows": 5,
+        "digest": "4f6c5fcbd05774042a8a68ce1ddbbf85"
+      },
+      "usuarios": {
+        "rows": 5,
+        "digest": "b6863c2f8cf11427767e70ca1e965506"
+      },
+      "venta_detalles": {
+        "rows": 14,
+        "digest": "f87a4a3dd8a659252a2a61da2c03ba1d"
+      },
+      "venta_pagos": {
+        "rows": 9,
+        "digest": "3b7828d3d003334e239275930fd14e05"
+      },
+      "ventas": {
+        "rows": 9,
+        "digest": "2a2496059243644dddf66e4eae861278"
+      },
+      "web_schema_migrations": {
+        "rows": 7,
+        "digest": "b34c47d4fbf8ed9acc1d5b298d11d697"
+      }
+    }
+  },
+  "backup_sha256": "d657cc090122b0dfa629f2a3ca8c83b60188eb89eb9944c44a53e203b3eb22c2",
+  "plan_sha256": "24183551964bfa9b334853ce4dfd98254458d38b85d32fbf361b24ae1457f6c0",
+  "health": [
+    {
+      "url": "http://127.0.0.1:3001/api/health",
+      "http": 200,
+      "ms": 126,
+      "body_sha256": "2049c7f42757025ae2960f7f2388415b9178d393e06d02ca076a646f03c003b3"
+    },
+    {
+      "url": "https://app.eduxfac.com/api/health",
+      "http": 200,
+      "ms": 25,
+      "body_sha256": "b05f92a71dabaf33aa69a64323ecc95fa773a9c9b1909c4ab4e87923c37d909b"
+    },
+    {
+      "url": "https://app.eduxfac.com/",
+      "http": 200,
+      "ms": 53,
+      "body_sha256": "06ad9349541563ef990fcf5c8a7ecf63c5db05b28b2688bfe25aaf8b63f524c1"
+    },
+    {
+      "url": "https://admin.eduxfac.com/",
+      "http": 200,
+      "ms": 22,
+      "body_sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df"
+    }
+  ],
+  "utc": "2026-10-15T03:38:22.760Z"
+}

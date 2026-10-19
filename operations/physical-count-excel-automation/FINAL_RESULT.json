@@ -1,0 +1,28 @@
+{
+  "status": "GO_RETRY_DEPLOY_AUTOMATION_ONLY",
+  "candidate_changed": false,
+  "candidate_sha256": "d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656",
+  "stability_openings": 3,
+  "stability_tests_passed": 30,
+  "stability_tests_failed": 0,
+  "additional_cached_export_checks_passed": 2,
+  "additional_original_path_open_success": true,
+  "original_failure": "PowerShell null reference in excel.Workbooks.Open chain before workbook opened; original record omitted COM HRESULT. Exact internal reason why Workbooks was unavailable is not recoverable.",
+  "observed_busy_com_error": {
+    "hresult": "0x80010001",
+    "name": "RPC_E_CALL_REJECTED",
+    "observed": true,
+    "handling": "Bounded retry of busy COM calls, retained Workbooks reference and readiness before Open."
+  },
+  "source_path_length": 120,
+  "short_path_length": 35,
+  "no_orphan_test_excel_processes": true,
+  "existing_user_processes_not_targeted": true,
+  "short_directory": "D:\\ExcelQA\\899e43658f4d",
+  "vps_connected": false,
+  "deployed": false,
+  "database_connections": 0,
+  "office_global_settings_changed": false,
+  "final_checks_passed": 32,
+  "final_checks_failed": 0
+}

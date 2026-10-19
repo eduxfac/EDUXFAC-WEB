@@ -1,0 +1,104 @@
+{
+  "comparisons": [
+    {
+      "width": 1920,
+      "kind": "purchases",
+      "passed": true,
+      "sameContent": true,
+      "safe": true,
+      "cancellationGeometryUnchanged": true
+    },
+    {
+      "width": 1920,
+      "kind": "cancellations",
+      "passed": true,
+      "sameContent": true,
+      "safe": true,
+      "cancellationGeometryUnchanged": true
+    },
+    {
+      "width": 1366,
+      "kind": "purchases",
+      "passed": true,
+      "sameContent": true,
+      "safe": true,
+      "cancellationGeometryUnchanged": true
+    },
+    {
+      "width": 1366,
+      "kind": "cancellations",
+      "passed": true,
+      "sameContent": true,
+      "safe": true,
+      "cancellationGeometryUnchanged": true
+    },
+    {
+      "width": 1024,
+      "kind": "purchases",
+      "passed": true,
+      "sameContent": true,
+      "safe": true,
+      "cancellationGeometryUnchanged": true
+    },
+    {
+      "width": 1024,
+      "kind": "cancellations",
+      "passed": true,
+      "sameContent": true,
+      "safe": true,
+      "cancellationGeometryUnchanged": true
+    },
+    {
+      "width": 768,
+      "kind": "purchases",
+      "passed": true,
+      "sameContent": true,
+      "safe": true,
+      "cancellationGeometryUnchanged": true
+    },
+    {
+      "width": 768,
+      "kind": "cancellations",
+      "passed": true,
+      "sameContent": true,
+      "safe": true,
+      "cancellationGeometryUnchanged": true
+    },
+    {
+      "width": 375,
+      "kind": "purchases",
+      "passed": true,
+      "sameContent": true,
+      "safe": true,
+      "cancellationGeometryUnchanged": true
+    },
+    {
+      "width": 375,
+      "kind": "cancellations",
+      "passed": true,
+      "sameContent": true,
+      "safe": true,
+      "cancellationGeometryUnchanged": true
+    }
+  ],
+  "mobileAccess": {
+    "globalOverflow": false,
+    "lastVisible": true,
+    "scrollLeft": 716,
+    "scrollTop": 702
+  },
+  "passed": 11,
+  "failed": 0,
+  "scope": "Isolated fictitious data, HTML/CSS downloaded from HTTPS and verified identical to D and VPS",
+  "automated_tests_passed": 6,
+  "total_passed": 17,
+  "total_failed": 0,
+  "widths": [
+    1920,
+    1366,
+    1024,
+    768,
+    375
+  ],
+  "GO": true
+}

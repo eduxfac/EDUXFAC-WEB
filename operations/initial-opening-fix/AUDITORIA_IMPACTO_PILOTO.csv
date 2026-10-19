@@ -1,0 +1,4 @@
+﻿codigo_interno,nombre,sucursal,numero_lote,cantidad_disponible,costo_unitario,valor_base_costos,valor_movimiento_inicial,valor_potencial_duplicado,valor_ledger_con_apertura,valor_lote_actual
+P000004,ABRILAR JARABE 120ML,PRINCIPAL,EDU1,3.000,15,45,45.000,45,90.000,45.000
+P000004,ABRILAR JARABE 120ML,PRINCIPAL,EDU2,3.000,15,60,60.000,60,105.000,45.000
+P000004,ABRILAR JARABE 120ML,PRINCIPAL,EDU3,5.000,15,75,75.000,75,150.000,75.000

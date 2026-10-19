@@ -1,0 +1,533 @@
+[
+  {
+    "id": "63967c1a72ba0faec5b3317754cd705d889a07332a84e938555c42ac90aed917",
+    "name": "/eduxfac-profit-native-20261013",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-10-14T01:59:47.2807475Z",
+      "FinishedAt": "2026-10-14T02:04:58.173657135Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "5b758b38c8cf0be91b2c2529573ab1add5aa5121827e78d9ae5f3c5de406cd81",
+    "name": "/eduxfac-fase11-regression",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-10-13T03:44:45.837369035Z",
+      "FinishedAt": "2026-10-13T05:38:46.835019731Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "D:\\EDUXFAC\\PANEL EDUXFAC\\01_TRABAJO_ACTUAL\\PANEL_EDUXFAC_ACTUAL\\staging\\phase11\\artifacts\\regression",
+        "Destination": "/artifacts",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "0b55a9774c12bde0da33db9850776b92fba3227e52698495f1066ada75c8692b",
+    "name": "/eduxfac-fase11-pilot",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-10-13T03:37:52.396923308Z",
+      "FinishedAt": "2026-10-13T05:38:53.276312033Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "D:\\EDUXFAC\\PANEL EDUXFAC\\01_TRABAJO_ACTUAL\\PANEL_EDUXFAC_ACTUAL\\staging\\phase11\\artifacts\\pilot-linux",
+        "Destination": "/artifacts",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "4f1ec0370cd51d302a9a7d8cf622a7607409db09de40df5d590c2f1162d826ba",
+    "name": "/eduxfac-fase11-precheck",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 255,
+      "Error": "",
+      "StartedAt": "2026-10-13T03:11:58.027113352Z",
+      "FinishedAt": "2026-10-13T03:26:33.0905773Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "D:\\EDUXFAC\\PANEL EDUXFAC\\01_TRABAJO_ACTUAL\\PANEL_EDUXFAC_ACTUAL\\staging\\phase11\\artifacts\\precheck",
+        "Destination": "/artifacts",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "a7474de177bb5d85d1dba8124ef5f9cf348056ccbe6766da6d7a7c546b1c9076",
+    "name": "/eduxfac-fase10-final2",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-10-13T01:19:30.072137042Z",
+      "FinishedAt": "2026-10-13T01:25:29.61279562Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "D:\\EDUXFAC\\PANEL EDUXFAC\\01_TRABAJO_ACTUAL\\PANEL_EDUXFAC_ACTUAL\\staging\\phase10\\artifacts\\repro-final-safe",
+        "Destination": "/artifacts",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "6313a11c4e3b2a99a4d556a10ef6ff2f058f498dfdcd8c94721dbf9f9d2d7369",
+    "name": "/eduxfac-fase10-final",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-10-13T01:18:33.087924975Z",
+      "FinishedAt": "2026-10-13T01:19:29.807209338Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "D:\\EDUXFAC\\PANEL EDUXFAC\\01_TRABAJO_ACTUAL\\PANEL_EDUXFAC_ACTUAL\\staging\\phase10\\artifacts\\final-image",
+        "Destination": "/artifacts",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "c1bd5ac81a8fd0eaea282c91d146d811e71e0b4785a0f7bcfa6dcec0315ab30d",
+    "name": "/eduxfac-fase10-image",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-10-13T01:15:22.173471361Z",
+      "FinishedAt": "2026-10-13T01:18:32.885580774Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "D:\\EDUXFAC\\PANEL EDUXFAC\\01_TRABAJO_ACTUAL\\PANEL_EDUXFAC_ACTUAL\\staging\\phase10\\artifacts\\final-image",
+        "Destination": "/artifacts",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "4ec7bd842df18446aab03754f095ded6d443ee59258012d455dd0d3c2aaf1fbd",
+    "name": "/eduxfac-fase10-regression",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-10-13T01:12:22.599677176Z",
+      "FinishedAt": "2026-10-13T01:25:25.658579455Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "D:\\EDUXFAC\\PANEL EDUXFAC\\01_TRABAJO_ACTUAL\\PANEL_EDUXFAC_ACTUAL\\staging\\phase10\\artifacts\\baseline-f9",
+        "Destination": "/artifacts",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "f7ab6cc1d493cb9766620a82498b353de24bf2b13f5411ec45446537cb0864ea",
+    "name": "/eduxfac-fase10-local",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 255,
+      "Error": "",
+      "StartedAt": "2026-10-13T00:55:24.137308525Z",
+      "FinishedAt": "2026-10-13T01:11:43.167946Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "D:\\EDUXFAC\\PANEL EDUXFAC\\01_TRABAJO_ACTUAL\\PANEL_EDUXFAC_ACTUAL\\staging\\phase10\\artifacts",
+        "Destination": "/artifacts",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "76d640978ed747de8d42fd1a3ff65e3c55e9dab5379f413906b53fa909ef0459",
+    "name": "/eduxfac-fase9-final",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-10-12T21:15:03.154632875Z",
+      "FinishedAt": "2026-10-12T21:17:27.404095087Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "D:\\EDUXFAC\\PANEL EDUXFAC\\01_TRABAJO_ACTUAL\\PANEL_EDUXFAC_ACTUAL\\staging\\phase9\\artifacts\\final-image",
+        "Destination": "/artifacts",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "200447af8202cf9f874ddadec8b6a5f65ec9968050d4c38ffe49a69bb05a649c",
+    "name": "/eduxfac-fase9-repro",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 255,
+      "Error": "",
+      "StartedAt": "2026-10-12T20:35:01.782945532Z",
+      "FinishedAt": "2026-10-12T21:11:45.7903744Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "D:\\EDUXFAC\\PANEL EDUXFAC\\01_TRABAJO_ACTUAL\\PANEL_EDUXFAC_ACTUAL\\staging\\phase9\\artifacts\\fresh-image",
+        "Destination": "/artifacts",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "5ea3ad405dc961ddc2e75d283fd59d0ebd19fe82e3dcafab975e85936f35e96e",
+    "name": "/eduxfac-fase9-local",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-10-12T21:12:49.20022602Z",
+      "FinishedAt": "2026-10-12T21:17:27.406301281Z"
+    },
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "D:\\EDUXFAC\\PANEL EDUXFAC\\01_TRABAJO_ACTUAL\\PANEL_EDUXFAC_ACTUAL\\staging\\phase9\\artifacts",
+        "Destination": "/artifacts",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "97bd38aca4dc9199fded517706637550a1b0b0cd1979868fe1c88d879ae06d6d",
+    "name": "/eduxfac_v444_desktop_test-postgres-1",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 255,
+      "Error": "",
+      "StartedAt": "2026-09-28T01:12:41.047287626Z",
+      "FinishedAt": "2026-10-12T14:15:18.5988218Z",
+      "Health": {
+        "Status": "starting",
+        "FailingStreak": 0,
+        "Log": []
+      }
+    },
+    "networkMode": "eduxfac_v444_desktop_test_default",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "volume",
+        "Name": "eduxfac_v444_desktop_test_boticaweb_pg",
+        "Source": "/var/lib/docker/volumes/eduxfac_v444_desktop_test_boticaweb_pg/_data",
+        "Destination": "/var/lib/postgresql/data",
+        "Driver": "local",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": ""
+      },
+      {
+        "Type": "bind",
+        "Source": "/run/desktop/mnt/host/c/Users/CASTILLO/Desktop/eddede/boticaweb_final/desktop_test/EDUXFAC_V44.4_DESKTOP_LICENSE_TEST/EDUXFAC_V44.4_DESKTOP_TEST/database/schema.sql",
+        "Destination": "/docker-entrypoint-initdb.d/001-schema.sql",
+        "Mode": "ro",
+        "RW": false,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "4f38410202539119c6b1d484937a4b436d1a85f10544e46549e3f8593d91a16f",
+    "name": "/318-postgres-1",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 127,
+      "Error": "failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error mounting \"/run/desktop/mnt/host/c/Users/CASTILLO/Desktop/eddede/31/31.8/database/schema.sql\" to rootfs at \"/docker-entrypoint-initdb.d/001-schema.sql\": mount src=/run/desktop/mnt/host/c/Users/CASTILLO/Desktop/eddede/31/31.8/database/schema.sql, dst=/docker-entrypoint-initdb.d/001-schema.sql, dstFd=/proc/thread-self/fd/14, flags=MS_BIND|MS_REC: not a directory: Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type",
+      "StartedAt": "2026-09-28T01:12:05.962467053Z",
+      "FinishedAt": "2026-10-12T14:15:18.5976203Z",
+      "Health": {
+        "Status": "starting",
+        "FailingStreak": 0,
+        "Log": []
+      }
+    },
+    "networkMode": "318_default",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "volume",
+        "Name": "318_boticaweb_pg",
+        "Source": "318_boticaweb_pg",
+        "Destination": "/var/lib/postgresql/data",
+        "Driver": "local",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": ""
+      },
+      {
+        "Type": "bind",
+        "Source": "C:\\Users\\CASTILLO\\Desktop\\eddede\\31\\31.8\\database\\schema.sql",
+        "Destination": "/docker-entrypoint-initdb.d/001-schema.sql",
+        "Mode": "ro",
+        "RW": false,
+        "Propagation": "rprivate"
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  },
+  {
+    "id": "6f605d35f92105c97123021749b5a55d71ef142fcedceb375269421d3117084d",
+    "name": "/boticaweb_final-postgres-1",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 255,
+      "Error": "",
+      "StartedAt": "2026-09-28T01:12:24.103023727Z",
+      "FinishedAt": "2026-10-12T14:15:18.5976204Z",
+      "Health": {
+        "Status": "starting",
+        "FailingStreak": 0,
+        "Log": []
+      }
+    },
+    "networkMode": "boticaweb_final_default",
+    "ports": {},
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/run/desktop/mnt/host/c/Users/CASTILLO/Desktop/eddede/boticaweb_final/database/schema.sql",
+        "Destination": "/docker-entrypoint-initdb.d/001-schema.sql",
+        "Mode": "ro",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "volume",
+        "Name": "boticaweb_final_boticaweb_pg",
+        "Source": "/var/lib/docker/volumes/boticaweb_final_boticaweb_pg/_data",
+        "Destination": "/var/lib/postgresql/data",
+        "Driver": "local",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": ""
+      }
+    ],
+    "restart": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    }
+  }
+]

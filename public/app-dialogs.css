@@ -1,0 +1,9 @@
+/* Same quick-modal card and buttons as Acceso restringido; only the shared dialog. */
+#appDialogModal { z-index: 220; }
+#appDialogModal .quick-modal-card { max-width: 520px; text-align: center; box-shadow: 0 24px 70px rgba(8,42,73,.28); }
+#appDialogTitle { margin-top: 0; color: #0b3a70; }
+#appDialogMessage { white-space: pre-wrap; overflow-wrap: anywhere; }
+#appDialogField { display: block; margin: 16px 0; }
+#appDialogInput { width: 100%; box-sizing: border-box; }
+#appDialogModal .actions { justify-content: center; flex-wrap: wrap; gap: 10px; }
+#appDialogModal :focus-visible { outline: 3px solid #72b5ff; outline-offset: 3px; }

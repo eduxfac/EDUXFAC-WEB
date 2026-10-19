@@ -1,0 +1,23 @@
+{
+  "public/index.html": {
+    "url": "https://app.eduxfac.com/",
+    "attempts": 3,
+    "pid": 359274,
+    "restarts": 18,
+    "stable_samples": 3
+  },
+  "public/purchase-requirement.js": {
+    "url": "https://app.eduxfac.com/purchase-requirement.js",
+    "attempts": 3,
+    "pid": 359274,
+    "restarts": 18,
+    "stable_samples": 3
+  },
+  "public/desktop-responsive.css": {
+    "url": "https://app.eduxfac.com/desktop-responsive.css",
+    "attempts": 3,
+    "pid": 359274,
+    "restarts": 18,
+    "stable_samples": 3
+  }
+}

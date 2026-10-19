@@ -1,0 +1,51 @@
+--- server/src/app.js original
+
++++ server/src/app.js candidato
+
+@@ -767,9 +767,24 @@
+
+ });
+ 
+-async function validateProductFormFields(db,user,b){
+- const required=[['codigo_barras','Código de barras'],['nombre','Nombre'],['principio_activo','Principio activo'],['concentracion','Concentración'],['presentacion','Presentación'],['unidad_medida','Unidad de medida'],['stock_minimo','Stock mínimo'],['precio','Precio de venta'],['categoria_id','Categoría'],['laboratorio_id','Laboratorio']];
++const PRODUCT_FORM_UNITS = new Set(['UNIDAD','BLISTER','CAJA','PAQUETE','DOCENA','FRASCO','BOTELLA','SOBRE','TUBO','AMPOLLA','VIAL','BOLSA','TABLETA','CAPSULA','GRAMO','MILILITRO']);
++async function validateProductFormFields(db,user,b,{create=false}={}){
++ const required=[...(create?[['codigo_interno','Código de producto']]:[]),['nombre','Nombre del producto'],['unidad_medida','Unidad de medida'],['stock_minimo','Stock mínimo'],['precio','Precio de venta']];
+  const missing=required.filter(([key])=>!String(b[key]??'').trim()).map(([,label])=>label);
+  if(missing.length)throw new Error('Complete los campos obligatorios: '+missing.join(', ')+'.');
++ if(create){
++  b.codigo_interno=String(b.codigo_interno).trim();
++  if(b.codigo_interno.length>40||b.codigo_interno==='Generando…')throw new Error('Código de producto inválido.');
++ }
++ b.unidad_medida=String(b.unidad_medida).trim();
++ if(create&&!PRODUCT_FORM_UNITS.has(b.unidad_medida))throw new Error('Selecciona una unidad de medida válida.');
++ for(const [key,label] of [['stock_minimo','Stock mínimo'],['precio','Precio de venta'],['stock_maximo','Stock máximo']]){
++  if(key==='stock_maximo'&&!String(b[key]??'').trim()){b[key]=0;continue;}
++  const value=b[key],text=String(value).trim();
++  if(!['number','string'].includes(typeof value)||!/^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?$/.test(text)||!Number.isFinite(Number(value))||Number(value)<0)throw new Error(label+' inválido.');
++ }
++ for(const key of ['codigo_barras','principio_activo','concentracion','presentacion'])b[key]=String(b[key]??'').trim()||null;
+  for(const [table,key,label] of [['categorias','categoria_id','Categoría'],['laboratorios','laboratorio_id','Laboratorio']]){
++  b[key]=String(b[key]??'').trim()||null;
++  if(b[key]===null)continue;
+   const found=await db.query('select id from '+table+" c where id=$1 and empresa_id=$2 and coalesce((to_jsonb(c)->>'activo')::boolean,true)",[b[key],user.empresa_id]);
+   if(!found.rowCount)throw new Error(label+' inválido o no disponible.');
+@@ -780,5 +795,5 @@
+
+   try{
+     await requireAnyBranchRole(pool,req.user,['Administrador','Almacén']);
+-    const b=req.body||{}; await validateProductFormFields(pool,req.user,b); await ensureBranchAccess(pool,req.user,b.sucursal_id); const max=numeric(b.stock_maximo??0,'Stock máximo');if(max<0)throw new Error('Stock máximo inválido.'); if(!String(b.nombre||'').trim()) throw new Error('El nombre del producto es obligatorio.');
++    const b={...(req.body||{})}; await validateProductFormFields(pool,req.user,b,{create:true}); await ensureBranchAccess(pool,req.user,b.sucursal_id); const max=numeric(b.stock_maximo??0,'Stock máximo');if(max<0)throw new Error('Stock máximo inválido.'); if(!String(b.nombre||'').trim()) throw new Error('El nombre del producto es obligatorio.');
+     if(!String(b.unidad_medida||'').trim()) throw new Error('Selecciona la unidad de medida.');
+     const min=numeric(b.stock_minimo??0,'Stock mínimo'); const price=numeric(b.precio??0,'Precio'); const equivalencias=normalizeEquivalences(b.equivalencias); if(min<0||price<0) throw new Error('Stock mínimo y precio no pueden ser negativos.');
+@@ -786,5 +801,8 @@
+
+       await c.query(`select pg_advisory_xact_lock(hashtext($1::text),91001)`,[req.user.empresa_id]);
+       const identity=await assertProductIdentityAvailable(c,req.user.empresa_id,b);
+-      const codigo=await nextProductCode(c,req.user.empresa_id,true);
++      const codigo=b.codigo_interno;
++      if((await c.query('select 1 from productos where empresa_id=$1 and btrim(codigo_interno)=$2',[req.user.empresa_id,codigo])).rowCount){
++        const error=new Error('Ya existe un producto con ese código. Genera un código nuevo antes de guardar.');error.status=409;throw error;
++      }
+       const q=await c.query(`insert into productos(empresa_id,codigo_interno,codigo_barras,nombre,principio_activo,concentracion,presentacion,unidad_medida,categoria_id,laboratorio_id,stock_minimo,requiere_lote)
+         values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) returning *`,[req.user.empresa_id,codigo,identity.cleanBarcode||null,identity.cleanName,b.principio_activo||null,b.concentracion||null,b.presentacion||null,String(b.unidad_medida).trim(),b.categoria_id||null,b.laboratorio_id||null,min,b.requiere_lote!==false]);

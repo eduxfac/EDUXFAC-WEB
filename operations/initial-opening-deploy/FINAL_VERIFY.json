@@ -1,0 +1,33 @@
+{
+  "result": "FINAL_OK",
+  "readiness": {
+    "loopback": {
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempts": 3,
+      "pid": 362852,
+      "restarts": 19,
+      "stable_samples": 3
+    },
+    "https": {
+      "url": "https://app.eduxfac.com/api/health",
+      "attempts": 3,
+      "pid": 362852,
+      "restarts": 19,
+      "stable_samples": 3
+    }
+  },
+  "pm2": {
+    "id": 4,
+    "pid": 362852,
+    "status": "online",
+    "restarts": 19,
+    "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+    "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+    "mode": "PILOTO",
+    "port": "3001",
+    "worker": "false",
+    "mutation": "no"
+  },
+  "database_unchanged": true,
+  "only_one_release_file_changed": true
+}

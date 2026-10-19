@@ -1,0 +1,10 @@
+{
+  "before": {
+    "server/src/app.js": "aea688d15a8022b8c5fbb38616c4aa50a86c0efe65e14c788a18f0278cd03d16",
+    "public/index.html": "a03b1cf10bddd39ccb171accdf0e724498903f3656e20fdc5b31136e460c2392"
+  },
+  "after": {
+    "server/src/app.js": "fd0f19d0837546630626a825b66c6cd3c72496faa25319f8cc9feab9327666d1",
+    "public/index.html": "4ead28dfbf60c2af42c30ddb373c24c269e8fbb565601450816d1ecb2d16ea9e"
+  }
+}

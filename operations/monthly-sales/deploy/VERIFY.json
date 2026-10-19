@@ -1,0 +1,30 @@
+{
+  "ok": true,
+  "readiness": {
+    "loopback": {
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempts": 3,
+      "pid": 385070,
+      "restarts": 20,
+      "stable_samples": 3
+    },
+    "https": {
+      "url": "https://app.eduxfac.com/api/health",
+      "attempts": 3,
+      "pid": 385070,
+      "restarts": 20,
+      "stable_samples": 3
+    }
+  },
+  "source_hashes": {
+    "server/src/app.js": "3a22cf3c1482aceac2788b86c8318aa9efbe70c9ca66e8e4571fefe861209d90",
+    "server/src/monthly-sales.js": "4f7cea2a35b1ddcd82af4db81178c2fb6502c8cad58122ae9af4cf4efa6a001f",
+    "public/index.html": "c2c01c26cd4cd1298e94223f87a64d9901659ac3516e47927aa57398ffb68e06",
+    "public/monthly-sales.js": "158173086da9c1e5b3b0ef0471a7cf68f2c8da1be5e1acbd33fe28ac7eb44a77",
+    "public/desktop-responsive.css": "a3e525f414f396b14e7a98edf995bbd631b496acd0ec4a23604625d64e9bcf25"
+  },
+  "other_processes_unchanged": true,
+  "database_unchanged": true,
+  "week_chart_unchanged": true,
+  "https_assets_match": true
+}

@@ -1,0 +1,79 @@
+{
+  "root": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+  "files": {
+    "server/src/app.js": "dfb160b96cce099f89283c221a3671affd3357e87f9b528b3bd2bb100c071576",
+    "server/src/monthly-sales.js": null,
+    "public/index.html": "06ad9349541563ef990fcf5c8a7ecf63c5db05b28b2688bfe25aaf8b63f524c1",
+    "public/monthly-sales.js": null,
+    "public/desktop-responsive.css": "f30b44ebf7936886ec7cb75142149ab4370669d287d65fcf06aa7fef00f4584c"
+  },
+  "processes": {
+    "eduxfac": {
+      "id": 0,
+      "pid": 988,
+      "status": "online",
+      "restarts": 0,
+      "cwd": "/var/www/eduxfac",
+      "script": "/usr/bin/npm",
+      "mode": null,
+      "port": "",
+      "worker": null,
+      "mutation": null
+    },
+    "EDUXFAC-PANEL-PILOTO": {
+      "id": 3,
+      "pid": 269525,
+      "status": "online",
+      "restarts": 4,
+      "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel",
+      "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel/server/start.mjs",
+      "mode": "PILOTO",
+      "port": "4310",
+      "worker": "false",
+      "mutation": null
+    },
+    "EDUXFAC-WEB-PILOTO": {
+      "id": 4,
+      "pid": 362852,
+      "status": "online",
+      "restarts": 19,
+      "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+      "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+      "mode": "PILOTO",
+      "port": "3001",
+      "worker": "false",
+      "mutation": "no"
+    }
+  },
+  "http": {
+    "http://127.0.0.1:3001/api/health": {
+      "status": 200,
+      "sha256": "78aaf1d5743f3731f4a1051b3c92605b706a356d8425d59a0f85ab62f0d91d8f",
+      "body": {
+        "ok": true,
+        "database": true,
+        "now": "2026-10-15T13:11:26.073Z",
+        "data_mode": "PILOTO"
+      }
+    },
+    "https://app.eduxfac.com/api/health": {
+      "status": 200,
+      "sha256": "bd1d870141b926b29d794432e3a1ef477a106b6b0f2688a553ea7561dd6c2947",
+      "body": {
+        "ok": true,
+        "database": true,
+        "now": "2026-10-15T13:11:26.107Z",
+        "data_mode": "PILOTO"
+      }
+    },
+    "https://app.eduxfac.com/": {
+      "status": 200,
+      "sha256": "06ad9349541563ef990fcf5c8a7ecf63c5db05b28b2688bfe25aaf8b63f524c1"
+    },
+    "https://admin.eduxfac.com/": {
+      "status": 200,
+      "sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df"
+    }
+  },
+  "readiness_tool_sha256": "90a1393ac5090aa3a95dd85730cd795cfc0269c37425ecfda7863827d090a785"
+}

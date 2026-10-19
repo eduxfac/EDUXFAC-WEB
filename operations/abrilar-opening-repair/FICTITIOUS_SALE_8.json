@@ -1,0 +1,28 @@
+{
+  "result": "FICTITIOUS_SALE_8_OK",
+  "allocation": [
+    {
+      "cantidad": "3.000000000000",
+      "costo_snapshot": "15.0000000000000000",
+      "numero_lote": "EDU1"
+    },
+    {
+      "cantidad": "3.000000000000",
+      "costo_snapshot": "15.0000000000000000",
+      "numero_lote": "EDU2"
+    },
+    {
+      "cantidad": "2.000000000000",
+      "costo_snapshot": "15.0000000000000000",
+      "numero_lote": "EDU3"
+    }
+  ],
+  "quantity": 8,
+  "cost": 120,
+  "revenue": 200,
+  "profit": 80,
+  "stock_restored": 11,
+  "value_restored": 165,
+  "real_pilot_sale": false,
+  "real_data_modified": false
+}

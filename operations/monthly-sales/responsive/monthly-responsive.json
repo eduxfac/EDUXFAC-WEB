@@ -1,0 +1,92 @@
+[
+  {
+    "bars": 12,
+    "card": {
+      "width": 1623,
+      "x": 263
+    },
+    "fonts": [
+      "14px",
+      "14px",
+      "12px"
+    ],
+    "footerOverlap": false,
+    "globalWidth": 1905,
+    "headerOverlap": false,
+    "internalScroll": false,
+    "total": "S/ 400.25",
+    "width": 1920
+  },
+  {
+    "bars": 12,
+    "card": {
+      "width": 1069,
+      "x": 263
+    },
+    "fonts": [
+      "14px",
+      "14px",
+      "12px"
+    ],
+    "footerOverlap": false,
+    "globalWidth": 1351,
+    "headerOverlap": false,
+    "internalScroll": false,
+    "total": "S/ 400.25",
+    "width": 1366
+  },
+  {
+    "bars": 12,
+    "card": {
+      "width": 793,
+      "x": 203
+    },
+    "fonts": [
+      "14px",
+      "14px",
+      "12px"
+    ],
+    "footerOverlap": false,
+    "globalWidth": 1009,
+    "headerOverlap": false,
+    "internalScroll": true,
+    "total": "S/ 400.25",
+    "width": 1024
+  },
+  {
+    "bars": 12,
+    "card": {
+      "width": 727,
+      "x": 13
+    },
+    "fonts": [
+      "14px",
+      "14px",
+      "12px"
+    ],
+    "footerOverlap": false,
+    "globalWidth": 753,
+    "headerOverlap": false,
+    "internalScroll": true,
+    "total": "S/ 400.25",
+    "width": 768
+  },
+  {
+    "bars": 12,
+    "card": {
+      "width": 338,
+      "x": 11
+    },
+    "fonts": [
+      "14px",
+      "14px",
+      "12px"
+    ],
+    "footerOverlap": false,
+    "globalWidth": 360,
+    "headerOverlap": false,
+    "internalScroll": true,
+    "total": "S/ 400.25",
+    "width": 375
+  }
+]

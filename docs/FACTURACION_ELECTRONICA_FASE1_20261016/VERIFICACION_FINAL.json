@@ -1,0 +1,52 @@
+{
+  "fecha_lima": "2026-10-16T10:39:10.263451-05:00",
+  "fase": "FACTURACION_ELECTRONICA_FASE_1_AUDITORIA_DISENO_PLAN",
+  "estado": "COMPLETADA",
+  "root": "D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL",
+  "solo_documentos_nuevos": "D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\docs\\FACTURACION_ELECTRONICA_FASE1_20261016",
+  "fuentes_verificadas": 155,
+  "modificados": [],
+  "eliminados": [],
+  "agregados_fuera_documentacion": [],
+  "comprobaciones_estaticas_aritmeticas": {
+    "aprobadas": 36,
+    "fallidas": 0,
+    "no_es_regresion_funcional": true
+  },
+  "implementacion": false,
+  "despliegue": false,
+  "migraciones_ejecutadas": false,
+  "conexion_bd": false,
+  "datos_piloto_accedidos": false,
+  "conexion_servicio_fiscal": false,
+  "consulta_externa": "Solo documentacion publica SUNAT; reglas XLSX identificadas pero no interpretadas",
+  "limites": "Hashes de fuentes locales; no se inspeccionaron datos ni esquema real VPS. Se excluyen dependencias y clusters historicos. No se afirma certificacion normativa ni emision electronica actual.",
+  "go_fase_2": "GO TECNICO para modelo/clientes/numeracion en entorno aislado; fase 2 no iniciada",
+  "go_emision_despliegue": "NO-GO",
+  "artefactos": {
+    "COMPROBACIONES_AUDITORIA.json": {
+      "sha256": "1fc2c4c6b474440abfa050f00804e864161957e72aadf914971f18cc48d9acf6",
+      "bytes": 4368
+    },
+    "EVIDENCIAS_CODIGO.json": {
+      "sha256": "88d390729e70d9eac619aa25570ecc6677d5d371d1d12889bcf9a2bab2582f82",
+      "bytes": 82052
+    },
+    "HASHES_ANTES.json": {
+      "sha256": "d3391fac431eecf562d7459697b9e2357729e13b8bbeba5edad5f6dc429ef812",
+      "bytes": 24762
+    },
+    "HASHES_DESPUES.json": {
+      "sha256": "0074f4b597bbf5cd7b989acddf5c4408024bd4eed9d7ec8062a5e32a40f065c9",
+      "bytes": 24589
+    },
+    "INFORME_FASE1_FACTURACION_ELECTRONICA.md": {
+      "sha256": "30bccfd0ffbf016614a083b5d609087bc2bbb2835034e113618e53afd4c1dc9b",
+      "bytes": 41442
+    },
+    "INTENTO_1_DELIMITACION_ESTETICA.json": {
+      "sha256": "8b848478a1a787d4b147c4073331ea3375548528323fa9462bd440ba28ac9d90",
+      "bytes": 4272
+    }
+  }
+}

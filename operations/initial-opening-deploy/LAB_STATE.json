@@ -1,0 +1,10 @@
+{
+  "linuxRoot": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL",
+  "container": "eduxfac-initial-opening-lab-20261014-223454",
+  "user": "eduxfac",
+  "candidate_sha256": "d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656",
+  "network": "none",
+  "utc": "2026-10-15T03:35:04.2052486Z",
+  "id": "32c0554bb903c85b221c95e55dceb86a2a03cd860ffc03518e9939efef55807a",
+  "image": "sha256:0a77b086357153cbf0092d178c66f1f4cd882538a246cfed02ce10c5a5b571e2"
+}

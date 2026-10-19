@@ -1,0 +1,81 @@
+{
+  "status": "NO_GO_STOPPED_ROLLBACK_VERIFIED",
+  "functional_candidate_changed": false,
+  "candidate_sha256": "d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656",
+  "active_sha256": "1e99adfc02152a633bcc3724d5fdc5f5d7f6b3871ff1f6feaf30fa2ddb488e65",
+  "backup": "/home/eduxadmin/.local/share/eduxfac/physical_count_deploy_v2_20261014_171559/backup/server/src/inventory-count.js",
+  "postdeploy_passed": 63,
+  "postdeploy_groups": {
+    "VPS_generated_workbook": 12,
+    "Windows": 21,
+    "Linux_functional": 21,
+    "PostgreSQL_native_RLS": 9
+  },
+  "functional_test_failures": 0,
+  "Microsoft_Excel_automation_start_failed": 1,
+  "Microsoft_Excel_checks_completed_this_run": 0,
+  "failure_detail": {
+    "checks_completed": [],
+    "private_pid": 17052,
+    "error": "You cannot call a method on a null-valued expression.",
+    "position": "At D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\operations\\physical-count-deploy-v2\\VERIFY_EXCEL_POSTDEPLOY.ps1:39 char:2\r\n+  $book=$excel.Workbooks.Open($inputFile,0,$true)\r\n+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  },
+  "linux_lab_correct_and_passed": true,
+  "real_data_unchanged": true,
+  "recovery": {
+    "result": "ROLLBACK_VERIFIED_OK",
+    "current_sha256": "1e99adfc02152a633bcc3724d5fdc5f5d7f6b3871ff1f6feaf30fa2ddb488e65",
+    "original_restored": true,
+    "readiness": {
+      "loopback": {
+        "url": "http://127.0.0.1:3001/api/health",
+        "attempts": 3,
+        "pid": 351895,
+        "restarts": 17,
+        "stable_samples": 3
+      },
+      "https": {
+        "url": "https://app.eduxfac.com/api/health",
+        "attempts": 3,
+        "pid": 351895,
+        "restarts": 17,
+        "stable_samples": 3
+      }
+    },
+    "pm2": {
+      "id": 4,
+      "pid": 351895,
+      "status": "online",
+      "restarts": 17,
+      "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+      "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+      "mode": "PILOTO",
+      "port": "3001",
+      "worker": "false",
+      "mutation": "no"
+    },
+    "database_unchanged": true,
+    "other_processes_unchanged": true,
+    "app_admin_eduxfac_https_200": true,
+    "rollback_done": {
+      "ok": true,
+      "readiness": {
+        "loopback": {
+          "url": "http://127.0.0.1:3001/api/health",
+          "attempts": 4,
+          "pid": 351895,
+          "restarts": 17,
+          "stable_samples": 3
+        },
+        "https": {
+          "url": "https://app.eduxfac.com/api/health",
+          "attempts": 3,
+          "pid": 351895,
+          "restarts": 17,
+          "stable_samples": 3
+        }
+      }
+    }
+  },
+  "no_redeployment_after_failure": true
+}

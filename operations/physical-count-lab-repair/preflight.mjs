@@ -1,0 +1,8 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {createRequire} from 'node:module';
+const root=process.cwd();assert.equal(root,'/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL');assert.equal(process.getuid()>0,true);assert.ok(fs.existsSync('/.dockerenv'));
+const p=JSON.parse(fs.readFileSync('package.json')),lock=JSON.parse(fs.readFileSync('package-lock.json')),req=createRequire(root+'/package.json'),versions={};
+for(const n of Object.keys({...p.dependencies,...p.devDependencies})){const installed=JSON.parse(fs.readFileSync('node_modules/'+n+'/package.json'));assert.equal(installed.version,lock.packages['node_modules/'+n].version,n+' lockfile version');await import(n);versions[n]={declared:p.dependencies?.[n]||p.devDependencies[n],installed:installed.version,resolved:req.resolve(n)};}
+const cached=JSON.parse(fs.readFileSync('node_modules/.package-lock.json'));let checked=0;
+for(const[n,meta]of Object.entries(cached.packages)){if(!n.startsWith('node_modules/'))continue;assert.ok(lock.packages[n],'Undeclared cached package '+n);assert.equal(meta.version,lock.packages[n].version,n);checked++;}
+const candidate=crypto.createHash('sha256').update(fs.readFileSync('server/src/inventory-count.js')).digest('hex');assert.equal(candidate,'d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656');
+console.log(JSON.stringify({result:'PREFLIGHT_OK',root,node:process.version,NODE_PATH_required:false,npm_install_required:false,versions,transitive_cached_versions_checked:checked,candidate_sha256:candidate,package_lock_sha256:crypto.createHash('sha256').update(fs.readFileSync('package-lock.json')).digest('hex')},null,2));

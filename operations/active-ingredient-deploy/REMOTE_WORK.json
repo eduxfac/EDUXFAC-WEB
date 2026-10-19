@@ -1,0 +1,9 @@
+{
+  "work": "/home/eduxadmin/.local/share/eduxfac/active_search_deploy_20261014_150209",
+  "hashes": {
+    "DEPLOY_SEARCH.py": "90747c23d9c1164b2cf6cf58e5ea44302524e9fa75bc9529f377e2bda619891f",
+    "READONLY_DB.mjs": "da51dad3bc04866655f5f4ceb10b35ce3b05e49d53d8e44498abf2d447274e4a",
+    "MANIFEST.json": "d4596e71f54402e276ce3c02ea8653675806a22ac2344b68d9446bfb08db1db0",
+    "ROLLBACK_RENTABILIDAD_V2.py": "1be41e4f827e730924109d85ad9fc770baf4aacfd5a0bac474027139b3f3c974"
+  }
+}

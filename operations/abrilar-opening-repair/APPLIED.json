@@ -1,0 +1,348 @@
+{
+  "applied": true,
+  "stock_total": 11,
+  "changes": [
+    {
+      "lote_id": "16a942c2-9776-4a80-8251-1187421adb6f",
+      "lote": "EDU2",
+      "antes": "60",
+      "despues": "0",
+      "stock": "3.000",
+      "costo": "15"
+    },
+    {
+      "lote_id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+      "lote": "EDU3",
+      "antes": "75",
+      "despues": "0",
+      "stock": "5.000",
+      "costo": "15"
+    },
+    {
+      "lote_id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+      "lote": "EDU1",
+      "antes": "45",
+      "despues": "0",
+      "stock": "3.000",
+      "costo": "15"
+    }
+  ],
+  "audit_id": "43",
+  "plan_sha256": "24183551964bfa9b334853ce4dfd98254458d38b85d32fbf361b24ae1457f6c0",
+  "checks": {
+    "simulation": {
+      "rows": [
+        {
+          "id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+          "numero_lote": "EDU1",
+          "stock": "3.000",
+          "costo_unitario": "15",
+          "valor_base_costos": "0",
+          "valor": "45.000",
+          "costo_venta": "15.0000000000000000",
+          "tomar": "3.000",
+          "costo_consumido": "45.0000000000000000"
+        },
+        {
+          "id": "16a942c2-9776-4a80-8251-1187421adb6f",
+          "numero_lote": "EDU2",
+          "stock": "3.000",
+          "costo_unitario": "15",
+          "valor_base_costos": "0",
+          "valor": "45.000",
+          "costo_venta": "15.0000000000000000",
+          "tomar": "3.000",
+          "costo_consumido": "45.0000000000000000"
+        },
+        {
+          "id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+          "numero_lote": "EDU3",
+          "stock": "5.000",
+          "costo_unitario": "15",
+          "valor_base_costos": "0",
+          "valor": "75.000",
+          "costo_venta": "15.0000000000000000",
+          "tomar": "2.000",
+          "costo_consumido": "30.0000000000000000"
+        }
+      ],
+      "stock_total": 11,
+      "inventory_value": 165,
+      "quantity": 8,
+      "cost": 120,
+      "revenue": 200,
+      "profit": 80,
+      "SELECT_only": true
+    },
+    "health": [
+      {
+        "url": "http://127.0.0.1:3001/api/health",
+        "http": 200,
+        "ms": 94,
+        "body_sha256": "7b2f30c95c5dd084f10ca099271d5cc1d9bd4d347d5d48f9896171b5ee1d6815"
+      },
+      {
+        "url": "https://app.eduxfac.com/api/health",
+        "http": 200,
+        "ms": 21,
+        "body_sha256": "6c0813f132bd6686261633cd5101d79f085966a6fad7c9414c3917201ebd493f"
+      },
+      {
+        "url": "https://app.eduxfac.com/",
+        "http": 200,
+        "ms": 46,
+        "body_sha256": "06ad9349541563ef990fcf5c8a7ecf63c5db05b28b2688bfe25aaf8b63f524c1"
+      },
+      {
+        "url": "https://admin.eduxfac.com/",
+        "http": 200,
+        "ms": 21,
+        "body_sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df"
+      }
+    ]
+  },
+  "after": {
+    "data": {
+      "product": [
+        {
+          "id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "empresa_id": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+          "codigo_interno": "P000004",
+          "codigo_anterior": null,
+          "codigo_barras": "5454544545",
+          "nombre": "ABRILAR JARABE 120ML",
+          "principio_activo": "PARACETAMOL",
+          "concentracion": "120ML",
+          "presentacion": "BOTELLA",
+          "unidad_medida": "UNIDAD",
+          "categoria_id": "6e2c2258-0e8e-4d52-8943-d3d941e32ee1",
+          "laboratorio_id": "c03364a1-464f-45bc-aefb-ff3e4967b081",
+          "stock_minimo": "2.000",
+          "stock_maximo": "0.000",
+          "tipo_afectacion_igv": null,
+          "favorito": false,
+          "precio_venta_dolares": "0.0000",
+          "recargo_propina": "0.0000",
+          "requiere_lote": true,
+          "activo": true,
+          "created_at": "2026-10-14T21:06:22.800Z",
+          "updated_at": "2026-10-15T02:57:49.156Z"
+        }
+      ],
+      "branch": [
+        {
+          "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "stock_minimo": "4.000",
+          "stock_maximo": "0.000",
+          "activo": true,
+          "origen": "operacion",
+          "created_at": "2026-10-14T21:06:22.800Z"
+        }
+      ],
+      "lots": [
+        {
+          "id": "16a942c2-9776-4a80-8251-1187421adb6f",
+          "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "numero_lote": "EDU2",
+          "fecha_vencimiento": "2026-11-28T23:00:00.000Z",
+          "costo_unitario": "15",
+          "cantidad_inicial": "4.000",
+          "cantidad_disponible": "3.000",
+          "compra_detalle_id": null,
+          "valor_base_costos": "0"
+        },
+        {
+          "id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+          "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "numero_lote": "EDU3",
+          "fecha_vencimiento": "2026-12-28T23:00:00.000Z",
+          "costo_unitario": "15",
+          "cantidad_inicial": "5.000",
+          "cantidad_disponible": "5.000",
+          "compra_detalle_id": null,
+          "valor_base_costos": "0"
+        },
+        {
+          "id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+          "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "numero_lote": "EDU1",
+          "fecha_vencimiento": "2026-10-28T23:00:00.000Z",
+          "costo_unitario": "15",
+          "cantidad_inicial": "3.000",
+          "cantidad_disponible": "3.000",
+          "compra_detalle_id": null,
+          "valor_base_costos": "0"
+        }
+      ],
+      "movements": [
+        {
+          "id": "45a35ca6-fafa-4ac0-98b5-63cbc04ae428",
+          "empresa_id": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "lote_id": "16a942c2-9776-4a80-8251-1187421adb6f",
+          "tipo": "AJUSTE_EXCEL_STOCK",
+          "cantidad": "-1.000",
+          "costo_unitario": "15",
+          "referencia_tipo": "CONTEO_FISICO",
+          "referencia_id": "3ddff926-780d-465a-ad31-ec0a0f963678",
+          "usuario_id": "239be455-5bb8-4334-be0a-d3f95db88fa2",
+          "created_at": "2026-10-14T21:07:53.547Z"
+        },
+        {
+          "id": "8de56af8-071d-47bf-8991-2a02b7369537",
+          "empresa_id": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "lote_id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+          "tipo": "INVENTARIO_INICIAL",
+          "cantidad": "5.000",
+          "costo_unitario": "15",
+          "referencia_tipo": "INVENTARIO_INICIAL",
+          "referencia_id": "1c2a3adb-3a3d-4ec6-8018-c059f7c5f4a8",
+          "usuario_id": "239be455-5bb8-4334-be0a-d3f95db88fa2",
+          "created_at": "2026-10-14T21:06:22.800Z"
+        },
+        {
+          "id": "a3c487d1-a387-4498-a268-8c350e813101",
+          "empresa_id": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "lote_id": "16a942c2-9776-4a80-8251-1187421adb6f",
+          "tipo": "INVENTARIO_INICIAL",
+          "cantidad": "4.000",
+          "costo_unitario": "15",
+          "referencia_tipo": "INVENTARIO_INICIAL",
+          "referencia_id": "1c2a3adb-3a3d-4ec6-8018-c059f7c5f4a8",
+          "usuario_id": "239be455-5bb8-4334-be0a-d3f95db88fa2",
+          "created_at": "2026-10-14T21:06:22.800Z"
+        },
+        {
+          "id": "db8a7356-a2c0-47c7-b5a6-b9203db6d966",
+          "empresa_id": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "lote_id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+          "tipo": "INVENTARIO_INICIAL",
+          "cantidad": "3.000",
+          "costo_unitario": "15",
+          "referencia_tipo": "INVENTARIO_INICIAL",
+          "referencia_id": "1c2a3adb-3a3d-4ec6-8018-c059f7c5f4a8",
+          "usuario_id": "239be455-5bb8-4334-be0a-d3f95db88fa2",
+          "created_at": "2026-10-14T21:06:22.800Z"
+        }
+      ],
+      "purchase_details": [],
+      "sale_details": [],
+      "sales": [],
+      "returns": [],
+      "adjustments": [
+        {
+          "id": "3ddff926-780d-465a-ad31-ec0a0f963678",
+          "empresa_id": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "lote_id": "16a942c2-9776-4a80-8251-1187421adb6f",
+          "diferencia": "-1.000",
+          "motivo": "AJUSTE DE INVENTARIO / CONTEO FÍSICO",
+          "usuario_id": "239be455-5bb8-4334-be0a-d3f95db88fa2",
+          "created_at": "2026-10-14T21:07:53.547Z"
+        }
+      ],
+      "prices": [
+        {
+          "id": "578626fb-b301-488f-8f2e-cb41cb752332",
+          "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "tipo": "unidad",
+          "factor_unidades": "1.000",
+          "precio_venta": "25.00",
+          "vigente_desde": "2026-10-14T21:06:22.800Z",
+          "vigente_hasta": "2026-10-15T02:57:49.156Z"
+        },
+        {
+          "id": "74591189-1096-4e61-b8c0-a95182ec40f7",
+          "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "tipo": "UNIDAD",
+          "factor_unidades": "1.000",
+          "precio_venta": "25.00",
+          "vigente_desde": "2026-10-15T02:57:49.156Z",
+          "vigente_hasta": null
+        }
+      ],
+      "audit": [
+        {
+          "id": "41",
+          "accion": "EDITAR_PRODUCTO",
+          "entidad": "productos",
+          "entidad_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "detalle": {
+            "precio": 25,
+            "equivalencias": []
+          },
+          "created_at": "2026-10-15T02:57:49.156Z"
+        },
+        {
+          "id": "43",
+          "accion": "REPARAR_APERTURA_INICIAL",
+          "entidad": "productos",
+          "entidad_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+          "detalle": {
+            "motivo": "Eliminar apertura duplicada ya representada por INVENTARIO_INICIAL; stock e históricos intactos",
+            "changes": [
+              {
+                "lote": "EDU2",
+                "antes": "60",
+                "costo": "15",
+                "stock": "3.000",
+                "despues": "0",
+                "lote_id": "16a942c2-9776-4a80-8251-1187421adb6f"
+              },
+              {
+                "lote": "EDU3",
+                "antes": "75",
+                "costo": "15",
+                "stock": "5.000",
+                "despues": "0",
+                "lote_id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04"
+              },
+              {
+                "lote": "EDU1",
+                "antes": "45",
+                "costo": "15",
+                "stock": "3.000",
+                "despues": "0",
+                "lote_id": "c77e5814-875d-4b7f-a818-82ba4140922f"
+              }
+            ],
+            "operador_so": "eduxadmin",
+            "plan_sha256": "24183551964bfa9b334853ce4dfd98254458d38b85d32fbf361b24ae1457f6c0",
+            "stock_total": 11,
+            "backup_sha256": "173c3e635f8af6e92656b52eb500137e6c04e15ad8459ad204879423b4a411bf",
+            "rol_postgresql": "eduxfac_web_migrator"
+          },
+          "created_at": "2026-10-15T03:38:52.295Z"
+        }
+      ]
+    },
+    "fingerprints": {
+      "product": "e3bf3301d165b4b7f8c860bf9d398c49056792b289c722d7a6c7f7715883ebdf",
+      "branch": "679d5d517286a4406c173e8a6bced1cdd89213b0fca901cfc951b6259a2b56bf",
+      "lots": "af04bd7f8ef79a121093711b60dd6bd4968db7f6304f647e3a269791b5f20414",
+      "movements": "3958df68fdb4fd32505024d1ee89db58769dd5facf7d328487099f79d2e87df3",
+      "purchase_details": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sale_details": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sales": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "returns": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "adjustments": "a9deb468437ec8656bb779c328d309ab11526886690b1f3a02f4a382b5796e8d",
+      "prices": "fbf24ea0d024a073b03067a2eb34e5bfa21b91d2e4052add034ec69384c31bf2",
+      "audit": "bd3cdb0a2d0eb1302c6c56f3340c46c1c587e1c2557f1eb66c758599973fb689"
+    }
+  },
+  "utc": "2026-10-15T03:38:52.870Z"
+}

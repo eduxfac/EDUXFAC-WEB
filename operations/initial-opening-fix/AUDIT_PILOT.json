@@ -1,0 +1,117 @@
+{
+  "identity": {
+    "db": "eduxfac_web_piloto",
+    "read_only": "on"
+  },
+  "company_product_count": 4,
+  "initial_inventory_lots": [
+    {
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "codigo_interno": "P000004",
+      "nombre": "ABRILAR JARABE 120ML",
+      "sucursal": "PRINCIPAL",
+      "lote_id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+      "numero_lote": "EDU1",
+      "cantidad_disponible": "3.000",
+      "costo_unitario": "15",
+      "valor_base_costos": "45",
+      "movimientos_iniciales": 1,
+      "stock_inicial_movimiento": "3.000",
+      "valor_movimiento_inicial": "45.000",
+      "apertura_mas_movimiento": true,
+      "coincidencia_exacta": true,
+      "valor_potencial_duplicado": "45",
+      "valor_neto_movimientos": "45.000",
+      "valor_ledger_con_apertura": "90.000",
+      "valor_lote_actual": "45.000"
+    },
+    {
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "codigo_interno": "P000004",
+      "nombre": "ABRILAR JARABE 120ML",
+      "sucursal": "PRINCIPAL",
+      "lote_id": "16a942c2-9776-4a80-8251-1187421adb6f",
+      "numero_lote": "EDU2",
+      "cantidad_disponible": "3.000",
+      "costo_unitario": "15",
+      "valor_base_costos": "60",
+      "movimientos_iniciales": 1,
+      "stock_inicial_movimiento": "4.000",
+      "valor_movimiento_inicial": "60.000",
+      "apertura_mas_movimiento": true,
+      "coincidencia_exacta": true,
+      "valor_potencial_duplicado": "60",
+      "valor_neto_movimientos": "45.000",
+      "valor_ledger_con_apertura": "105.000",
+      "valor_lote_actual": "45.000"
+    },
+    {
+      "producto_id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "codigo_interno": "P000004",
+      "nombre": "ABRILAR JARABE 120ML",
+      "sucursal": "PRINCIPAL",
+      "lote_id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+      "numero_lote": "EDU3",
+      "cantidad_disponible": "5.000",
+      "costo_unitario": "15",
+      "valor_base_costos": "75",
+      "movimientos_iniciales": 1,
+      "stock_inicial_movimiento": "5.000",
+      "valor_movimiento_inicial": "75.000",
+      "apertura_mas_movimiento": true,
+      "coincidencia_exacta": true,
+      "valor_potencial_duplicado": "75",
+      "valor_neto_movimientos": "75.000",
+      "valor_ledger_con_apertura": "150.000",
+      "valor_lote_actual": "75.000"
+    }
+  ],
+  "plan": {
+    "database": "eduxfac_web_piloto",
+    "empresaId": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+    "sucursalId": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+    "productoId": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+    "productName": "ABRILAR JARABE 120ML",
+    "lots": [
+      {
+        "id": "16a942c2-9776-4a80-8251-1187421adb6f",
+        "numero_lote": "EDU2",
+        "cantidad_inicial": "4.000",
+        "cantidad_disponible": "3.000",
+        "costo_unitario": "15",
+        "valor_base_costos": "60"
+      },
+      {
+        "id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+        "numero_lote": "EDU3",
+        "cantidad_inicial": "5.000",
+        "cantidad_disponible": "5.000",
+        "costo_unitario": "15",
+        "valor_base_costos": "75"
+      },
+      {
+        "id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+        "numero_lote": "EDU1",
+        "cantidad_inicial": "3.000",
+        "cantidad_disponible": "3.000",
+        "costo_unitario": "15",
+        "valor_base_costos": "45"
+      }
+    ],
+    "expectedFingerprints": {
+      "product": "e3bf3301d165b4b7f8c860bf9d398c49056792b289c722d7a6c7f7715883ebdf",
+      "branch": "679d5d517286a4406c173e8a6bced1cdd89213b0fca901cfc951b6259a2b56bf",
+      "lots": "12ad2661e46dcec28feb00913c8367ae2a271d35931ae1f75901cc2670953b26",
+      "movements": "3958df68fdb4fd32505024d1ee89db58769dd5facf7d328487099f79d2e87df3",
+      "purchase_details": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sale_details": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sales": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "returns": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "adjustments": "a9deb468437ec8656bb779c328d309ab11526886690b1f3a02f4a382b5796e8d",
+      "prices": "fbf24ea0d024a073b03067a2eb34e5bfa21b91d2e4052add034ec69384c31bf2",
+      "audit": "16821cb90ce3c67976a189546474527a69ae0ec13cb6aeab6481874985c39528"
+    }
+  },
+  "plan_sha256": "24183551964bfa9b334853ce4dfd98254458d38b85d32fbf361b24ae1457f6c0",
+  "read_only": true
+}

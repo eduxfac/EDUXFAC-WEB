@@ -1,0 +1,484 @@
+{
+  "utc": "2026-10-14T01:22:53.705Z",
+  "read_only": true,
+  "repair_committed": true,
+  "balances": [
+    {
+      "id": "6b714b36-a45e-4a0d-a9d8-05d70f93a439",
+      "nombre": "PARACETAMOL 500MG PORTUGAL",
+      "stock": "390.000",
+      "value": "31.20"
+    },
+    {
+      "id": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+      "nombre": "APRONAX 550MG",
+      "stock": "120.000",
+      "value": "188.40"
+    }
+  ],
+  "total_inventory": "219.60",
+  "lots": [
+    {
+      "id": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+      "numero_lote": "DFDF",
+      "producto_id": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "costo_unitario": 1.57,
+      "cantidad_inicial": 120,
+      "compra_detalle_id": "137a3877-c8c7-4d4d-ac62-22e1378f36b8",
+      "fecha_vencimiento": "2026-10-31",
+      "valor_base_costos": 0,
+      "cantidad_disponible": 120
+    },
+    {
+      "id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+      "numero_lote": null,
+      "producto_id": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+      "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+      "costo_unitario": 1.57,
+      "cantidad_inicial": 0,
+      "compra_detalle_id": null,
+      "fecha_vencimiento": null,
+      "valor_base_costos": 0,
+      "cantidad_disponible": 0
+    }
+  ],
+  "movements": [
+    {
+      "id": "d603b816-7d6f-44ae-b13b-31e134d8083c",
+      "lote_id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+      "tipo": "RECLASIFICACION_COSTO",
+      "cantidad": "-120.000",
+      "costo_unitario": "1.57",
+      "value": "-188.40",
+      "referencia_tipo": "REPARACION_COSTO",
+      "referencia_id": "2a34059b-c614-4cbe-9e77-af7e20d3583a",
+      "created_at": "2026-10-14T01:21:34.276Z"
+    },
+    {
+      "id": "6d6b61c4-e8e1-4bc5-b863-d31c30af9ce7",
+      "lote_id": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+      "tipo": "RECLASIFICACION_COSTO",
+      "cantidad": "120.000",
+      "costo_unitario": "1.57",
+      "value": "188.40",
+      "referencia_tipo": "REPARACION_COSTO",
+      "referencia_id": "2a34059b-c614-4cbe-9e77-af7e20d3583a",
+      "created_at": "2026-10-14T01:21:34.276Z"
+    }
+  ],
+  "audits": [
+    {
+      "id": "30",
+      "accion": "CONCILIAR_COSTO_STOCK",
+      "entidad": "lotes",
+      "entidad_id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+      "detalle": {
+        "stock": "0.000",
+        "origen": "MOVIMIENTOS_INMUTABLES_Y_APERTURA",
+        "costo_nuevo": "1.57",
+        "producto_id": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+        "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+        "referencia_id": "2a34059b-c614-4cbe-9e77-af7e20d3583a",
+        "costo_anterior": "0.0000",
+        "referencia_tipo": "REPARACION_COSTO",
+        "requiere_revision_valor": false,
+        "valor_movimientos_y_apertura": "0.0000000"
+      },
+      "created_at": "2026-10-14T01:21:34.276Z"
+    },
+    {
+      "id": "31",
+      "accion": "REPARAR_VALORIZACION_APRONAX",
+      "entidad": "productos",
+      "entidad_id": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+      "detalle": {
+        "to": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+        "from": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+        "costo": "1.57",
+        "cantidad": "120",
+        "reference": "2a34059b-c614-4cbe-9e77-af7e20d3583a",
+        "valor_despues": "188.40",
+        "stock_total_antes": "120",
+        "historia_preservada": true,
+        "stock_total_despues": "120"
+      },
+      "created_at": "2026-10-14T01:21:34.276Z"
+    }
+  ],
+  "reference": "2a34059b-c614-4cbe-9e77-af7e20d3583a",
+  "checks": {
+    "historical_tables_unchanged": 45,
+    "historical_kardex_and_audits_unchanged": true,
+    "other_lots_unchanged": true,
+    "lot_numbers_expiries_unchanged": true,
+    "force_rls_44": true,
+    "permissions_unchanged": true,
+    "migration007_applied": true,
+    "users_subscriptions_unchanged": true
+  },
+  "source_hashes": {
+    "server/src/app.js": "aea688d15a8022b8c5fbb38616c4aa50a86c0efe65e14c788a18f0278cd03d16",
+    "server/src/sale-profitability.js": "0eb7a95cfe300f8649fb6e8dd5c6a71795bb0fec52b6018a1d7803644eafae5b",
+    "server/src/inventory-entry.js": "0b3a49ac0ea077db9bc29fb8dbc08aa2d92d20aa8761a47f81652eb1c4de897f",
+    "server/src/stock-cost.js": "f2f1bb2c8f05f8ee4b1a9b6a2d468a141575281680afb0b41e43c871819ddab8",
+    "database/schema.sql": "693f6f2ba6f4b2aa35d7103375d9780c7db80b63d78ccd24b24886a6b2225e40",
+    "database/migrations/007_consistencia_costos.sql": "523f57aaad2cf517158306ae7ca623549cee722cb3f6aee59673a2add7924079",
+    "public/index.html": "a03b1cf10bddd39ccb171accdf0e724498903f3656e20fdc5b31136e460c2392"
+  },
+  "pm2": {
+    "eduxfac": {
+      "id": 0,
+      "pid": 988,
+      "status": "online",
+      "restarts": 0,
+      "cwd": "/var/www/eduxfac",
+      "script": "/usr/bin/npm",
+      "mode": null,
+      "port": "",
+      "worker": null,
+      "mutation": null
+    },
+    "EDUXFAC-PANEL-PILOTO": {
+      "id": 3,
+      "pid": 269525,
+      "status": "online",
+      "restarts": 4,
+      "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel",
+      "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel/server/start.mjs",
+      "mode": "PILOTO",
+      "port": "4310",
+      "worker": "false",
+      "mutation": null
+    },
+    "EDUXFAC-WEB-PILOTO": {
+      "id": 4,
+      "pid": 306007,
+      "status": "online",
+      "restarts": 7,
+      "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+      "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+      "mode": "PILOTO",
+      "port": "3001",
+      "worker": "false",
+      "mutation": "no"
+    }
+  },
+  "readiness": {
+    "loopback": {
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempts": 3,
+      "pid": 306007,
+      "restarts": 7,
+      "stable_samples": 3
+    },
+    "https": {
+      "url": "https://app.eduxfac.com/api/health",
+      "attempts": 3,
+      "pid": 306007,
+      "restarts": 7,
+      "stable_samples": 3
+    }
+  },
+  "backup": {
+    "utc": "2026-10-14T01:20:33.363650+00:00",
+    "path": "/home/eduxadmin/.local/share/eduxfac/apronax_repair_20261014_011938/backup/eduxfac_web_piloto_before_apronax.dump",
+    "sha256": "753d4c7a3c4a7843be53143f54d7456a42d2b6db9d5bc38e4712bd762c41cd72",
+    "bytes": 258218,
+    "database": "eduxfac_web_piloto",
+    "archive_parse_valid": true,
+    "rows_verified": true,
+    "tables_verified": 48,
+    "affected_scope_snapshot": "/home/eduxadmin/.local/share/eduxfac/apronax_repair_20261014_011938/AFFECTED_BEFORE.json",
+    "affected_scope_sha256": "81ea45c40d1b833dab1a1b87d59dd43a08c7e05665d6f78ca3653213e87f9497",
+    "previous_backups_preserved": true
+  },
+  "dry_run": {
+    "utc": "2026-10-14T01:21:09.938Z",
+    "reference": "d752e375-1619-46c8-8601-3dbd2d752a48",
+    "products": [
+      {
+        "id": "6b714b36-a45e-4a0d-a9d8-05d70f93a439",
+        "nombre": "PARACETAMOL 500MG PORTUGAL",
+        "stock": "390.000",
+        "value": "31.20"
+      },
+      {
+        "id": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+        "nombre": "APRONAX 550MG",
+        "stock": "120.000",
+        "value": "188.40"
+      }
+    ],
+    "inventory_total": "219.60",
+    "movements": [
+      {
+        "id": "a35d3e1d-ecf2-49cb-ae36-6c971e949cd4",
+        "lote_id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+        "tipo": "RECLASIFICACION_COSTO",
+        "cantidad": "-120.000",
+        "costo_unitario": "1.57",
+        "value": "-188.40",
+        "referencia_tipo": "REPARACION_COSTO",
+        "referencia_id": "d752e375-1619-46c8-8601-3dbd2d752a48",
+        "created_at": "2026-10-14T01:21:08.918Z"
+      },
+      {
+        "id": "01ab4328-db6b-455e-bc7a-db1a19df4e65",
+        "lote_id": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+        "tipo": "RECLASIFICACION_COSTO",
+        "cantidad": "120.000",
+        "costo_unitario": "1.57",
+        "value": "188.40",
+        "referencia_tipo": "REPARACION_COSTO",
+        "referencia_id": "d752e375-1619-46c8-8601-3dbd2d752a48",
+        "created_at": "2026-10-14T01:21:08.918Z"
+      }
+    ],
+    "audits": [
+      {
+        "id": "28",
+        "accion": "CONCILIAR_COSTO_STOCK",
+        "entidad": "lotes",
+        "entidad_id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+        "detalle": {
+          "stock": "0.000",
+          "origen": "MOVIMIENTOS_INMUTABLES_Y_APERTURA",
+          "costo_nuevo": "1.57",
+          "producto_id": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "referencia_id": "d752e375-1619-46c8-8601-3dbd2d752a48",
+          "costo_anterior": "0.0000",
+          "referencia_tipo": "REPARACION_COSTO",
+          "requiere_revision_valor": false,
+          "valor_movimientos_y_apertura": "0.0000000"
+        },
+        "created_at": "2026-10-14T01:21:08.918Z"
+      },
+      {
+        "id": "29",
+        "accion": "REPARAR_VALORIZACION_APRONAX",
+        "entidad": "productos",
+        "entidad_id": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+        "detalle": {
+          "to": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+          "from": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+          "costo": "1.57",
+          "cantidad": "120",
+          "reference": "d752e375-1619-46c8-8601-3dbd2d752a48",
+          "valor_despues": "188.40",
+          "stock_total_antes": "120",
+          "historia_preservada": true,
+          "stock_total_despues": "120"
+        },
+        "created_at": "2026-10-14T01:21:08.918Z"
+      }
+    ],
+    "stock_total_before": "120",
+    "stock_total_after": "120",
+    "stock_quantity_delta": "0",
+    "historical_tables_unchanged": 45,
+    "old_movements_and_audits_unchanged": true,
+    "other_lots_unchanged": true,
+    "lot_metadata_unchanged": true,
+    "RLS_force_tables": 44,
+    "permissions_unchanged": true,
+    "health": [
+      {
+        "url": "http://127.0.0.1:3001/api/health",
+        "started_utc": "2026-10-14T01:21:09.400Z",
+        "http": 200,
+        "duration_ms": 199.35
+      },
+      {
+        "url": "https://app.eduxfac.com/api/health",
+        "started_utc": "2026-10-14T01:21:09.602Z",
+        "http": 200,
+        "duration_ms": 96.39
+      },
+      {
+        "url": "https://app.eduxfac.com/",
+        "started_utc": "2026-10-14T01:21:09.698Z",
+        "http": 200,
+        "duration_ms": 129.43
+      },
+      {
+        "url": "https://admin.eduxfac.com/",
+        "started_utc": "2026-10-14T01:21:09.828Z",
+        "http": 200,
+        "duration_ms": 31.34
+      },
+      {
+        "url": "https://eduxfac.com/",
+        "started_utc": "2026-10-14T01:21:09.859Z",
+        "http": 200,
+        "duration_ms": 78.15
+      }
+    ],
+    "applied": false,
+    "dry_run": true,
+    "stock": "120",
+    "value": "188.40",
+    "quantity_delta": "0",
+    "historical_business_rows_updated": false,
+    "committed": false,
+    "backup": "/home/eduxadmin/.local/share/eduxfac/apronax_repair_20261014_011938/backup/eduxfac_web_piloto_before_apronax.dump",
+    "backup_sha256": "753d4c7a3c4a7843be53143f54d7456a42d2b6db9d5bc38e4712bd762c41cd72",
+    "physical_batch_confirmed": "DFDF",
+    "all_checks_before_commit": true
+  },
+  "repair_done": {
+    "utc": "2026-10-14T01:21:34.827Z",
+    "reference": "2a34059b-c614-4cbe-9e77-af7e20d3583a",
+    "products": [
+      {
+        "id": "6b714b36-a45e-4a0d-a9d8-05d70f93a439",
+        "nombre": "PARACETAMOL 500MG PORTUGAL",
+        "stock": "390.000",
+        "value": "31.20"
+      },
+      {
+        "id": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+        "nombre": "APRONAX 550MG",
+        "stock": "120.000",
+        "value": "188.40"
+      }
+    ],
+    "inventory_total": "219.60",
+    "movements": [
+      {
+        "id": "d603b816-7d6f-44ae-b13b-31e134d8083c",
+        "lote_id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+        "tipo": "RECLASIFICACION_COSTO",
+        "cantidad": "-120.000",
+        "costo_unitario": "1.57",
+        "value": "-188.40",
+        "referencia_tipo": "REPARACION_COSTO",
+        "referencia_id": "2a34059b-c614-4cbe-9e77-af7e20d3583a",
+        "created_at": "2026-10-14T01:21:34.276Z"
+      },
+      {
+        "id": "6d6b61c4-e8e1-4bc5-b863-d31c30af9ce7",
+        "lote_id": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+        "tipo": "RECLASIFICACION_COSTO",
+        "cantidad": "120.000",
+        "costo_unitario": "1.57",
+        "value": "188.40",
+        "referencia_tipo": "REPARACION_COSTO",
+        "referencia_id": "2a34059b-c614-4cbe-9e77-af7e20d3583a",
+        "created_at": "2026-10-14T01:21:34.276Z"
+      }
+    ],
+    "audits": [
+      {
+        "id": "30",
+        "accion": "CONCILIAR_COSTO_STOCK",
+        "entidad": "lotes",
+        "entidad_id": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+        "detalle": {
+          "stock": "0.000",
+          "origen": "MOVIMIENTOS_INMUTABLES_Y_APERTURA",
+          "costo_nuevo": "1.57",
+          "producto_id": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+          "sucursal_id": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+          "referencia_id": "2a34059b-c614-4cbe-9e77-af7e20d3583a",
+          "costo_anterior": "0.0000",
+          "referencia_tipo": "REPARACION_COSTO",
+          "requiere_revision_valor": false,
+          "valor_movimientos_y_apertura": "0.0000000"
+        },
+        "created_at": "2026-10-14T01:21:34.276Z"
+      },
+      {
+        "id": "31",
+        "accion": "REPARAR_VALORIZACION_APRONAX",
+        "entidad": "productos",
+        "entidad_id": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+        "detalle": {
+          "to": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+          "from": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+          "costo": "1.57",
+          "cantidad": "120",
+          "reference": "2a34059b-c614-4cbe-9e77-af7e20d3583a",
+          "valor_despues": "188.40",
+          "stock_total_antes": "120",
+          "historia_preservada": true,
+          "stock_total_despues": "120"
+        },
+        "created_at": "2026-10-14T01:21:34.276Z"
+      }
+    ],
+    "stock_total_before": "120",
+    "stock_total_after": "120",
+    "stock_quantity_delta": "0",
+    "historical_tables_unchanged": 45,
+    "old_movements_and_audits_unchanged": true,
+    "other_lots_unchanged": true,
+    "lot_metadata_unchanged": true,
+    "RLS_force_tables": 44,
+    "permissions_unchanged": true,
+    "health": [
+      {
+        "url": "http://127.0.0.1:3001/api/health",
+        "started_utc": "2026-10-14T01:21:34.577Z",
+        "http": 200,
+        "duration_ms": 97.81
+      },
+      {
+        "url": "https://app.eduxfac.com/api/health",
+        "started_utc": "2026-10-14T01:21:34.677Z",
+        "http": 200,
+        "duration_ms": 22.2
+      },
+      {
+        "url": "https://app.eduxfac.com/",
+        "started_utc": "2026-10-14T01:21:34.699Z",
+        "http": 200,
+        "duration_ms": 57.62
+      },
+      {
+        "url": "https://admin.eduxfac.com/",
+        "started_utc": "2026-10-14T01:21:34.757Z",
+        "http": 200,
+        "duration_ms": 20.7
+      },
+      {
+        "url": "https://eduxfac.com/",
+        "started_utc": "2026-10-14T01:21:34.777Z",
+        "http": 200,
+        "duration_ms": 49.25
+      }
+    ],
+    "applied": true,
+    "dry_run": false,
+    "stock": "120",
+    "value": "188.40",
+    "quantity_delta": "0",
+    "historical_business_rows_updated": false,
+    "committed": true,
+    "backup": "/home/eduxadmin/.local/share/eduxfac/apronax_repair_20261014_011938/backup/eduxfac_web_piloto_before_apronax.dump",
+    "backup_sha256": "753d4c7a3c4a7843be53143f54d7456a42d2b6db9d5bc38e4712bd762c41cd72",
+    "physical_batch_confirmed": "DFDF",
+    "all_checks_before_commit": true
+  },
+  "result": "GO",
+  "public_https_from_PC": [
+    {
+      "url": "https://app.eduxfac.com/api/health",
+      "http": 200,
+      "data_mode": "PILOTO"
+    },
+    {
+      "url": "https://app.eduxfac.com/",
+      "http": 200
+    },
+    {
+      "url": "https://admin.eduxfac.com/",
+      "http": 200
+    },
+    {
+      "url": "https://eduxfac.com/",
+      "http": 200
+    }
+  ]
+}

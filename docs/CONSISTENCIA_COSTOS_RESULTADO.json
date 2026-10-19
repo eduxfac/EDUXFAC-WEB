@@ -1,0 +1,122 @@
+{
+  "date_utc": "2026-10-14T00:45:12.611634+00:00",
+  "status": "CANDIDATE_D_VALIDATED_NOT_DEPLOYED",
+  "result": "GO_TECHNICAL_CONTROLLED_REPAIR_WITH_BACKUP_SCHEMA_AND_PHYSICAL_BATCH_CONFIRMATION",
+  "files": [
+    "server/src/app.js",
+    "server/src/sale-profitability.js",
+    "server/src/inventory-entry.js",
+    "server/src/stock-cost.js",
+    "database/schema.sql",
+    "database/migrations/007_consistencia_costos.sql",
+    "public/index.html",
+    "tests/cost-consistency-native.test.js",
+    "operations/repair-costs/repair-apronax.mjs",
+    "operations/repair-costs/PLAN_APRONAX.json"
+  ],
+  "sha256_before": {
+    "server/src/app.js": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7",
+    "server/src/sale-profitability.js": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220",
+    "server/src/inventory-entry.js": "8ab55caf191240b9fd4b69239e930967f75dd4de9dfb3275d700819852e8e1e9",
+    "database/schema.sql": "71a5d8d80d8d2236a6773ae6e9fafa1e52bb38e43b44f25e96db5764fde24856",
+    "public/index.html": "a08a0ec8aa8837d92842682ea56f467081d6a1d247d05732faedf6c8560d1c04"
+  },
+  "sha256_after": {
+    "server/src/app.js": "aea688d15a8022b8c5fbb38616c4aa50a86c0efe65e14c788a18f0278cd03d16",
+    "server/src/sale-profitability.js": "0eb7a95cfe300f8649fb6e8dd5c6a71795bb0fec52b6018a1d7803644eafae5b",
+    "server/src/inventory-entry.js": "0b3a49ac0ea077db9bc29fb8dbc08aa2d92d20aa8761a47f81652eb1c4de897f",
+    "server/src/stock-cost.js": "f2f1bb2c8f05f8ee4b1a9b6a2d468a141575281680afb0b41e43c871819ddab8",
+    "database/schema.sql": "693f6f2ba6f4b2aa35d7103375d9780c7db80b63d78ccd24b24886a6b2225e40",
+    "database/migrations/007_consistencia_costos.sql": "523f57aaad2cf517158306ae7ca623549cee722cb3f6aee59673a2add7924079",
+    "public/index.html": "a03b1cf10bddd39ccb171accdf0e724498903f3656e20fdc5b31136e460c2392",
+    "tests/cost-consistency-native.test.js": "e0c15abba1aa98f35a78b6e3cc159594b35d486daea52e1aa3e1b737043bb82c",
+    "operations/repair-costs/repair-apronax.mjs": "be7c9bb5c18dbe4bd9e9e55c8b834ed48fc616bc99f3b2a3070b23c2a21fb1dc",
+    "operations/repair-costs/PLAN_APRONAX.json": "5bb692035e0c96c55cb900bfc316951abbdc437b2c85969815d581db6c9c7105"
+  },
+  "tests": {
+    "web_linux": 300,
+    "native_cost_consistency_new": 33,
+    "native_profitability_existing": 22,
+    "native_server_global_RLS_existing": 16,
+    "total_passed": 371,
+    "total_failed": 0,
+    "skipped": 0
+  },
+  "environment": {
+    "container": "eduxfac-profit-native-20261013",
+    "network": "none",
+    "host_mounts": [],
+    "published_ports": [],
+    "postgresql": "16.15",
+    "node": "24.21.0",
+    "linux": "Ubuntu 24.04",
+    "stopped": true
+  },
+  "new_rules": [
+    "canonical_verified_cost_persisted_on_new_sale",
+    "presentation_snapshot_calculated_with_PostgreSQL_numeric",
+    "returns_use_immutable_snapshot",
+    "ledger_value_carried_across_zero_and_negative_stock",
+    "fixed_opening_value_for_legacy_stock_without_movements",
+    "positive_known_cost_reconciled_and_audited",
+    "weighted_cost_for_reused_lot_no_pre_audit_overwrite",
+    "unknown_cost_not_fabricated",
+    "strict_profit_guard_no_admin_override",
+    "all_mutations_same_transaction",
+    "deterministic_product_lock_order"
+  ],
+  "historical_business_rows_rewritten": false,
+  "new_sale_movements_only_updated_before_commit": true,
+  "schema_candidate": "database/migrations/007_consistencia_costos.sql",
+  "schema_effects": [
+    "lotes.costo_unitario numeric",
+    "lotes.valor_base_costos nullable numeric",
+    "venta_detalles.costo_snapshot numeric",
+    "movimientos_inventario.costo_unitario numeric",
+    "dependent_view_definition_options_grants_preserved",
+    "no_mass_data_backfill"
+  ],
+  "reports_change": {
+    "before": "Costo promedio",
+    "after": "Compra promedio por documento",
+    "calculation_changed": false
+  },
+  "repair": {
+    "real_applied": false,
+    "module": "operations/repair-costs/repair-apronax.mjs",
+    "plan": "operations/repair-costs/PLAN_APRONAX.json",
+    "isolated_legacy_replica_test": "PASSED",
+    "dry_run_rolls_back": "PASSED",
+    "requires_explicit_confirmations": true,
+    "second_application_refused": true,
+    "stock_before": "120",
+    "stock_after": "120",
+    "from_unassigned": "-120",
+    "to_DFDF": "120",
+    "movement_unit_cost": "1.57",
+    "inventory_quantity_delta": "0",
+    "value_apronax_after": "188.40",
+    "value_paracetamol_if_390_unchanged": "31.20",
+    "expected_combined_value": "219.60",
+    "existing_purchases_sales_returns_and_movements_preserved": true
+  },
+  "constraints": {
+    "VPS_accessed": false,
+    "VPS_deployed": false,
+    "real_data_modified": false,
+    "real_apronax_repaired": false,
+    "PANEL_modified": false,
+    "Nginx_modified": false,
+    "certificates_modified": false,
+    "ZIP_created": false
+  },
+  "pending_real_execution_prerequisites": [
+    "new_user_authorization",
+    "verified_backup_and_restore_evidence",
+    "READ_ONLY_current_plan_precheck",
+    "physical_DFDF_identity_confirmation",
+    "authorized_007_migration_before_new_runtime",
+    "controlled_candidate_deployment_not_yet_authorized"
+  ],
+  "technical_blockers": []
+}

@@ -1,0 +1,19 @@
+{
+  "work": "/home/eduxadmin/.local/share/eduxfac/monthly_sales_deploy_20261015_131626_7c68b6",
+  "manifest": {
+    "before": {
+      "server/src/app.js": "dfb160b96cce099f89283c221a3671affd3357e87f9b528b3bd2bb100c071576",
+      "server/src/monthly-sales.js": null,
+      "public/index.html": "06ad9349541563ef990fcf5c8a7ecf63c5db05b28b2688bfe25aaf8b63f524c1",
+      "public/monthly-sales.js": null,
+      "public/desktop-responsive.css": "f30b44ebf7936886ec7cb75142149ab4370669d287d65fcf06aa7fef00f4584c"
+    },
+    "after": {
+      "server/src/app.js": "3a22cf3c1482aceac2788b86c8318aa9efbe70c9ca66e8e4571fefe861209d90",
+      "server/src/monthly-sales.js": "4f7cea2a35b1ddcd82af4db81178c2fb6502c8cad58122ae9af4cf4efa6a001f",
+      "public/index.html": "c2c01c26cd4cd1298e94223f87a64d9901659ac3516e47927aa57398ffb68e06",
+      "public/monthly-sales.js": "158173086da9c1e5b3b0ef0471a7cf68f2c8da1be5e1acbd33fe28ac7eb44a77",
+      "public/desktop-responsive.css": "a3e525f414f396b14e7a98edf995bbd631b496acd0ec4a23604625d64e9bcf25"
+    }
+  }
+}

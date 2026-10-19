@@ -1,0 +1,148 @@
+{
+  "comparisons_passed": 35,
+  "comparisons_failed": 0,
+  "before_after_observations": 70,
+  "other_module_comparisons_unchanged": 30,
+  "fonts_unchanged": true,
+  "global_overflow": false,
+  "overlaps": false,
+  "HTML_JS_backend_unchanged": true,
+  "css_sha256": "bd8eb2433919c82b67eb0b9b83603cd7a388b0e441c62018cad89296a1522271",
+  "sales": [
+    {
+      "width": 1920,
+      "before_px": 296,
+      "after_px": 199,
+      "reduction_percent": 32.77,
+      "components_before": {
+        "#sales .sale-doc-buttons": 55,
+        "#sales .sale-doc-flow": 118,
+        "#sales .sale-doc-title": 25,
+        "#sales .sale-heading": 73,
+        "#sales .sale-workspace": 1032.375,
+        ".bw-branchbox": 46,
+        ".bw-topbar": 75,
+        ".bw-userbox": 50
+      },
+      "components_after": {
+        "#sales .sale-doc-buttons": 37,
+        "#sales .sale-doc-flow": 75,
+        "#sales .sale-doc-title": 20,
+        "#sales .sale-heading": 59,
+        "#sales .sale-workspace": 1032.375,
+        ".bw-branchbox": 38,
+        ".bw-topbar": 53,
+        ".bw-userbox": 44
+      },
+      "workspace_gained_px": 113
+    },
+    {
+      "width": 1366,
+      "before_px": 296,
+      "after_px": 199,
+      "reduction_percent": 32.77,
+      "components_before": {
+        "#sales .sale-doc-buttons": 55,
+        "#sales .sale-doc-flow": 118,
+        "#sales .sale-doc-title": 25,
+        "#sales .sale-heading": 73,
+        "#sales .sale-workspace": 1048.375,
+        ".bw-branchbox": 46,
+        ".bw-topbar": 75,
+        ".bw-userbox": 50
+      },
+      "components_after": {
+        "#sales .sale-doc-buttons": 37,
+        "#sales .sale-doc-flow": 75,
+        "#sales .sale-doc-title": 20,
+        "#sales .sale-heading": 59,
+        "#sales .sale-workspace": 1048.375,
+        ".bw-branchbox": 38,
+        ".bw-topbar": 53,
+        ".bw-userbox": 44
+      },
+      "workspace_gained_px": 113
+    },
+    {
+      "width": 1024,
+      "before_px": 349,
+      "after_px": 231,
+      "reduction_percent": 33.81,
+      "components_before": {
+        "#sales .sale-doc-buttons": 55,
+        "#sales .sale-doc-flow": 118,
+        "#sales .sale-doc-title": 25,
+        "#sales .sale-heading": 126,
+        "#sales .sale-workspace": 1553.859375,
+        ".bw-branchbox": 46,
+        ".bw-topbar": 75,
+        ".bw-userbox": 50
+      },
+      "components_after": {
+        "#sales .sale-doc-buttons": 52,
+        "#sales .sale-doc-flow": 90,
+        "#sales .sale-doc-title": 20,
+        "#sales .sale-heading": 76,
+        "#sales .sale-workspace": 1553.859375,
+        ".bw-branchbox": 38,
+        ".bw-topbar": 53,
+        ".bw-userbox": 44
+      },
+      "workspace_gained_px": 134
+    },
+    {
+      "width": 768,
+      "before_px": 472,
+      "after_px": 231,
+      "reduction_percent": 51.06,
+      "components_before": {
+        "#sales .sale-doc-buttons": 119,
+        "#sales .sale-doc-flow": 195,
+        "#sales .sale-doc-title": 38,
+        "#sales .sale-heading": 126,
+        "#sales .sale-workspace": 1837.859375,
+        ".bw-branchbox": 46,
+        ".bw-topbar": 131,
+        ".bw-userbox": 50
+      },
+      "components_after": {
+        "#sales .sale-doc-buttons": 52,
+        "#sales .sale-doc-flow": 90,
+        "#sales .sale-doc-title": 20,
+        "#sales .sale-heading": 76,
+        "#sales .sale-workspace": 1837.859375,
+        ".bw-branchbox": 38,
+        ".bw-topbar": 53,
+        ".bw-userbox": 44
+      },
+      "workspace_gained_px": 257
+    },
+    {
+      "width": 375,
+      "before_px": 663,
+      "after_px": 419,
+      "reduction_percent": 36.8,
+      "components_before": {
+        "#sales .sale-doc-buttons": 192,
+        "#sales .sale-doc-flow": 305,
+        "#sales .sale-doc-title": 75,
+        "#sales .sale-heading": 207,
+        "#sales .sale-workspace": 2299.625,
+        ".bw-branchbox": 46,
+        ".bw-topbar": 131,
+        ".bw-userbox": 50
+      },
+      "components_after": {
+        "#sales .sale-doc-buttons": 135,
+        "#sales .sale-doc-flow": 215,
+        "#sales .sale-doc-title": 62,
+        "#sales .sale-heading": 139,
+        "#sales .sale-workspace": 2299.625,
+        ".bw-branchbox": 38,
+        ".bw-topbar": 53,
+        ".bw-userbox": 44
+      },
+      "workspace_gained_px": 260
+    }
+  ]
+}

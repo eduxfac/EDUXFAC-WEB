@@ -1,0 +1,8 @@
+{
+  "commitButton": true,
+  "headingPresent": true,
+  "headingVisible": true,
+  "previewButton": true,
+  "scope": "Actual HTTPS HTML rendered in isolated local fixture; no production session or data",
+  "templateButton": true
+}

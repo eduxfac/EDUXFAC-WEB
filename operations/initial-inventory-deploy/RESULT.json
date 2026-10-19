@@ -1,0 +1,58 @@
+{
+  "GO": false,
+  "deployed": false,
+  "rolled_back": true,
+  "cause": "Candidate HTML has CRLF; existing csp-header.js normalizes CRLF to LF; HTTP 200 body SHA256 equals normalized candidate, not raw file SHA256",
+  "failed_url": "http://127.0.0.1:3001/",
+  "failed_http_status": 200,
+  "before": {
+    "server/src/app.js": "7c32762622b79f77c5b3cb03ce0bc16f355eaf7c4766d865e6c29aab51ad02ab",
+    "server/src/initial-inventory.js": null,
+    "public/index.html": "3e73a96aa412757b51409f2783fa84e8112fff8af623664a1d3bfecacb0a3295"
+  },
+  "temporarily_applied": {
+    "server/src/app.js": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab",
+    "server/src/initial-inventory.js": "57abcde45bc6b165875e1f8b6ad6c956e87bc4759a4483476f3bfef159b62377",
+    "public/index.html": "fa057a968001d037e63a41760911a9f5e5adbd1038c2c31ee320b0f700b7031d"
+  },
+  "restored": {
+    "server/src/app.js": "7c32762622b79f77c5b3cb03ce0bc16f355eaf7c4766d865e6c29aab51ad02ab",
+    "server/src/initial-inventory.js": null,
+    "public/index.html": "3e73a96aa412757b51409f2783fa84e8112fff8af623664a1d3bfecacb0a3295"
+  },
+  "backup": "/home/eduxadmin/.local/share/eduxfac/initial_inventory_deploy_20261014_202648/backup",
+  "candidate_raw_html_sha256": "fa057a968001d037e63a41760911a9f5e5adbd1038c2c31ee320b0f700b7031d",
+  "candidate_normalized_html_sha256": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32",
+  "health": [
+    {
+      "url": "http://127.0.0.1:3001/api/health",
+      "status": 200,
+      "ok": true,
+      "database": true,
+      "data_mode": "PILOTO"
+    },
+    {
+      "url": "https://app.eduxfac.com/api/health",
+      "status": 200,
+      "ok": true,
+      "database": true,
+      "data_mode": "PILOTO"
+    },
+    {
+      "url": "https://app.eduxfac.com/",
+      "status": 200
+    },
+    {
+      "url": "https://admin.eduxfac.com/",
+      "status": 200
+    },
+    {
+      "url": "https://eduxfac.com/",
+      "status": 200
+    }
+  ],
+  "timeout_seconds": 90,
+  "real_data_unchanged": true,
+  "post_deploy_laboratory_tests_executed": false,
+  "template_download_executed": false
+}

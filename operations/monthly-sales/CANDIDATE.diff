@@ -1,0 +1,298 @@
+--- before/server/src/app.js
++++ server/src/app.js
+@@ -1,3 +1,4 @@
++import {monthlySales} from './monthly-sales.js';
+ import {prepareStockCosts,reconcileStockCosts} from './stock-cost.js';
+ import {validateSalePresentation,assertSaleProfitability} from './sale-profitability.js';
+ import {dataMode,assertPilotConfiguration,assertOperationalProfile} from './environment-mode.js';
+@@ -139,7 +140,7 @@
+       if (!rule || !permissions[rule[0]]?.ver || !permissions[rule[0]]?.[rule[1]]) {
+         return res.status(403).json({ error: 'No tienes permiso para esta operación.' });
+       }
+-      if (req.path === '/api/dashboard' || req.path.startsWith('/api/reports/')) {
++      if (req.path === '/api/dashboard' || req.path.startsWith('/api/dashboard/') || req.path.startsWith('/api/reports/')) {
+         const branch = req.query.sucursal_id;
+         if (branch !== undefined && (typeof branch !== 'string' || (branch !== '' && !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(branch)))) {
+           return res.status(400).json({error:'Sucursal inválida.'});
+@@ -649,6 +650,14 @@
+   const rm=new Map(rr.rows.map(x=>[x.venta_detalle_id,Number(x.cantidad)]));
+   d.rows.forEach(x=>{x.cantidad_devuelta=rm.get(x.venta_detalle_id)||0;x.cantidad_devolvible=Math.max(0,Number(x.cantidad)-x.cantidad_devuelta)});
+   res.json({venta:h.rows[0],items:d.rows,pagos:p.rows});
++});
++
++app.get('/api/dashboard/monthly-sales', requireAuth, async (req,res)=>{
++ try{
++  const branch=req.query.sucursal_id||null;
++  if(branch)await ensureBranchAccess(pool,req.user,branch);
++  res.set('Cache-Control','no-store');res.json(await monthlySales(pool,req.user.empresa_id,branch,req.query.year));
++ }catch(error){res.status(error.status||400).json({error:error.message});}
+ });
+ 
+ app.get('/api/dashboard', requireAuth, async (req, res) => {
+--- before/public/index.html
++++ public/index.html
+@@ -658,6 +658,11 @@
+     <article class="dash-card dash-chart-card"><div class="dash-card-head"><div><span class="dash-card-icon">⌁</span><b>Ventas de los últimos 7 días</b><small>Importes reales por día</small></div><span class="dash-chip">7 días</span></div><div id="dashWeekChart" class="dash-chart"></div></article>
+     <article class="dash-card dash-cash-card"><div class="dash-card-head"><div><span class="dash-card-icon">▰</span><b>Estado de caja</b><small>Sesión del usuario conectado</small></div><span id="dashCashState" class="dash-chip neutral">Consultando</span></div><div class="dash-cash-grid"><div><small>Apertura</small><b id="dashCashOpening">S/ 0.00</b></div><div><small>Movimiento neto</small><b id="dashCashMoves">S/ 0.00</b></div><div class="wide"><small>Saldo esperado</small><strong id="dashCashExpected">S/ 0.00</strong></div></div><button class="dash-outline-action" data-dash-go="cash">Ir a caja <span>→</span></button></article>
+   </div>
++  <article id="dashMonthlyCard" class="dash-card monthly-sales-card" aria-labelledby="dashMonthlyTitle">
++    <div class="dash-card-head monthly-sales-head"><div><span class="dash-card-icon">⌁</span><b id="dashMonthlyTitle">Ventas por mes</b><small>Importes netos por mes</small></div><label class="monthly-year-label">Año: <select id="dashMonthlyYear" class="input" aria-label="Año de ventas mensuales"><option>Cargando...</option></select></label></div>
++    <div class="monthly-chart-scroll" tabindex="0" aria-label="Gráfico mensual, desplazamiento horizontal"><div id="dashMonthlyChart" class="monthly-chart" role="list" aria-label="Totales vendidos de enero a diciembre" aria-busy="true"></div></div>
++    <div class="monthly-sales-footer"><strong>Total del año: <span id="dashMonthlyTotal">—</span></strong><span id="dashMonthlyStatus" class="muted" role="status" aria-live="polite"></span></div>
++  </article>
+   <div class="dash-operational-grid">
+     <article class="dash-card"><div class="dash-card-head"><div><span class="dash-card-icon amber">◷</span><b>Productos por vencer</b><small>Próximos 90 días</small></div><button class="dash-link" data-dash-go="alerts" data-alert-view="expiry">Ver todos</button></div><div id="dashExpiryList" class="dash-data-list"><div class="dash-empty">Cargando...</div></div></article>
+     <article class="dash-card"><div class="dash-card-head"><div><span class="dash-card-icon red">!</span><b>Stock bajo <span id="dashLowStockCount" aria-label="Productos con stock bajo">0</span></b><small>Productos que requieren reposición</small></div><button class="dash-link" data-dash-go="replenishment">Ver todos</button></div><div id="dashLowStockList" class="dash-data-list"><div class="dash-empty">Cargando...</div></div></article>
+@@ -819,6 +824,7 @@
+ </div>
+ 
+ <script src="/purchase-requirement.js"></script>
++<script src="/monthly-sales.js"></script>
+ <script src="app-dialogs.js"></script>
+ <script>
+ // Compatibility for existing text-entry workflows; shared HTML dialog.
+@@ -1087,6 +1093,7 @@
+ }
+ async function loadInventoryProducts(){return filterInventoryProducts()}
+ function scheduleInventorySearch(){clearTimeout(inventorySearchTimer);inventorySearchTimer=setTimeout(()=>filterInventoryProducts(),220)}
++const monthlyDashboard=window.createMonthlySales({api,getBranchId:()=>state.branchId});
+ let dashboardLoading=false;
+ function resetDashboardLoadingState(){
+   if($('dashPayments')) $('dashPayments').innerHTML='<div class="dash-empty">Sin ventas registradas hoy.</div>';
+@@ -1096,6 +1103,7 @@
+   if($('dashLowStockList')) $('dashLowStockList').innerHTML='<div class="dash-empty">Consultando existencias...</div>';
+ }
+ async function loadDashboard(){
++  void monthlyDashboard.load();
+   if(!state.branchId)return;
+   if(dashboardLoading)return;
+   dashboardLoading=true;
+--- before/public/desktop-responsive.css
++++ public/desktop-responsive.css
+@@ -477,3 +477,24 @@
+ @media(max-width:767px){#replenishment .rq-toolbar{grid-template-columns:minmax(0,1fr)}#replenishment>.top,#replenishment #rqSummary>.top{flex-wrap:wrap;gap:12px}#replenishment .rq-pagination{justify-content:center}}
+ 
+ #dashLowStockCount{display:inline-block;background:#fff0f0;color:#b52130;padding:3px 9px;border-radius:12px;margin-left:5px}
++
++/* Monthly sales: scoped to the new card, no changes to the existing weekly chart. */
++#dashboard .monthly-sales-card{min-width:0;margin-top:18px}
++#dashboard .monthly-sales-head{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
++#dashboard .monthly-year-label{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#244766;margin:0}
++#dashboard #dashMonthlyYear{width:auto;min-width:104px;padding:8px 12px;font-size:14px}
++#dashboard .monthly-chart-scroll{max-width:100%;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;padding-top:10px}
++#dashboard .monthly-chart{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;min-width:900px;height:235px;padding:10px 5px 0;border-bottom:1px solid #dfe8f1;background:repeating-linear-gradient(to top,#fff 0,#fff 49px,#edf2f7 50px)}
++#dashboard .monthly-bar-col{min-width:0;display:grid;grid-template-rows:25px minmax(0,1fr) 28px;text-align:center;align-items:end}
++#dashboard .monthly-bar-value{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#58738f}
++#dashboard .monthly-bar-track{height:100%;display:flex;align-items:flex-end;justify-content:center}
++#dashboard .monthly-bar-track i{display:block;width:min(36px,65%);border-radius:8px 8px 2px 2px;background:linear-gradient(180deg,#08b8d0,#0878f9);box-shadow:0 4px 12px #0878f930}
++#dashboard .monthly-bar-col b{font-size:12px;color:#5e7590;padding-top:7px}
++#dashboard .monthly-loading{grid-column:1/-1;align-self:center;text-align:center;color:#58738f;font-size:14px}
++#dashboard .monthly-sales-footer{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;justify-content:space-between;padding-top:14px;min-width:0}
++#dashboard .monthly-sales-footer strong{font-size:16px;color:#123f6b}
++#dashboard #dashMonthlyStatus{font-size:13px;overflow-wrap:anywhere;max-width:100%}
++@media(max-width:767px){#dashboard .monthly-sales-head{gap:10px}#dashboard .monthly-sales-footer{align-items:flex-start;flex-direction:column}}
++
++#dashboard .monthly-has-negative .monthly-bar-track{position:relative;background:linear-gradient(to bottom,transparent calc(50% - .5px),#a8bed4 50%,transparent calc(50% + .5px))}
++#dashboard .monthly-has-negative .monthly-bar-track i{position:absolute}
+--- /dev/null
++++ server/src/monthly-sales.js
+@@ -0,0 +1,30 @@
++// Same net-sales view, states and Lima sale date as Reportes > Ventas.
++// Half-open timestamp bounds keep the existing sales/date index usable.
++export const MONTHLY_SALES_SQL=String.raw`
++ with selection as (
++  select coalesce($3::int,extract(year from now() at time zone 'America/Lima')::int) AS sales_year,
++   extract(year from now() at time zone 'America/Lima')::int current_year
++ ), available as (
++  select distinct extract(year from v.created_at at time zone 'America/Lima')::int AS sales_year
++  from ventas v where v.empresa_id=$1 and ($2::uuid is null or v.sucursal_id=$2)
++ ), monthly as (
++  select extract(month from v.created_at at time zone 'America/Lima')::int AS month_number,sum(v.total) total
++  from reporte_ventas_netas v cross join selection s
++  where v.empresa_id=$1 and ($2::uuid is null or v.sucursal_id=$2)
++   and v.estado in ('EMITIDA','DEVOLUCION_PARCIAL')
++   and v.created_at >= (make_date(s.sales_year,1,1)::timestamp at time zone 'America/Lima')
++   and v.created_at < (make_date(s.sales_year+1,1,1)::timestamp at time zone 'America/Lima')
++  group by extract(month from v.created_at at time zone 'America/Lima')
++ ), months as (
++  select m.month_number,coalesce(t.total,0)::numeric total from generate_series(1,12) m(month_number) left join monthly t using(month_number)
++ )select s.sales_year AS "year",
++  (select array_agg(sales_year order by sales_year desc) from (select sales_year from available where sales_year between 1900 and 9998 union select current_year from selection) y) years,
++  jsonb_agg(jsonb_build_object('month',m.month_number,'total',m.total::text) order by m.month_number) months,
++  sum(m.total)::text total_year
++ from selection s cross join months m group by s.sales_year
++`;
++export async function monthlySales(db,company,branch,year){
++ if(year!==undefined&&(typeof year!=='string'||!/^\d{4}$/.test(year)||Number(year)<1900||Number(year)>9998))throw Object.assign(Error('Año inválido (1900 a 9998).'),{status:400});
++ const r=await db.query(MONTHLY_SALES_SQL,[company,branch||null,year===undefined?null:Number(year)]);
++ return {...r.rows[0],timezone:'America/Lima',definition:'Ventas netas de devoluciones, atribuidas a la fecha de venta'};
++}
+--- /dev/null
++++ public/monthly-sales.js
+@@ -0,0 +1,24 @@
++(()=>{
++ const MONTHS=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
++ const format=new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN',minimumFractionDigits:2,maximumFractionDigits:2});
++ window.createMonthlySales=({api,getBranchId})=>{
++  const year=document.getElementById('dashMonthlyYear'),chart=document.getElementById('dashMonthlyChart'),total=document.getElementById('dashMonthlyTotal'),status=document.getElementById('dashMonthlyStatus');
++  let selectedYear,sequence=0;
++  async function load(){
++   const branch=getBranchId(),request=++sequence;if(!branch){selectedYear=undefined;chart.innerHTML='';chart.classList.toggle('monthly-has-negative',false);chart.setAttribute('aria-busy','false');total.textContent='—';status.textContent='Seleccione una sucursal.';year.innerHTML='';year.value='';year.disabled=true;return}
++   chart.setAttribute('aria-busy','true');chart.innerHTML='<div class="monthly-loading">Consultando ventas mensuales...</div>';total.textContent='—';status.textContent='';year.disabled=true;
++   try{
++    const query=new URLSearchParams({sucursal_id:branch,...(selectedYear?{year:String(selectedYear)}:{})}),data=await api('/api/dashboard/monthly-sales?'+query);
++    if(request!==sequence||branch!==getBranchId())return;
++    if(!Number.isInteger(data.year)||data.year<1900||data.year>9998||!Array.isArray(data.months)||data.months.length!==12||data.months.some((m,i)=>Number(m.month)!==i+1||!Number.isFinite(Number(m.total)))||!Number.isFinite(Number(data.total_year)))throw Error('Respuesta mensual inválida.');
++    selectedYear=data.year;const years=[...new Set([...(data.years||[]),data.year])].filter(y=>Number.isInteger(y)&&y>=1900&&y<=9998).sort((a,b)=>b-a);
++    year.innerHTML=years.map(y=>'<option value="'+y+'"'+(y===selectedYear?' selected':'')+'>'+y+'</option>').join('');year.value=String(selectedYear);
++    const negative=data.months.some(m=>Number(m.total)<0);chart.classList.toggle('monthly-has-negative',negative);const max=Math.max(1,...data.months.map(m=>Math.abs(Number(m.total))));
++    chart.innerHTML=data.months.map((m,i)=>{const value=Number(m.total),label=MONTHS[i],amount=format.format(value),height=value!==0?Math.max(1,Math.abs(value)/max*(negative?50:100)):0,position=negative?(value<0?'top:50%;':'bottom:50%;'):'';return '<div class="monthly-bar-col" role="listitem" aria-label="'+label+': '+amount+'"><span class="monthly-bar-value" title="'+amount+'">'+amount+'</span><div class="monthly-bar-track" aria-hidden="true"><i style="height:'+height+'%;'+position+'"></i></div><b>'+label+'</b></div>'}).join('');
++    total.textContent=format.format(Number(data.total_year));status.textContent=data.months.every(m=>Number(m.total)===0)?'Sin ventas netas en el año seleccionado.':'Ventas netas según la fecha de venta · Sucursal activa';
++   }catch(e){if(request===sequence&&branch===getBranchId()){chart.innerHTML='<div class="monthly-loading">No se pudieron cargar las ventas mensuales.</div>';total.textContent='—';status.textContent=e.message||'Intente nuevamente.'}}
++   finally{if(request===sequence){chart.setAttribute('aria-busy','false');year.disabled=false}}
++  }
++  year.onchange=()=>{selectedYear=Number(year.value);void load()};return{load};
++ };
++})();
+--- /dev/null
++++ tests/monthly-sales.test.js
+@@ -0,0 +1,2 @@
++import test from 'node:test';import {createFixture,ids} from './helpers/initial-inventory-template-fixture.js';import {monthlyChecks} from './helpers/monthly-sales-checks.js';
++test('Ventas mensuales SQL/HTTP aisladas',async t=>{const f=await createFixture();t.after(()=>f.close());await monthlyChecks(t,f,ids)});
+--- /dev/null
++++ tests/monthly-sales-native.test.js
+@@ -0,0 +1,52 @@
++import test from 'node:test';import assert from 'node:assert/strict';
++import {createProfitNativeCluster} from './helpers/profit-native-cluster.js';
++import {execFile,spawn} from 'node:child_process';import {promisify} from 'node:util';
++import {readFileSync,readdirSync} from 'node:fs';import {randomUUID} from 'node:crypto';
++import {monthlyChecks} from './helpers/monthly-sales-checks.js';
++import pg from 'pg';import bcrypt from 'bcryptjs';import net from 'node:net';
++import {planGlobalRLS} from '../server/scripts/global-rls.js';
++const run=promisify(execFile),SECRET='FAKE_NATIVE_PROFIT_SESSION_ONLY_000000000000',PASS='FAKE_NATIVE_PROFIT_PASSWORD_ONLY';
++test('Ventas mensuales PostgreSQL nativo: 44 FORCE RLS',{skip:process.platform!=='linux'||process.env.EDUXFAC_PROFIT_NATIVE!=='yes'},async t=>{
++ const n=await createProfitNativeCluster();let db,server;
++ t.after(async()=>{if(server&&server.exitCode===null){server.kill('SIGTERM');await new Promise(r=>server.once('exit',r));}if(db)await db.end();await n.close();});
++ const roles={tenant:'profit_app',auth:'profit_auth',service:'profit_service',migrator:'profit_migrator',backup:'profit_backup'};
++ for(const role of Object.values(roles))await n.query('CREATE ROLE '+role+' LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS');
++ const dbName='web_f10_profit_native';await n.query('CREATE DATABASE '+dbName+' OWNER '+roles.migrator+' TEMPLATE template0');
++ const url=role=>'postgresql://'+role+'@127.0.0.1:'+n.port+'/'+dbName;
++ db=new pg.Pool({connectionString:url(roles.migrator),max:6,options:'-c statement_timeout=15000'});
++ await db.query(readFileSync(new URL('../database/schema.sql',import.meta.url),'utf8'));
++ await run(process.execPath,['server/scripts/migrate.js'],{env:{...process.env,NODE_ENV:'test',DATABASE_URL:url(roles.migrator),WEB_RLS_ENABLED:'false',WEB_RLS_PROFILE:'',SESSION_SECRET:SECRET},timeout:60000,maxBuffer:1024*1024});
++ for(const file of readdirSync(new URL('../database/migrations/',import.meta.url)).filter(x=>x.endsWith('.sql')).sort())await db.query(readFileSync(new URL('../database/migrations/'+file,import.meta.url),'utf8'));
++ await db.query('CREATE TABLE IF NOT EXISTS web_schema_migrations(version text PRIMARY KEY,applied_at timestamptz NOT NULL DEFAULT now())');
++ const plan=await planGlobalRLS(db,{...roles,dataMode:'DEMO'});
++ await db.query('BEGIN');try{for(const sql of plan.statements)await db.query(sql);await db.query('COMMIT');}catch(e){await db.query('ROLLBACK');throw e;}
++ const A=randomUUID(),B=randomUUID(),branchA=randomUUID(),branchB=randomUUID(),admin=randomUUID(),cashier=randomUUID(),other=randomUUID(),hash=await bcrypt.hash(PASS,4);
++ const adminRole=(await db.query("SELECT id FROM roles WHERE nombre='Administrador'")).rows[0].id,cashRole=(await db.query("SELECT id FROM roles WHERE nombre='Cajero / Vendedor'")).rows[0].id;
++ for(const[id,branch,label,ruc]of [[A,branchA,'PROFIT-A','20900123011'],[B,branchB,'PROFIT-B','20900123012']]){
++  await db.query('INSERT INTO empresas(id,razon_social,empresa_codigo,ruc) VALUES($1,$2,$2,$3)',[id,label,ruc]);
++  await db.query("INSERT INTO empresa_acceso(empresa_id,estado,plan_codigo,condiciones_version,limite_sucursales,limite_usuarios,multisucursal,suscripcion_id,estado_suscripcion,version_suscripcion,fecha_inicio,fecha_vencimiento) VALUES($1,'ACTIVO','PROFESIONAL',1,2,5,false,$2,'ACTIVA',1,now()-interval '1 day',now()+interval '1 month')",[id,randomUUID()]);
++  await db.query("INSERT INTO sucursales(id,empresa_id,codigo,nombre) VALUES($1,$2,'PRINCIPAL','PRINCIPAL')",[branch,id]);
++ }
++ for(const[id,company,branch,username,role]of [[admin,A,branchA,'native_admin',adminRole],[cashier,A,branchA,'native_cashier',cashRole],[other,B,branchB,'native_other',adminRole]]){
++  await db.query('INSERT INTO usuarios(id,empresa_id,nombre,usuario,password_hash) VALUES($1,$2,$3,$3,$4)',[id,company,username,hash]);
++  await db.query('INSERT INTO usuario_sucursal(usuario_id,sucursal_id,rol_id) VALUES($1,$2,$3)',[id,branch,role]);
++ }
++ const socket=net.createServer();await new Promise(r=>socket.listen(0,'127.0.0.1',r));const port=socket.address().port;await new Promise(r=>socket.close(r));
++ let errors='';
++ server=spawn(process.execPath,['server/start.mjs'],{env:{...process.env,NODE_ENV:'production',EDUXFAC_DATA_MODE:'DEMO',PORT:String(port),DATABASE_URL:url(roles.tenant),WEB_AUTH_DATABASE_URL:url(roles.auth),WEB_SERVICE_DATABASE_URL:url(roles.service),WEB_RLS_ENABLED:'true',WEB_RLS_PROFILE:'global',WEB_PG_TLS:'',SESSION_SECRET:SECRET,PANEL_WEB_SERVICE_SECRET:SECRET,PANEL_WEB_SERVICE_ISSUER:'native-profit',PANEL_WEB_SERVICE_AUDIENCE:'native-profit',EXPIRATION_WORKER_ENABLED:'false',EDUXFAC_SUBSCRIPTION_WORKER_ALLOW_MUTATION:'no'},stdio:['ignore','pipe','pipe']});
++ server.stderr.on('data',b=>{errors+=b.toString();});server.stdout.resume();
++ const base='http://127.0.0.1:'+port;
++ const request=async(route,{token,method='GET',body}={})=>{const response=await fetch(base+route,{method,headers:{...(token?{Authorization:'Bearer '+token}:{}),...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});return{status:response.status,data:await response.json()};};
++ let ready=false;for(let i=0;i<120;i++){try{ready=(await request('/api/health')).status===200;if(ready)break;}catch{}if(server.exitCode!==null)break;await new Promise(r=>setTimeout(r,50));}
++ assert.ok(ready,'Servidor RLS no inició: '+errors);
++ const login=async(username,company)=>{const r=await request('/api/auth/login',{method:'POST',body:{usuario:username,password:PASS,empresa_codigo:company}});assert.equal(r.status,200,JSON.stringify(r.data));return r.data.token;};
++ const tokenA=await login('native_admin','PROFIT-A'),tokenCash=await login('native_cashier','PROFIT-A'),tokenB=await login('native_other','PROFIT-B');
++
++
++
++ const ids={empresaA:A,empresaB:B,sucursalA:branchA,sucursalB:branchB,usuarioA:admin,usuarioB:other};
++ const explain=async(sql,args)=>{const c=new pg.Client({connectionString:url(roles.tenant),options:'-c statement_timeout=15000'});await c.connect();try{await c.query('BEGIN READ ONLY');const branches=(await db.query('select id from sucursales where empresa_id=$1',[A])).rows.map(x=>x.id);await c.query("select set_config('app.empresa_id',$1,true),set_config('app.usuario_id',$2,true),set_config('app.sucursal_ids',$3,true)",[A,admin,branches.join(',')]);const r=await c.query('EXPLAIN (ANALYZE,BUFFERS,FORMAT JSON) '+sql,args);await c.query('ROLLBACK');return r.rows[0]['QUERY PLAN'];}finally{await c.end()}};
++ await t.test('44 FORCE RLS al iniciar',async()=>assert.equal((await db.query("select count(*)::int n from pg_class where relnamespace='public'::regnamespace and relkind='r' and relforcerowsecurity")).rows[0].n,44));
++ await monthlyChecks(t,{query:db.query.bind(db),request,base,tokenA,tokenB,explain},ids,{native:true});
++ await t.test('44 FORCE RLS intactas al terminar',async()=>assert.equal((await db.query("select count(*)::int n from pg_class where relnamespace='public'::regnamespace and relkind='r' and relforcerowsecurity")).rows[0].n,44));
++});
+--- /dev/null
++++ tests/monthly-sales-ui.test.js
+@@ -0,0 +1,19 @@
++import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';
++const js=readFileSync(new URL('../public/monthly-sales.js',import.meta.url),'utf8');
++function fixture(api){const nodes={};for(const id of ['dashMonthlyYear','dashMonthlyChart','dashMonthlyTotal','dashMonthlyStatus'])nodes[id]={innerHTML:'',textContent:'',value:'',disabled:false,attrs:{},setAttribute(k,v){this.attrs[k]=v},classes:new Set(),classList:{toggle(k,v){v?nodes[id].classes.add(k):nodes[id].classes.delete(k)}}};let branch='A';const window={};vm.runInNewContext(js,{window,document:{getElementById:id=>nodes[id]},Intl,URLSearchParams});const view=window.createMonthlySales({api,getBranchId:()=>branch});return{nodes,view,branch:x=>branch=x}}
++const data=(year=2026,value=10)=>({year,years:[2025,2026],months:Array.from({length:12},(_,i)=>({month:i+1,total:String(i===0?value:0)})),total_year:String(value)});
++test('12 barras, importes y meses cero',async()=>{const f=fixture(async()=>data());await f.view.load();assert.equal((f.nodes.dashMonthlyChart.innerHTML.match(/role="listitem"/g)||[]).length,12);assert.match(f.nodes.dashMonthlyChart.innerHTML,/Ene/);assert.match(f.nodes.dashMonthlyChart.innerHTML,/Dic/);assert.match(f.nodes.dashMonthlyTotal.textContent,/10[.,]00/);assert.equal(f.nodes.dashMonthlyYear.disabled,false)});
++test('selector cambia año y total',async()=>{let url;const f=fixture(async u=>{url=u;return data(u.includes('2025')?2025:2026,50)});await f.view.load();f.nodes.dashMonthlyYear.value='2025';f.nodes.dashMonthlyYear.onchange();await new Promise(r=>setImmediate(r));assert.match(url,/year=2025/);assert.match(f.nodes.dashMonthlyTotal.textContent,/50[.,]00/)});
++test('año sin ventas muestra 12 ceros',async()=>{const f=fixture(async()=>data(2022,0));await f.view.load();assert.match(f.nodes.dashMonthlyStatus.textContent,/Sin ventas/);assert.match(f.nodes.dashMonthlyYear.innerHTML,/2022/)});
++test('meses negativos conservan signo y eje divergente',async()=>{const f=fixture(async()=>data(2026,-10));await f.view.load();assert.ok(f.nodes.dashMonthlyChart.classes.has('monthly-has-negative'));assert.match(f.nodes.dashMonthlyChart.innerHTML,/top:50%/);assert.match(f.nodes.dashMonthlyTotal.textContent,/-/)});
++test('respuesta tardía de otra sucursal no sustituye datos actuales',async()=>{const pending=[];const f=fixture(()=>new Promise(r=>pending.push(r)));const a=f.view.load();f.branch('B');const b=f.view.load();pending[1](data(2026,30));await b;pending[0](data(2026,99));await a;assert.match(f.nodes.dashMonthlyTotal.textContent,/30[.,]00/)});
++test('error tardío no borra datos de la nueva sucursal',async()=>{const pending=[];const f=fixture(()=>new Promise((r,j)=>pending.push({r,j})));const a=f.view.load();f.branch('B');const b=f.view.load();pending[1].r(data(2026,30));await b;pending[0].j(Error('viejo'));await a;assert.match(f.nodes.dashMonthlyTotal.textContent,/30[.,]00/)});
++test('error de API explícito sin total ficticio',async()=>{const f=fixture(async()=>{throw Error('Sin acceso')});await f.view.load();assert.equal(f.nodes.dashMonthlyTotal.textContent,'—');assert.match(f.nodes.dashMonthlyStatus.textContent,/Sin acceso/);assert.equal(f.nodes.dashMonthlyYear.disabled,false)});
++test('respuesta incompleta no se presenta como correcta',async()=>{const f=fixture(async()=>({...data(),months:[]}));await f.view.load();assert.match(f.nodes.dashMonthlyStatus.textContent,/inválida/)});
++test('gráfico semanal, función semanal y endpoint anterior conservados',()=>{const old=readFileSync(new URL('../operations/monthly-sales/before/public/index.html',import.meta.url),'utf8'),now=readFileSync(new URL('../public/index.html',import.meta.url),'utf8');const block=s=>s.slice(s.indexOf('<article class="dash-card dash-chart-card">'),s.indexOf('</article>',s.indexOf('<article class="dash-card dash-chart-card">'))+10);assert.ok(block(old).length>50);assert.equal(block(old),block(now));const week=s=>s.slice(s.indexOf('function renderDashWeek('),s.indexOf('function renderDashWeek(')+s.slice(s.indexOf('function renderDashWeek(')).indexOf('function ',10));assert.equal(week(old),week(now));const oldApp=readFileSync(new URL('../operations/monthly-sales/before/server/src/app.js',import.meta.url),'utf8'),newApp=readFileSync(new URL('../server/src/app.js',import.meta.url),'utf8');const endpoint=s=>s.slice(s.indexOf("app.get('/api/dashboard',"),s.indexOf("app.get('/api/dashboard',")+s.slice(s.indexOf("app.get('/api/dashboard',")).indexOf('\napp.',10));assert.ok(endpoint(oldApp).length>100);assert.equal(endpoint(oldApp),endpoint(newApp));});
++
++test('sintaxis de scripts nuevos e inline del HTML',()=>{new vm.Script(js);const html=readFileSync(new URL('../public/index.html',import.meta.url),'utf8');let checked=0;for(const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)){if(/src=|type=["'](?:module|application\/)/.test(match[1])||!match[2].trim())continue;new vm.Script(match[2]);checked++}assert.ok(checked>0)});
++
++test('sin sucursal limpia importes, años y estado aunque haya una consulta pendiente',async()=>{let resolve;const f=fixture(async()=>data(2025,-10));await f.view.load();assert.match(f.nodes.dashMonthlyTotal.textContent,/-/);f.branch(null);await f.view.load();assert.equal(f.nodes.dashMonthlyChart.innerHTML,'');assert.equal(f.nodes.dashMonthlyChart.attrs['aria-busy'],'false');assert.equal(f.nodes.dashMonthlyYear.innerHTML,'');assert.equal(f.nodes.dashMonthlyYear.disabled,true);assert.equal(f.nodes.dashMonthlyTotal.textContent,'—');assert.match(f.nodes.dashMonthlyStatus.textContent,/Seleccione/);assert.equal(f.nodes.dashMonthlyChart.classes.has('monthly-has-negative'),false);
++ const pending=fixture(()=>new Promise(r=>resolve=r));const old=pending.view.load();pending.branch(null);await pending.view.load();resolve(data());await old;assert.equal(pending.nodes.dashMonthlyYear.disabled,true);assert.equal(pending.nodes.dashMonthlyTotal.textContent,'—');assert.equal(pending.nodes.dashMonthlyChart.attrs['aria-busy'],'false');});
++test('al recuperar sucursal solicita el año predeterminado y restaura el selector',async()=>{const urls=[];const f=fixture(async u=>{urls.push(u);return data()});await f.view.load();f.nodes.dashMonthlyYear.value='2025';f.nodes.dashMonthlyYear.onchange();await new Promise(r=>setImmediate(r));f.branch(null);await f.view.load();f.branch('B');await f.view.load();assert.equal(new URL('http://test'+urls.at(-1)).searchParams.has('year'),false);assert.equal(f.nodes.dashMonthlyYear.disabled,false);assert.match(f.nodes.dashMonthlyTotal.textContent,/10[.,]00/);});
+--- /dev/null
++++ tests/helpers/monthly-sales-checks.js
+@@ -0,0 +1,42 @@
++import assert from 'node:assert/strict';import {randomUUID} from 'node:crypto';import {mkdir,writeFile} from 'node:fs/promises';
++import {MONTHLY_SALES_SQL} from '../../server/src/monthly-sales.js';
++export async function seedMonthly(f,ids){
++ const add=async(date,total,estado='EMITIDA',type='BOLETA',company=ids.empresaA,branch=ids.sucursalA,user=ids.usuarioA)=>{const id=randomUUID();await f.query('insert into ventas(id,empresa_id,sucursal_id,usuario_id,subtotal,total,estado,tipo_comprobante,created_at) values($1,$2,$3,$4,$5,$5,$6,$7,$8)',[id,company,branch,user,total,estado,type,date]);return id};
++ const refund=async(sale,amount,date)=>f.query("insert into devoluciones_venta(venta_id,empresa_id,sucursal_id,tipo,motivo,metodo_reembolso,monto,usuario_id,created_at) values($1,$2,$3,'PARCIAL','Ficticio','Efectivo',$4,$5,$6)",[sale,ids.empresaA,ids.sucursalA,amount,ids.usuarioA,date]);
++ await add('2026-01-01T04:59:59Z',100);await add('2026-01-01T05:00:00Z',100);
++ const partial=await add('2026-01-15T15:00:00Z',200,'DEVOLUCION_PARCIAL');await refund(partial,40,'2027-03-01T12:00:00Z');
++ await add('2026-01-20T15:00:00Z',25,'EMITIDA','NOTA DE CREDITO');
++ const cancelled=await add('2026-02-15T15:00:00Z',50,'ANULADA');await refund(cancelled,50,'2026-03-01T12:00:00Z');
++ await add('2026-02-15T16:00:00Z',500,'BORRADOR');
++ const discounted=await add('2026-03-15T15:00:00Z',50.25);await f.query('update ventas set subtotal=60,descuento=9.75 where id=$1',[discounted]);
++ await add('2026-05-01T15:00:00Z',-10,'EMITIDA','NOTA DE CRÉDITO');
++ await add('2027-01-01T04:59:59Z',75);await add('2027-01-01T05:00:00Z',20);
++ const second=ids.sucursalA2||randomUUID();if(!ids.sucursalA2){await f.query("insert into sucursales(id,empresa_id,codigo,nombre) values($1,$2,'SEGUNDA','Sucursal A2')",[second,ids.empresaA]);const role=(await f.query("select id from roles where nombre='Administrador'")).rows[0].id;await f.query('insert into usuario_sucursal(usuario_id,sucursal_id,rol_id) values($1,$2,$3)',[ids.usuarioA,second,role])}
++ await add('2026-05-02T15:00:00Z',900,'EMITIDA','BOLETA',ids.empresaA,second,ids.usuarioA);
++ await add('2026-01-02T15:00:00Z',99999,'EMITIDA','BOLETA',ids.empresaB,ids.sucursalB,ids.usuarioB);
++ return {second,partial,cancelled};
++}
++export async function monthlyChecks(t,f,ids,{native=false,performance:runPerformance=true}={}){
++ const seeded=await seedMonthly(f,ids),get=(year='2026',branch=ids.sucursalA,token=f.tokenA)=>f.request('/api/dashboard/monthly-sales?'+new URLSearchParams({...year===undefined?{}:{year},...branch===null?{}:{sucursal_id:branch}}),{token});
++ const snapshot=async()=>{const r={};for(const table of ['ventas','venta_detalles','devoluciones_venta','devolucion_venta_detalles','compras','compra_detalles','lotes','movimientos_inventario','precios_producto','auditoria'])r[table]=(await f.query('select * from '+table+' order by id')).rows;return r};const before=await snapshot();let annual;
++ await t.test('doce meses ordenados y suma anual monetaria exacta',async()=>{annual=await get();assert.equal(annual.status,200,JSON.stringify(annual));assert.equal(annual.data.months.length,12);assert.deepEqual(annual.data.months.map(m=>m.month),Array.from({length:12},(_,i)=>i+1));assert.equal(Number(annual.data.months[0].total),285);assert.equal(Number(annual.data.months[2].total),50.25);assert.equal(Number(annual.data.total_year),400.25);});
++ await t.test('mes sin ventas/anuladas/borrador tiene cero; no cuenta tickets como importe',()=>{assert.equal(Number(annual.data.months[1].total),0);assert.equal(Number(annual.data.months[3].total),0);assert.equal(Number(annual.data.months[0].total),100+200-40+25)});
++ await t.test('devolución posterior se resta del mes de venta original, no del mes de devolución',async()=>{assert.equal(Number(annual.data.months[0].total),285);const next=await get('2027');assert.equal(Number(next.data.months[0].total),20);assert.equal(Number(next.data.months[2].total),0)});
++ await t.test('nota de crédito respeta valor/estado existentes, sin segundo descuento ni signo inventado',()=>{assert.equal(Number(annual.data.months[4].total),-10);assert.equal(Number(annual.data.months[0].total),285)});
++ await t.test('comparación mensual exacta con Reportes > Ventas para los doce periodos',async()=>{for(let month=1;month<=12;month++){const last=new Date(Date.UTC(2026,month,0)).getUTCDate(),mm=String(month).padStart(2,'0'),r=await f.request('/api/reports/center/sales?'+new URLSearchParams({sucursal_id:ids.sucursalA,desde:'2026-'+mm+'-01',hasta:'2026-'+mm+'-'+last}),{token:f.tokenA});assert.equal(r.status,200,JSON.stringify(r));assert.equal(Number(r.data.summary.ventas),Number(annual.data.months[month-1].total))}});
++ await t.test('fronteras de año en America/Lima: UTC04:59 pertenece al año previo',async()=>{const old=await get('2025');assert.equal(Number(old.data.months[11].total),100);assert.equal(Number(annual.data.months[11].total),75);assert.equal(Number((await get('2027')).data.total_year),20)});
++ await t.test('años disponibles de la sucursal más año actual, sin años de empresa ajena',()=>{assert.ok(annual.data.years.includes(2025)&&annual.data.years.includes(2026)&&annual.data.years.includes(2027));assert.equal(annual.data.timezone,'America/Lima')});
++ await t.test('año sin ventas devuelve doce ceros y total0',async()=>{const r=await get('2022');assert.equal(r.status,200);assert.ok(r.data.months.every(m=>Number(m.total)===0));assert.equal(Number(r.data.total_year),0)});
++ await t.test('cambio de sucursal conserva aislamiento del importe y años',async()=>{const r=await get('2026',seeded.second);assert.equal(r.status,200,JSON.stringify(r));assert.equal(Number(r.data.total_year),900);assert.equal(Number(r.data.months[0].total),0)});
++ await t.test('global permitido solo con acceso a todas las sucursales de la empresa',async()=>{const r=await get('2026',null);assert.equal(r.status,200,JSON.stringify(r));assert.equal(Number(r.data.total_year),1300.25);const row=(await f.query('select * from usuario_sucursal where usuario_id=$1 and sucursal_id=$2',[ids.usuarioA,seeded.second])).rows[0];await f.query('delete from usuario_sucursal where usuario_id=$1 and sucursal_id=$2',[ids.usuarioA,seeded.second]);try{assert.equal((await get('2026',null)).status,403)}finally{await f.query('insert into usuario_sucursal(usuario_id,sucursal_id,rol_id) values($1,$2,$3)',[ids.usuarioA,seeded.second,row.rol_id])}});
++ await t.test('empresa y sucursal ajena403, no autenticado401, no bypass empresa_id',async()=>{assert.equal((await get('2026',ids.sucursalB)).status,403);assert.equal((await get('2026',ids.sucursalA,f.tokenB)).status,403);assert.equal((await get('2026',ids.sucursalA,null)).status,401);const q=await f.request('/api/dashboard/monthly-sales?'+new URLSearchParams({sucursal_id:ids.sucursalA,empresa_id:ids.empresaB}),{token:f.tokenA});assert.equal(q.status,403)});
++ await t.test('permiso dashboard denegado también bloquea el nuevo endpoint',async()=>{const old=(await f.query("select * from usuario_permisos where usuario_id=$1 and modulo='dashboard'",[ids.usuarioA])).rows;assert.equal(old.length,0);const assignments=(await f.query('select * from usuario_sucursal where usuario_id=$1',[ids.usuarioA])).rows;const cashier=(await f.query("select id from roles where lower(nombre) like '%caj%' limit 1")).rows[0];assert.ok(cashier);await f.query('update usuario_sucursal set rol_id=$2 where usuario_id=$1',[ids.usuarioA,cashier.id]);await f.query("insert into usuario_permisos(usuario_id,modulo,puede_ver) values($1,'dashboard',false)",[ids.usuarioA]);try{assert.equal((await get()).status,403)}finally{await f.query("delete from usuario_permisos where usuario_id=$1 and modulo='dashboard'",[ids.usuarioA]);for(const a of assignments)await f.query('update usuario_sucursal set rol_id=$3 where usuario_id=$1 and sucursal_id=$2',[ids.usuarioA,a.sucursal_id,a.rol_id])}});
++ await t.test('año/sucursal inválidos e intentos de inyección se rechazan',async()=>{for(const y of ['abc','2026foo','1899','10000','2026 OR 1=1',''])assert.equal((await get(y)).status,400);assert.equal((await get('2026','incorrecta')).status,400);assert.equal((await f.request('/api/dashboard/monthly-sales?year=2025&year=2026&sucursal_id='+ids.sucursalA,{token:f.tokenA})).status,400)});
++ await t.test('una sola consulta de agregación, sin doce consultas por mes',async()=>{let calls=0;const {monthlySales}=await import('../../server/src/monthly-sales.js');const r=await monthlySales({query:async(sql,args)=>{calls++;assert.equal(sql,MONTHLY_SALES_SQL);return f.query(sql,args)}},ids.empresaA,ids.sucursalA,'2026');assert.equal(calls,1);assert.equal(Number(r.total_year),400.25)});
++ await t.test('históricos, movimientos, stock y precios intactos tras todas las lecturas',async()=>assert.deepEqual(await snapshot(),before));
++ if(runPerformance)await t.test((native?'100.000':'10.000')+' ventas y devoluciones: rendimiento y total completo sin truncar',async()=>{const volume=native?100000:10000;
++ const inserted=(await f.query("insert into ventas(empresa_id,sucursal_id,usuario_id,subtotal,total,estado,tipo_comprobante,created_at) select $1,$2,$3,10,10,'EMITIDA','BOLETA',(make_date(2024,(i%12)+1,15)::timestamp at time zone 'America/Lima') from generate_series(1,$4::int) i returning id",[ids.empresaA,ids.sucursalA,ids.usuarioA,volume])).rows;
++ for(let start=0;start<inserted.length;start+=1000){const batch=inserted.slice(start,start+1000).filter((_,i)=>i%10===0).map(v=>v.id);await f.query("insert into devoluciones_venta(venta_id,empresa_id,sucursal_id,tipo,motivo,metodo_reembolso,monto,usuario_id) select id,$2,$3,'PARCIAL','Ficticio masivo','Efectivo',2,$4 from unnest($1::uuid[]) id",[batch,ids.empresaA,ids.sucursalA,ids.usuarioA])}
++ await f.query('ANALYZE ventas');await f.query('ANALYZE devoluciones_venta');const elapsed=[];for(let i=0;i<3;i++){const start=performance.now(),r=await get('2024');elapsed.push(performance.now()-start);assert.equal(r.status,200,JSON.stringify(r));assert.equal(Number(r.data.total_year),volume*10-volume/10*2)}
++ let plan=null;if(f.explain)plan=await f.explain(MONTHLY_SALES_SQL,[ids.empresaA,ids.sucursalA,2024]);await mkdir(new URL('../../operations/monthly-sales/',import.meta.url),{recursive:true});await writeFile(new URL('../../operations/monthly-sales/PERFORMANCE_'+(native?'PG':'WASM')+'.json',import.meta.url),JSON.stringify({volume,refunds:volume/10,http_ms:elapsed,plan},null,2));console.log('MONTHLY_'+(native?'PG':'WASM')+'_HTTP_MS='+JSON.stringify(elapsed.map(v=>Math.round(v))))});
++}
+--- before/tests/initial-inventory-lf.test.js
++++ tests/initial-inventory-lf.test.js
+@@ -3,7 +3,8 @@
+ import {webIndexHTML,contentSecurityPolicy} from '../server/src/csp-header.js';
+ const old=readFileSync(new URL('../operations/initial-inventory-lf/index.before-crlf.html',import.meta.url));
+ const now=readFileSync(new URL('../public/index.html',import.meta.url));
+-const sha=b=>createHash('sha256').update(b).digest('hex'),expected='72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32';
+-test('Normalización: bytes idénticos excepto 2.204 CRLF; sin cambios HTML/CSS/JS',()=>{assert.equal(sha(old),'fa057a968001d037e63a41760911a9f5e5adbd1038c2c31ee320b0f700b7031d');assert.equal(old.toString().split('\r\n').length-1,2204);assert.equal(now.includes(13),false);assert.deepEqual(now,Buffer.from(old.toString('utf8').replace(/\r\n/g,'\n')));assert.equal(sha(now),expected);});
+-test('Normalización: cinco scripts inline compilables y CSP sin cambios',()=>{const canonical=old.toString('utf8').replace(/\r\n?/g,'\n');assert.equal(canonical,webIndexHTML);assert.equal(Buffer.from(webIndexHTML).compare(now),0);let count=0;for(const x of now.toString('utf8').matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)){if(!x[1].trim())continue;new vm.Script(x[1]);const hash=createHash('sha256').update(x[1]).digest('base64');assert.ok(contentSecurityPolicy.includes("'sha256-"+hash+"'"));count++;}assert.equal(count,5);});
+-test('Servidor local real: archivo D LF y cuerpo HTTP coinciden byte a byte, HTTP 200 y CSP válida',async()=>{const f=await createFixture();try{const r=await fetch(f.base+'/');assert.equal(r.status,200);const body=Buffer.from(await r.arrayBuffer());assert.equal(sha(body),expected);assert.deepEqual(body,now);assert.equal(r.headers.get('content-security-policy'),contentSecurityPolicy);}finally{await f.close();}});
++const sha=b=>createHash('sha256').update(b).digest('hex');
++
++test('Normalización histórica conserva su checksum y el HTML vigente mantiene LF',()=>{assert.equal(sha(old),'fa057a968001d037e63a41760911a9f5e5adbd1038c2c31ee320b0f700b7031d');assert.equal(old.toString().split('\r\n').length-1,2204);assert.equal(sha(Buffer.from(old.toString('utf8').replace(/\r\n/g,'\n'))),'72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32');assert.equal(now.includes(13),false);});
++test('HTML vigente: scripts inline compilables y todos autorizados por CSP',()=>{assert.equal(webIndexHTML,now.toString('utf8'));let count=0;for(const x of now.toString('utf8').matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)){if(!x[1].trim())continue;new vm.Script(x[1]);const hash=createHash('sha256').update(x[1]).digest('base64');assert.ok(contentSecurityPolicy.includes("'sha256-"+hash+"'"));count++;}assert.ok(count>0);});
++test('Servidor local: HTML vigente LF y cuerpo HTTP coinciden byte a byte con CSP válida',async()=>{const f=await createFixture();try{const r=await fetch(f.base+'/');assert.equal(r.status,200);const body=Buffer.from(await r.arrayBuffer());assert.equal(sha(body),sha(now));assert.equal(r.headers.get('content-security-policy'),contentSecurityPolicy);}finally{await f.close();}});

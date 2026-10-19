@@ -1,0 +1,20 @@
+{
+  "mode": "READ_ONLY",
+  "confirmed_cost_per_presentation": "31.875",
+  "inflated_total": "255",
+  "correct_cost_per_unit": "15",
+  "correct_total": "120",
+  "revenue": "200",
+  "correct_profit": "80",
+  "stock_total": "11",
+  "allocation": {
+    "EDU1": 3,
+    "EDU2": 3,
+    "EDU3": 2
+  },
+  "root_cause": "opening_value_and_initial_inventory_movement_double_counted",
+  "company_imported_lots_affected": 3,
+  "persisted_sales": 0,
+  "writes_to_vps_or_database": false,
+  "code_D_matches_VPS": true
+}

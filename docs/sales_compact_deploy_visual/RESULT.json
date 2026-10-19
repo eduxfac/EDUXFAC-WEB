@@ -1,0 +1,46 @@
+{
+  "passed": 35,
+  "failed": 0,
+  "other_module_comparisons_unchanged": 30,
+  "fonts_unchanged": true,
+  "global_overflow": false,
+  "overlap": false,
+  "sales": [
+    {
+      "width": 1920,
+      "before": 296,
+      "after": 199,
+      "reduction_percent": 32.77,
+      "workspace_gained_px": 113
+    },
+    {
+      "width": 1366,
+      "before": 296,
+      "after": 199,
+      "reduction_percent": 32.77,
+      "workspace_gained_px": 113
+    },
+    {
+      "width": 1024,
+      "before": 349,
+      "after": 231,
+      "reduction_percent": 33.81,
+      "workspace_gained_px": 134
+    },
+    {
+      "width": 768,
+      "before": 472,
+      "after": 231,
+      "reduction_percent": 51.06,
+      "workspace_gained_px": 257
+    },
+    {
+      "width": 375,
+      "before": 663,
+      "after": 419,
+      "reduction_percent": 36.8,
+      "workspace_gained_px": 260
+    }
+  ],
+  "scope": "isolated official DOM with CSS fetched from deployed HTTPS; fictitious data; no authenticated live session"
+}

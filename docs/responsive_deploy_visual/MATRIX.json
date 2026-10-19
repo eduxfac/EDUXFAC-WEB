@@ -1,0 +1,684 @@
+[
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#checkout": "15px",
+      ".cart-price-input": "16px",
+      ".cart-product-name": "12px",
+      ".sale-product-name b": "13px",
+      ".sale-products-table td": "13px",
+      ".sale-products-table th": "12px"
+    },
+    "layout": "784.422px 830.578px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": "",
+    "screen": "sales",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "sales_1920.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#productsAdmin .btn": "16px",
+      "#productsAdmin .input": "16px",
+      "#productsAdmin h2": "24px",
+      "#productsAdmin td": "14px"
+    },
+    "layout": "500px 500px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "productsAdmin",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "productsAdmin_1920.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#inventory .btn": "16px",
+      "#inventory .input": "16px",
+      "#inventory h2": "24px",
+      "#inventory td": "14px"
+    },
+    "layout": "804.5px 804.5px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "inventory",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "inventory_1920.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#purchases .btn": "16px",
+      "#purchases .input": "16px",
+      "#purchases h2": "24px",
+      "#purchases td": "14px"
+    },
+    "layout": "521px 521px 521px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "purchases",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "purchases_1920.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#reports .btn": "16px",
+      "#reports .input": "12px",
+      "#reports h2": "25px",
+      "#reports td": "14px"
+    },
+    "layout": "255.5px 255.5px 255.5px 255.5px 255.5px 255.5px 0px 0px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "reports",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "reports_1920.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#usersAdmin .btn": "16px",
+      "#usersAdmin .input": "16px",
+      "#usersAdmin h2": "24px",
+      "#usersAdmin td": "14px"
+    },
+    "layout": "966.594px 644.406px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "usersAdmin",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "usersAdmin_1920.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1905,
+    "fonts": {
+      "#settings .btn": "16px",
+      "#settings .input": "16px",
+      "#settings h2": "24px",
+      "#settings td": null
+    },
+    "layout": "365px 365px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1905,
+    "productNameClamped": null,
+    "screen": "settings",
+    "scrollContainers": [],
+    "width": 1920,
+    "screenshot": "settings_1920.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#checkout": "15px",
+      ".cart-price-input": "16px",
+      ".cart-product-name": "12px",
+      ".sale-product-name b": "13px",
+      ".sale-products-table td": "13px",
+      ".sale-products-table th": "12px"
+    },
+    "layout": "515.328px 545.672px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": "",
+    "screen": "sales",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "sales_1366.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#productsAdmin .btn": "16px",
+      "#productsAdmin .input": "16px",
+      "#productsAdmin h2": "24px",
+      "#productsAdmin td": "14px"
+    },
+    "layout": "500px 500px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "productsAdmin",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "productsAdmin_1366.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#inventory .btn": "16px",
+      "#inventory .input": "16px",
+      "#inventory h2": "24px",
+      "#inventory td": "14px"
+    },
+    "layout": "527.5px 527.5px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "inventory",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "inventory_1366.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#purchases .btn": "16px",
+      "#purchases .input": "16px",
+      "#purchases h2": "24px",
+      "#purchases td": "14px"
+    },
+    "layout": "336.328px 336.328px 336.344px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "purchases",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "purchases_1366.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#reports .btn": "16px",
+      "#reports .input": "12px",
+      "#reports h2": "25px",
+      "#reports td": "14px"
+    },
+    "layout": "198.188px 198.203px 198.203px 198.203px 198.188px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "reports",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "reports_1366.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#usersAdmin .btn": "16px",
+      "#usersAdmin .input": "16px",
+      "#usersAdmin h2": "24px",
+      "#usersAdmin td": "14px"
+    },
+    "layout": "634.188px 422.812px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "usersAdmin",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "usersAdmin_1366.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1351,
+    "fonts": {
+      "#settings .btn": "16px",
+      "#settings .input": "16px",
+      "#settings h2": "24px",
+      "#settings td": null
+    },
+    "layout": "328.656px 328.672px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1351,
+    "productNameClamped": null,
+    "screen": "settings",
+    "scrollContainers": [],
+    "width": 1366,
+    "screenshot": "settings_1366.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#checkout": "15px",
+      ".cart-price-input": "16px",
+      ".cart-product-name": "12px",
+      ".sale-product-name b": "13px",
+      ".sale-products-table td": "13px",
+      ".sale-products-table th": "12px"
+    },
+    "layout": "795px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": "",
+    "screen": "sales",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "sales_1024.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#productsAdmin .btn": "16px",
+      "#productsAdmin .input": "16px",
+      "#productsAdmin h2": "24px",
+      "#productsAdmin td": "14px"
+    },
+    "layout": "461.5px 461.5px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": null,
+    "screen": "productsAdmin",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "productsAdmin_1024.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#inventory .btn": "16px",
+      "#inventory .input": "16px",
+      "#inventory h2": "24px",
+      "#inventory td": "14px"
+    },
+    "layout": "795px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": null,
+    "screen": "inventory",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "inventory_1024.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#purchases .btn": "16px",
+      "#purchases .input": "16px",
+      "#purchases h2": "24px",
+      "#purchases td": "14px"
+    },
+    "layout": "379.5px 379.5px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": null,
+    "screen": "purchases",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "purchases_1024.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#reports .btn": "16px",
+      "#reports .input": "12px",
+      "#reports h2": "25px",
+      "#reports td": "14px"
+    },
+    "layout": "181.75px 181.75px 181.75px 181.75px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": null,
+    "screen": "reports",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "reports_1024.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#usersAdmin .btn": "16px",
+      "#usersAdmin .input": "16px",
+      "#usersAdmin h2": "24px",
+      "#usersAdmin td": "14px"
+    },
+    "layout": "392.5px 392.5px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": null,
+    "screen": "usersAdmin",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "usersAdmin_1024.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 1009,
+    "fonts": {
+      "#settings .btn": "16px",
+      "#settings .input": "16px",
+      "#settings h2": "24px",
+      "#settings td": null
+    },
+    "layout": "176.75px 176.75px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 1009,
+    "productNameClamped": null,
+    "screen": "settings",
+    "scrollContainers": [],
+    "width": 1024,
+    "screenshot": "settings_1024.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#checkout": "15px",
+      ".cart-price-input": "16px",
+      ".cart-product-name": "12px",
+      ".sale-product-name b": "13px",
+      ".sale-products-table td": "13px",
+      ".sale-products-table th": "12px"
+    },
+    "layout": "729px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": "",
+    "screen": "sales",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "sales_768.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#productsAdmin .btn": "16px",
+      "#productsAdmin .input": "16px",
+      "#productsAdmin h2": "24px",
+      "#productsAdmin td": "14px"
+    },
+    "layout": "677px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": null,
+    "screen": "productsAdmin",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "productsAdmin_768.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#inventory .btn": "16px",
+      "#inventory .input": "16px",
+      "#inventory h2": "24px",
+      "#inventory td": "14px"
+    },
+    "layout": "729px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": null,
+    "screen": "inventory",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "inventory_768.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#purchases .btn": "16px",
+      "#purchases .input": "16px",
+      "#purchases h2": "24px",
+      "#purchases td": "14px"
+    },
+    "layout": "703px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": null,
+    "screen": "purchases",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "purchases_768.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#reports .btn": "16px",
+      "#reports .input": "12px",
+      "#reports h2": "25px",
+      "#reports td": "14px"
+    },
+    "layout": "224.328px 224.328px 224.328px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": null,
+    "screen": "reports",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "reports_768.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#usersAdmin .btn": "16px",
+      "#usersAdmin .input": "16px",
+      "#usersAdmin h2": "24px",
+      "#usersAdmin td": "14px"
+    },
+    "layout": "729px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": null,
+    "screen": "usersAdmin",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "usersAdmin_768.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 753,
+    "fonts": {
+      "#settings .btn": "16px",
+      "#settings .input": "16px",
+      "#settings h2": "24px",
+      "#settings td": null
+    },
+    "layout": "703px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 753,
+    "productNameClamped": null,
+    "screen": "settings",
+    "scrollContainers": [],
+    "width": 768,
+    "screenshot": "settings_768.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#checkout": "15px",
+      ".cart-price-input": "16px",
+      ".cart-product-name": "12px",
+      ".sale-product-name b": "13px",
+      ".sale-products-table td": "13px",
+      ".sale-products-table th": "12px"
+    },
+    "layout": "340px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": "",
+    "screen": "sales",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "sales_375.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#productsAdmin .btn": "16px",
+      "#productsAdmin .input": "16px",
+      "#productsAdmin h2": "24px",
+      "#productsAdmin td": "14px"
+    },
+    "layout": "305px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "productsAdmin",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "productsAdmin_375.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#inventory .btn": "16px",
+      "#inventory .input": "16px",
+      "#inventory h2": "24px",
+      "#inventory td": "14px"
+    },
+    "layout": "340px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "inventory",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "inventory_375.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#purchases .btn": "16px",
+      "#purchases .input": "16px",
+      "#purchases h2": "24px",
+      "#purchases td": "14px"
+    },
+    "layout": "314px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "purchases",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "purchases_375.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#reports .btn": "16px",
+      "#reports .input": "12px",
+      "#reports h2": "25px",
+      "#reports td": "14px"
+    },
+    "layout": "308px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "reports",
+    "scrollContainers": [
+      {
+        "client": 338,
+        "cls": "report-center-table",
+        "id": "",
+        "scroll": 640
+      }
+    ],
+    "width": 375,
+    "screenshot": "reports_375.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#usersAdmin .btn": "16px",
+      "#usersAdmin .input": "16px",
+      "#usersAdmin h2": "24px",
+      "#usersAdmin td": "14px"
+    },
+    "layout": "340px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "usersAdmin",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "usersAdmin_375.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  },
+  {
+    "clientWidth": 360,
+    "fonts": {
+      "#settings .btn": "16px",
+      "#settings .input": "16px",
+      "#settings h2": "24px",
+      "#settings td": null
+    },
+    "layout": "314px",
+    "overflows": [],
+    "pageOverflow": false,
+    "pageWidth": 360,
+    "productNameClamped": null,
+    "screen": "settings",
+    "scrollContainers": [],
+    "width": 375,
+    "screenshot": "settings_375.jpg",
+    "scope": "isolated DOM with HTTPS deployed CSS and fictitious data"
+  }
+]

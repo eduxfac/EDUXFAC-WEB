@@ -1,0 +1,12 @@
+{
+  "remote": {
+    "path": "/home/eduxadmin/.local/share/eduxfac/monthly_sales_deploy_20261015_131626_7c68b6/backup.tar.gz",
+    "sha256": "ce7b9878f78b695c9982c008fc93512ffbedb3dc8da4d803c99a6398d409483a",
+    "verified": true
+  },
+  "local_archive": "D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\operations\\monthly-sales\\deploy\\backup.tar.gz",
+  "sha256": "ce7b9878f78b695c9982c008fc93512ffbedb3dc8da4d803c99a6398d409483a",
+  "verified": true,
+  "replaced_files": 3,
+  "new_files_absent": 2
+}

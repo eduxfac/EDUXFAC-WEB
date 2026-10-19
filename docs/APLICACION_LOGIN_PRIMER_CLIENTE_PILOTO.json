@@ -1,0 +1,168 @@
+{
+  "deployment": {
+    "applied": true,
+    "time_utc": "2026-10-13T17:33:19.372764+00:00",
+    "sha256_before": "eb07a2bfe13b06698e411dc2cf7c16c27b5af972d1850036b71138823bc66db6",
+    "sha256_after": "d5c51054a23d2a16fe65b0bf1226fb4cf5d1a6f24b72b88d7f8c4887695b5aa3",
+    "backup": "/home/eduxadmin/.local/share/eduxfac/phase12b_20261013_0625/login_frontend_fix_20261013_1730/index.html.before",
+    "candidate_matches_installed": true,
+    "changed_files": [
+      "public/index.html"
+    ],
+    "protected_files": 63,
+    "health_samples": [
+      {
+        "loopback": {
+          "url": "http://127.0.0.1:3001/api/health",
+          "status": 200,
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "https": {
+          "url": "https://app.eduxfac.com/api/health",
+          "status": 200,
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "html_status": 200,
+        "html_sha256": "d5c51054a23d2a16fe65b0bf1226fb4cf5d1a6f24b72b88d7f8c4887695b5aa3",
+        "scripts_valid": 5
+      },
+      {
+        "loopback": {
+          "url": "http://127.0.0.1:3001/api/health",
+          "status": 200,
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "https": {
+          "url": "https://app.eduxfac.com/api/health",
+          "status": 200,
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "html_status": 200,
+        "html_sha256": "d5c51054a23d2a16fe65b0bf1226fb4cf5d1a6f24b72b88d7f8c4887695b5aa3",
+        "scripts_valid": 5
+      },
+      {
+        "loopback": {
+          "url": "http://127.0.0.1:3001/api/health",
+          "status": 200,
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "https": {
+          "url": "https://app.eduxfac.com/api/health",
+          "status": 200,
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        },
+        "html_status": 200,
+        "html_sha256": "d5c51054a23d2a16fe65b0bf1226fb4cf5d1a6f24b72b88d7f8c4887695b5aa3",
+        "scripts_valid": 5
+      }
+    ],
+    "assets": [
+      {
+        "asset": "initial-password.js",
+        "status": 200,
+        "syntax_ok": true,
+        "source_matches": true
+      },
+      {
+        "asset": "delegated-events.js",
+        "status": 200,
+        "syntax_ok": true,
+        "source_matches": true
+      },
+      {
+        "asset": "app-dialogs.js",
+        "status": 200,
+        "syntax_ok": true,
+        "source_matches": true
+      }
+    ],
+    "https": {
+      "app.eduxfac.com": 200,
+      "admin.eduxfac.com": 200,
+      "eduxfac.com": 200
+    },
+    "processes_after": {
+      "eduxfac": {
+        "id": 0,
+        "pid": 988,
+        "status": "online",
+        "restarts": 0,
+        "cwd": "/var/www/eduxfac",
+        "script": "/usr/bin/npm",
+        "interpreter": "/usr/bin/node",
+        "data_mode": null,
+        "port": "",
+        "expiration_worker": null,
+        "mutation": null
+      },
+      "EDUXFAC-PANEL-PILOTO": {
+        "id": 3,
+        "pid": 269525,
+        "status": "online",
+        "restarts": 4,
+        "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel",
+        "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel/server/start.mjs",
+        "interpreter": "/home/eduxadmin/.local/opt/eduxfac-node24/bin/node",
+        "data_mode": "PILOTO",
+        "port": "4310",
+        "expiration_worker": "false",
+        "mutation": null
+      },
+      "EDUXFAC-WEB-PILOTO": {
+        "id": 4,
+        "pid": 279626,
+        "status": "online",
+        "restarts": 1,
+        "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+        "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+        "interpreter": "/home/eduxadmin/.local/opt/eduxfac-node24/bin/node",
+        "data_mode": "PILOTO",
+        "port": "3001",
+        "expiration_worker": "false",
+        "mutation": "no"
+      }
+    },
+    "other_processes_unchanged": true,
+    "rollback": "/home/eduxadmin/.local/share/eduxfac/phase12b_20261013_0625/login_frontend_fix_20261013_1730/ROLLBACK_LOGIN_FRONTEND.py",
+    "rollback_available": true,
+    "database_writes": false,
+    "sudo_used": false
+  },
+  "final_check": {
+    "backup_verified": true,
+    "rollback_syntax_valid": true,
+    "final_health": {
+      "status": 200,
+      "data_mode": "PILOTO",
+      "ok": true
+    },
+    "pm2": {
+      "name": "EDUXFAC-WEB-PILOTO",
+      "status": "online",
+      "pid": 279626,
+      "restarts": 1
+    }
+  },
+  "tests_post_apply": {
+    "passed": 80,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 25827.6463,
+    "fixture_databases_only": true,
+    "real_user_password_used": false
+  }
+}

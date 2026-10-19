@@ -1,0 +1,13 @@
+{
+  "empresaId": "8678361e-91ec-4bb2-877f-42ea2893d39e",
+  "sucursalId": "11b36867-46b5-40a1-9d0a-8a773b318d8d",
+  "productoId": "dfade78c-7cd3-4fc0-8660-ae7e608cdf79",
+  "saldoSinLoteId": "e422a936-92c7-4a97-9354-06b84c10f5b0",
+  "loteRealId": "771bf66f-44b6-4d61-beed-ce6bef93ba68",
+  "usuario": "edwinpiloto",
+  "stock_total_esperado": "120",
+  "valor_apronax_esperado": "188.40",
+  "valor_inventario_esperado": "219.60",
+  "estado": "PREPARADO_NO_EJECUTADO",
+  "confirmar_lote_fisico": "DFDF"
+}

@@ -1,0 +1,11 @@
+{
+  "failed": 0,
+  "fictitious_tests": 10,
+  "passed": 12,
+  "candidate_sha256": "D244957D7B5C6983B4E7F2A1C3037E2E99D90E8D403678A1CDF9203AA83B5656",
+  "exported_copy_tests": 2,
+  "engine": "Microsoft Excel",
+  "stability_successful_openings": 3,
+  "exported_source_unchanged": true,
+  "stability_assertions": 30.0
+}

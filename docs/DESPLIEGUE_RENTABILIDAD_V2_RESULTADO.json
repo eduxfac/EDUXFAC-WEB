@@ -1,0 +1,252 @@
+{
+  "utc": "2026-10-13T23:29:50.255867+00:00",
+  "result": "V2_DEPLOY_OK_GO_MANUAL_NEGATIVE_APRONAX",
+  "deployed": true,
+  "functional_candidate_changed": false,
+  "files": [
+    "server/src/app.js",
+    "server/src/sale-profitability.js",
+    "public/index.html",
+    "public/sale-profitability.js"
+  ],
+  "hashes_before": {
+    "server/src/app.js": "58d31e00d2414804e636429a38fdd1662b1888d5dfe7c26f533d798c76e6af0d",
+    "server/src/sale-profitability.js": null,
+    "public/index.html": "981647b74c4c971a498f51dae74e089a2ce8b2e836f9083555ae81ec9b983430",
+    "public/sale-profitability.js": null
+  },
+  "hashes_after": {
+    "server/src/app.js": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7",
+    "server/src/sale-profitability.js": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220",
+    "public/index.html": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e",
+    "public/sale-profitability.js": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+  },
+  "all_four_D_VPS_equal": true,
+  "timing": {
+    "loopback": {
+      "first_200_since_restart_seconds": 3.875,
+      "stable_since_restart_seconds": 7.553,
+      "attempts": 5,
+      "observed_responses": [
+        {
+          "status": null,
+          "error_type": "CONNECTION_REFUSED",
+          "duration_ms": 0.42
+        },
+        {
+          "status": null,
+          "error_type": "CONNECTION_REFUSED",
+          "duration_ms": 6.5
+        },
+        {
+          "status": 200,
+          "error_type": null,
+          "duration_ms": 32.99
+        },
+        {
+          "status": 200,
+          "error_type": null,
+          "duration_ms": 8.12
+        },
+        {
+          "status": 200,
+          "error_type": null,
+          "duration_ms": 17.11
+        }
+      ]
+    },
+    "https": {
+      "first_200_since_restart_seconds": 7.988,
+      "stable_since_restart_seconds": 10.822,
+      "attempts": 3,
+      "observed_responses": [
+        {
+          "status": 200,
+          "error_type": null,
+          "duration_ms": 83.44
+        },
+        {
+          "status": 200,
+          "error_type": null,
+          "duration_ms": 19.16
+        },
+        {
+          "status": 200,
+          "error_type": null,
+          "duration_ms": 18.3
+        }
+      ]
+    },
+    "deployment_restart_utc": "2026-10-13T23:23:10.600375+00:00",
+    "total_since_restart_seconds": 31.91
+  },
+  "post_deploy_tests": {
+    "web_linux_regression": {
+      "passed": 300,
+      "failed": 0,
+      "skipped": 0
+    },
+    "native_postgresql_profit_concurrency": {
+      "passed": 22,
+      "failed": 0
+    },
+    "native_server_global_RLS": {
+      "passed": 16,
+      "failed": 0
+    },
+    "total_passed": 338,
+    "total_failed": 0,
+    "environment": "LOCAL_ISOLATED_FICTITIOUS_IDENTICAL_DEPLOYED_SOURCE",
+    "real_customer_sales_performed": false
+  },
+  "live_smoke": {
+    "read_only": true,
+    "checks": [
+      "candidate_hashes",
+      "protected_inventory_exact_four_changes",
+      "other_processes_unchanged",
+      "rollback_preflight_eligible",
+      "backup_hashes",
+      "absence_markers"
+    ],
+    "tests": [
+      {
+        "utc": "2026-10-13T23:26:58.749205+00:00",
+        "url": "http://127.0.0.1:3001/api/health",
+        "status": 200,
+        "body_sanitized": {
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        }
+      },
+      {
+        "utc": "2026-10-13T23:26:58.774374+00:00",
+        "url": "https://app.eduxfac.com/api/health",
+        "status": 200,
+        "body_sanitized": {
+          "ok": true,
+          "database": true,
+          "data_mode": "PILOTO"
+        }
+      },
+      {
+        "utc": "2026-10-13T23:26:58.806162+00:00",
+        "url": "https://app.eduxfac.com/",
+        "status": 200
+      },
+      {
+        "utc": "2026-10-13T23:26:58.827030+00:00",
+        "url": "https://admin.eduxfac.com/",
+        "status": 200
+      },
+      {
+        "utc": "2026-10-13T23:26:58.861825+00:00",
+        "url": "https://eduxfac.com/",
+        "status": 200
+      }
+    ],
+    "web_pm2": {
+      "id": 4,
+      "pid": 300850,
+      "status": "online",
+      "restarts": 5
+    },
+    "rollback_executed": false
+  },
+  "public_https": [
+    {
+      "utc": "2026-10-13T23:28:28.409025+00:00",
+      "url": "https://app.eduxfac.com/api/health",
+      "status": 200,
+      "tls_verified": true,
+      "client": "local_PC_public_DNS",
+      "body_sanitized": {
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:28:29.724631+00:00",
+      "url": "https://app.eduxfac.com/",
+      "status": 200,
+      "tls_verified": true,
+      "client": "local_PC_public_DNS",
+      "sha256": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e"
+    },
+    {
+      "utc": "2026-10-13T23:28:30.359012+00:00",
+      "url": "https://app.eduxfac.com/sale-profitability.js",
+      "status": 200,
+      "tls_verified": true,
+      "client": "local_PC_public_DNS",
+      "sha256": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+    },
+    {
+      "utc": "2026-10-13T23:28:30.888170+00:00",
+      "url": "https://admin.eduxfac.com/",
+      "status": 200,
+      "tls_verified": true,
+      "client": "local_PC_public_DNS"
+    },
+    {
+      "utc": "2026-10-13T23:28:33.028608+00:00",
+      "url": "https://eduxfac.com/",
+      "status": 200,
+      "tls_verified": true,
+      "client": "local_PC_public_DNS"
+    }
+  ],
+  "pm2": [
+    {
+      "name": "eduxfac",
+      "id": 0,
+      "pid": 988,
+      "status": "online",
+      "restarts": 0
+    },
+    {
+      "name": "EDUXFAC-PANEL-PILOTO",
+      "id": 3,
+      "pid": 269525,
+      "status": "online",
+      "restarts": 4
+    },
+    {
+      "name": "EDUXFAC-WEB-PILOTO",
+      "id": 4,
+      "pid": 300850,
+      "status": "online",
+      "restarts": 5
+    }
+  ],
+  "web_restart_count_before": 4,
+  "web_restart_count_after": 5,
+  "web_restarts_performed": 1,
+  "backup": "/home/eduxadmin/.local/share/eduxfac/profitability_deploy_v2_20261013/backup",
+  "backup_verified": true,
+  "rollback": "/home/eduxadmin/.local/share/eduxfac/profitability_deploy_v2_20261013/ROLLBACK_RENTABILIDAD_V2.py",
+  "rollback_sha256": "dae131cf2b803ce5ed5aa3f85edad79705693cffcd4d7720f37d42c80a1af09f",
+  "rollback_preflight_verified_readonly": true,
+  "rollback_executed": false,
+  "old_v1_backups_preserved": true,
+  "http_evidence_file": "DESPLIEGUE_RENTABILIDAD_V2_EVENTOS.jsonl",
+  "transient_startup_observations": {
+    "connection_refused": 2,
+    "followed_by_stable_200": true
+  },
+  "restrictions_respected": [
+    "NO_POSTGRESQL_CHANGES",
+    "NO_NGINX_CHANGES",
+    "NO_CERTIFICATE_CHANGES",
+    "NO_PANEL_CHANGES",
+    "NO_OLD_EDUXFAC_DB_CHANGES",
+    "NO_USER_CHANGES",
+    "NO_SUBSCRIPTION_CHANGES",
+    "NO_REAL_SALES",
+    "NO_ZIP"
+  ],
+  "blockers": [],
+  "pending": "USER_MANUAL_NEGATIVE_APRONAX_TEST"
+}

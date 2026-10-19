@@ -1,0 +1,10 @@
+{
+  "hashes_before_and_after": {
+    "server/src/inventory-count.js": "d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656",
+    "server/src/app.js": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab"
+  },
+  "functional_code_changed": false,
+  "vps_connected": false,
+  "backup_created": false,
+  "deployed": false
+}

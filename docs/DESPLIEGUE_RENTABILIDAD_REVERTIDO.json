@@ -1,0 +1,260 @@
+{
+  "date": "2026-10-13",
+  "result": "NO_GO_NEW_RULE_NOT_ACTIVE",
+  "deployment_attempted": true,
+  "rolled_back": true,
+  "application_files_active": false,
+  "candidate_sha256": {
+    "server/src/app.js": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7",
+    "server/src/sale-profitability.js": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220",
+    "public/index.html": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e",
+    "public/sale-profitability.js": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+  },
+  "precheck": {
+    "read_only": true,
+    "files": {
+      "server/src/app.js": {
+        "exists": true,
+        "sha256": "58d31e00d2414804e636429a38fdd1662b1888d5dfe7c26f533d798c76e6af0d"
+      },
+      "server/src/sale-profitability.js": {
+        "exists": false,
+        "sha256": null
+      },
+      "public/index.html": {
+        "exists": true,
+        "sha256": "981647b74c4c971a498f51dae74e089a2ce8b2e836f9083555ae81ec9b983430"
+      },
+      "public/sale-profitability.js": {
+        "exists": false,
+        "sha256": null
+      }
+    },
+    "processes": [
+      {
+        "name": "eduxfac",
+        "id": 0,
+        "pid": 988,
+        "status": "online",
+        "restarts": 0,
+        "cwd": "/var/www/eduxfac",
+        "script": "/usr/bin/npm",
+        "mode": null,
+        "port": null
+      },
+      {
+        "name": "EDUXFAC-PANEL-PILOTO",
+        "id": 3,
+        "pid": 269525,
+        "status": "online",
+        "restarts": 4,
+        "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel",
+        "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel/server/start.mjs",
+        "mode": "PILOTO",
+        "port": "4310"
+      },
+      {
+        "name": "EDUXFAC-WEB-PILOTO",
+        "id": 4,
+        "pid": 281573,
+        "status": "online",
+        "restarts": 2,
+        "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+        "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+        "mode": "PILOTO",
+        "port": "3001"
+      }
+    ],
+    "https": {
+      "app.eduxfac.com": 200,
+      "admin.eduxfac.com": 200,
+      "eduxfac.com": 200
+    },
+    "health": {
+      "status": 200,
+      "ok": true,
+      "data_mode": "PILOTO"
+    }
+  },
+  "rollback": {
+    "read_only": true,
+    "failure": {
+      "error_code": "HTTPError",
+      "rollback_ok": true
+    },
+    "restored": {
+      "server/src/app.js": {
+        "exists": true,
+        "sha256": "58d31e00d2414804e636429a38fdd1662b1888d5dfe7c26f533d798c76e6af0d",
+        "matches_before": true
+      },
+      "server/src/sale-profitability.js": {
+        "exists": false,
+        "sha256": null,
+        "matches_before": true
+      },
+      "public/index.html": {
+        "exists": true,
+        "sha256": "981647b74c4c971a498f51dae74e089a2ce8b2e836f9083555ae81ec9b983430",
+        "matches_before": true
+      },
+      "public/sale-profitability.js": {
+        "exists": false,
+        "sha256": null,
+        "matches_before": true
+      }
+    },
+    "backup": {
+      "server/src/app.js": {
+        "saved": true,
+        "verified": true,
+        "existed_before": true
+      },
+      "server/src/sale-profitability.js": {
+        "saved": false,
+        "verified": true,
+        "existed_before": false
+      },
+      "public/index.html": {
+        "saved": true,
+        "verified": true,
+        "existed_before": true
+      },
+      "public/sale-profitability.js": {
+        "saved": false,
+        "verified": true,
+        "existed_before": false
+      }
+    },
+    "processes": [
+      {
+        "name": "eduxfac",
+        "id": 0,
+        "pid": 988,
+        "status": "online",
+        "restarts": 0
+      },
+      {
+        "name": "EDUXFAC-PANEL-PILOTO",
+        "id": 3,
+        "pid": 269525,
+        "status": "online",
+        "restarts": 4
+      },
+      {
+        "name": "EDUXFAC-WEB-PILOTO",
+        "id": 4,
+        "pid": 297349,
+        "status": "online",
+        "restarts": 4
+      }
+    ],
+    "https": {
+      "app.eduxfac.com": 200,
+      "admin.eduxfac.com": 200,
+      "eduxfac.com": 200
+    },
+    "health": {
+      "status": 200,
+      "ok": true,
+      "data_mode": "PILOTO"
+    }
+  },
+  "source_inventory": {
+    "read_only": true,
+    "source_files_restored": 61,
+    "changed_files_after_rollback": [],
+    "backup_directory": "/home/eduxadmin/.local/share/eduxfac/profitability_deploy_20261013_controlado/backup"
+  },
+  "logs": {
+    "read_only": true,
+    "logs": [
+      {
+        "type": "pm_out_log_path",
+        "path": "/home/eduxadmin/.local/share/eduxfac/phase12b_20261013_0625/web-piloto-out-4.log",
+        "bytes": 72,
+        "ready_events": 4,
+        "known_error_codes": {
+          "RLS_GLOBAL_PENDIENTE": 0,
+          "RLS_ROLE_PROFILE_MISMATCH": 0,
+          "DATABASE_DATA_MODE_MISMATCH": 0,
+          "WEB_PORT_BUSY": 0,
+          "WEB_LISTEN_ERROR": 0,
+          "SyntaxError": 0,
+          "TypeError": 0,
+          "ERR_MODULE_NOT_FOUND": 0,
+          "WEB_DB_POOL_ERROR": 0
+        },
+        "modified_utc_seconds": 1791931439.1370378
+      },
+      {
+        "type": "pm_err_log_path",
+        "path": "/home/eduxadmin/.local/share/eduxfac/phase12b_20261013_0625/web-piloto-error-4.log",
+        "bytes": 0,
+        "ready_events": 0,
+        "known_error_codes": {
+          "RLS_GLOBAL_PENDIENTE": 0,
+          "RLS_ROLE_PROFILE_MISMATCH": 0,
+          "DATABASE_DATA_MODE_MISMATCH": 0,
+          "WEB_PORT_BUSY": 0,
+          "WEB_LISTEN_ERROR": 0,
+          "SyntaxError": 0,
+          "TypeError": 0,
+          "ERR_MODULE_NOT_FOUND": 0,
+          "WEB_DB_POOL_ERROR": 0
+        },
+        "modified_utc_seconds": 1791894100.625319
+      }
+    ],
+    "nginx_access_readable": false
+  },
+  "pilot_before": {
+    "read_only": true,
+    "pilot_login_state": [
+      {
+        "razon_social": "BOTICA PILOTO EDUXFAC",
+        "ruc": "10460023039",
+        "empresa_codigo": "PILOTO001",
+        "empresa_activa": true,
+        "usuario": "edwinpiloto",
+        "usuario_activo": true,
+        "debe_cambiar_password": false,
+        "hash_format_valid": true,
+        "estado": "ACTIVO",
+        "auth_version": "3",
+        "estado_suscripcion": "ACTIVA",
+        "version_suscripcion": "2",
+        "fecha_inicio": "2026-10-13T05:00:00.000Z",
+        "fecha_vencimiento": "2026-11-13T05:00:00.000Z",
+        "vigente": true
+      }
+    ]
+  },
+  "pilot_after": {
+    "read_only": true,
+    "pilot_login_state": [
+      {
+        "razon_social": "BOTICA PILOTO EDUXFAC",
+        "ruc": "10460023039",
+        "empresa_codigo": "PILOTO001",
+        "empresa_activa": true,
+        "usuario": "edwinpiloto",
+        "usuario_activo": true,
+        "debe_cambiar_password": false,
+        "hash_format_valid": true,
+        "estado": "ACTIVO",
+        "auth_version": "3",
+        "estado_suscripcion": "ACTIVA",
+        "version_suscripcion": "2",
+        "fecha_inicio": "2026-10-13T05:00:00.000Z",
+        "fecha_vencimiento": "2026-11-13T05:00:00.000Z",
+        "vigente": true
+      }
+    ]
+  },
+  "pilot_state_unchanged": true,
+  "post_deploy_business_tests": "NOT_RUN_STOP_ON_HTTP_ERROR",
+  "prior_native_results": "338_PASS_PRE_DEPLOY_ONLY",
+  "repeated_deployment": false,
+  "sudo_used": false
+}

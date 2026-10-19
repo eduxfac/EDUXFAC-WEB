@@ -1,0 +1,17 @@
+import {createRequire} from 'node:module';
+import {pathToFileURL} from 'node:url';
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+const ROOT='/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web';
+const WORK=new URL('.',import.meta.url);
+const require=createRequire(ROOT+'/package.json'),ExcelJS=require('exceljs');
+const mod=await import(pathToFileURL(ROOT+'/server/src/initial-inventory.js'));
+const expected=['Código interno','Código de barras','Producto','Principio activo','Concentración','Presentación','Unidad de medida','Categoría','Laboratorio','Stock del lote','Stock mínimo','Precio de compra','Precio de venta','Lote','Vencimiento'];
+const buffer=await mod.initialTemplate(),wb=new ExcelJS.Workbook();await wb.xlsx.load(buffer);
+const ws=wb.getWorksheet('Inventario inicial'),info=wb.getWorksheet('Información');
+if(JSON.stringify(ws.getRow(1).values.slice(1))!==JSON.stringify(expected)||ws.columnCount!==15||!info)throw Error('TEMPLATE_INVALID');
+const a=info.getRow(13),b=info.getRow(14);
+if(a.getCell(1).value!=='P000003'||b.getCell(1).value!=='P000003'||a.getCell(10).value+b.getCell(10).value!==10||a.getCell(14).value!=='EDED'||b.getCell(14).value!=='DEDEEE')throw Error('TEMPLATE_EXAMPLE_INVALID');
+fs.writeFileSync(new URL('TEMPLATE_FROM_DEPLOYED.xlsx',WORK),buffer,{mode:0o600});
+const result={source:'Actual deployed module initialTemplate; no database connection, no production login, no real imports',columns:expected,column_count:15,stock_maximo_column:false,valor_stock_column:false,information_sheet:true,two_lot_same_product_example:true,sha256:crypto.createHash('sha256').update(buffer).digest('hex'),bytes:buffer.length};
+fs.writeFileSync(new URL('TEMPLATE_VERIFIED.json',WORK),JSON.stringify(result,null,2),{mode:0o600});console.log(JSON.stringify(result));

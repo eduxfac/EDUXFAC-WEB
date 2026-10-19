@@ -1,0 +1,158 @@
+/* Desktop responsive: shell and Ventas only. Large screens keep existing rules. */
+#sales #saleResultsWrap {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#sales .sale-products-table {
+  width: 100%;
+  min-width: 0 !important;
+  table-layout: fixed;
+}
+#sales .sale-products-table .sale-col-code { width: 8%; }
+#sales .sale-products-table .sale-col-product { width: 35%; }
+#sales .sale-products-table .sale-col-presentation { width: 13%; }
+#sales .sale-products-table .sale-col-lab { width: 13%; }
+#sales .sale-products-table .sale-col-cost { width: 7.5%; }
+#sales .sale-products-table .sale-col-price { width: 7.5%; }
+#sales .sale-products-table .sale-col-margin { width: 9%; }
+#sales .sale-products-table .sale-col-stock { width: 7%; }
+#sales .sale-products-table th,
+#sales .sale-products-table td {
+  min-width: 0;
+  padding: 9px 5px;
+  overflow: hidden;
+  line-height: 1.25;
+  font-size: clamp(11px, .65vw, 13px);
+}
+#sales .sale-products-table th {
+  white-space: normal;
+  overflow-wrap: normal;
+}
+#sales .sale-product-name b {
+  display: -webkit-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+#sales .sale-product-sub {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+#sales .sale-compact-text {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#sales .sale-products-table .price-stack b {
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+  font-size: clamp(10px, .58vw, 11px);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.35px;
+}
+#sales .sale-products-table .margin-badge,
+#sales .sale-products-table .stock-badge {
+  max-width: 100%;
+  min-width: 0;
+  padding-inline: 5px;
+  white-space: nowrap;
+}
+@media screen and (min-width: 1600px) {
+  /* Match the existing 18px main padding; remove a residual 2px overflow. */
+  #app .bw-topbar { margin-inline: -18px; }
+}
+@media screen and (max-width: 1599px) {
+  .app { grid-template-columns: 210px minmax(0, 1fr); }
+  #app > .sidebar { min-width: 0; padding-inline: 10px; }
+  #app > .sidebar .brand { margin-inline: -10px; padding-inline: 12px; gap: 6px; }
+  .sidebar .brand::before { margin-right: 0; }
+  .sidebar .brand > span { min-width: 0; }
+  .sidebar .brand small { overflow-wrap: anywhere; }
+  #app > .sidebar .nav button { padding: 10px; }
+  #app > .sidebar .sidebar-foot { padding: 10px; overflow-wrap: anywhere; }
+  .main { padding-inline: 12px; }
+  #app .bw-topbar {
+    height: auto; min-height: 68px; margin: 0 -12px 12px;
+    padding-inline: 12px; flex-wrap: wrap;
+  }
+  .bw-topbar > *, .bw-userbar > * { min-width: 0; max-width: 100%; }
+  .bw-userbar { min-width: 0; flex-wrap: wrap; }
+  .bw-branchbox, .bw-userbox { height: auto; min-height: 46px; }
+  .bw-branchbox select { min-width: 0; width: 100%; }
+  .bw-userbox { overflow-wrap: anywhere; }
+
+  #sales .sale-workspace { grid-template-columns: minmax(0, 1fr); }
+  #sales .sale-shell, #sales .sale-workspace > *,
+  #sales .sale-left > *, #sales .sale-right > *,
+  #sales .cart-summary > *, #sales .checkout-line > *,
+  #sales .sale-client-line > * { min-width: 0; }
+  #sales .sale-heading, #sales .sale-doc-title,
+  #sales .sale-doc-title > div, #sales .sale-cart-head,
+  #sales .result-foot { flex-wrap: wrap; }
+  #sales .sale-heading { padding: 12px; }
+  #sales .sale-actions { display: flex; align-items: center; }
+  #sales .sale-cart-head { height: auto; min-height: 50px; gap: 10px; }
+  #sales .sale-tabs { flex-wrap: wrap; }
+  #sales .sale-tab { padding-inline: 12px; }
+  #sales .sale-doc-buttons { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  #sales .sale-doc-btn { padding: 10px; overflow-wrap: anywhere; }
+  #sales .input, #sales .sale-note { min-width: 0; max-width: 100%; }
+  #sales .sale-note { width: 100%; }
+  #sales #saleResultsWrap { min-width: 0; max-width: 100%; }
+  #sales .sale-products-table th,
+  #sales .sale-products-table td { font-size: 11px; padding-inline: 4px; }
+  #sales .cart-product-name { overflow-wrap: anywhere; }
+  #sales .cart-row, #sales .cart-table-head {
+    grid-template-columns: minmax(110px, 1fr) 80px 115px minmax(85px, auto) 34px;
+    padding-inline: 10px;
+  }
+  #sales .cart-line-total { overflow-wrap: anywhere; }
+  #sales .cart-summary { grid-template-columns: minmax(0, 1fr); }
+  #sales .sum-row { gap: 12px; flex-wrap: wrap; }
+  #sales .payment-buttons { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #sales .payment-btn { min-height: 76px; }
+  #sales .checkout-line { grid-template-columns: minmax(0, 1fr); }
+  #sales .checkout-big { height: auto; min-height: 58px; padding: 12px; }
+  #sales .recent-sales table { table-layout: fixed; }
+  #sales .recent-sales th, #sales .recent-sales td { overflow-wrap: anywhere; }
+  #sales .recent-sales th:first-child { width: 18%; }
+  #sales .recent-sales th:nth-child(3) { width: 22%; }
+  #sales .recent-sales th:last-child { width: 24%; }
+  #sales .recent-sales > div:last-child { flex-wrap: wrap; }
+  #sales .recent-detail-btn { min-height: 34px; font-size: 12px; }
+  #sales .sale-detail-head { flex-wrap: wrap; }
+  #sales .sale-detail-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #sales .sale-detail-meta > div { overflow-wrap: anywhere; }
+}
+
+/* Reinforced compact: reorganize the workspace instead of shrinking controls. */
+@media screen and (max-width: 1365px) {
+  .app { grid-template-columns: 190px minmax(0, 1fr); }
+  .sidebar .brand { flex-wrap: wrap; }
+  .bw-userbox { display: flex; }
+  #sales .sale-workspace { grid-template-columns: minmax(0, 1fr); }
+  #sales .cart-summary { grid-template-columns: minmax(0, 1fr) minmax(220px, .6fr); }
+  #sales .payment-buttons { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  #sales .checkout-line { grid-template-columns: minmax(0, 1fr) minmax(280px, 1fr); }
+}
+
+/* Graceful fallback for smaller windows and desktop zoom. */
+@media screen and (max-width: 1023px) {
+  #sales .sale-doc-buttons { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #sales .payment-buttons { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #sales .cart-summary, #sales .checkout-line { grid-template-columns: minmax(0, 1fr); }
+}
+@media screen and (max-width: 900px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .sidebar .nav { flex-wrap: wrap; }
+  .sidebar .nav button { width: auto; min-width: 0; }
+}
+@media screen and (max-width: 600px) {
+  #sales .sale-doc-buttons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #sales .cart-row, #sales .cart-table-head {
+    grid-template-columns: minmax(80px, 1fr) 115px minmax(75px, 1fr) 34px;
+  }
+  #sales .cart-product-name, #sales .cart-table-head > :first-child { grid-column: 1 / -1; }
+}

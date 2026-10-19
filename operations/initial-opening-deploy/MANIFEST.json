@@ -1,0 +1,8 @@
+{
+  "before": {
+    "server/src/initial-inventory.js": "57abcde45bc6b165875e1f8b6ad6c956e87bc4759a4483476f3bfef159b62377"
+  },
+  "after": {
+    "server/src/initial-inventory.js": "6509028c9ab0d4a39a2671d87637fb99b8c6584ed407f6099b3e1c39971f8ccd"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "status": "GO_MANUAL_VALIDATION",
+  "automated_regression": {
+    "TEST_WINDOWS.log": 31,
+    "TEST_LINUX.log": 16,
+    "TEST_POSTGRESQL_RLS.log": 18
+  },
+  "regression_passed": 65,
+  "regression_failed": 0,
+  "regression_skipped": 0,
+  "vps_readonly_checks": 6,
+  "total_checks_passed": 71,
+  "total_failed": 0,
+  "force_rls_tables": 44,
+  "candidate_unchanged": true,
+  "six_files_only": true,
+  "D_VPS_HTTPS_identical": true,
+  "database_all_table_fingerprints_unchanged": true,
+  "stock_prices_costs_histories_unchanged": true,
+  "real_pilot_requirement_count": 0,
+  "real_excel_generation": "Not attempted: no products at/below minimum; exports/print validated with fictitious data",
+  "browser_export_verified": true,
+  "browser_print_invocation_without_console_error": true,
+  "physical_print_not_sent": true,
+  "backup": "/home/eduxadmin/.local/share/eduxfac/purchase_requirement_deploy_20261014_214725/backup",
+  "rollback": "python3 /home/eduxadmin/.local/share/eduxfac/purchase_requirement_deploy_20261014_214725/DEPLOY_REQUIREMENT.py --rollback",
+  "pm2": {
+    "id": 4,
+    "pid": 359274,
+    "status": "online",
+    "restarts": 18,
+    "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+    "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+    "mode": "PILOTO",
+    "port": "3001",
+    "worker": "false",
+    "mutation": "no"
+  },
+  "readiness": {
+    "loopback": {
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempts": 5,
+      "pid": 359274,
+      "restarts": 18,
+      "stable_samples": 3
+    },
+    "https": {
+      "url": "https://app.eduxfac.com/api/health",
+      "attempts": 3,
+      "pid": 359274,
+      "restarts": 18,
+      "stable_samples": 3
+    }
+  },
+  "restart_readiness_seconds": 10.169,
+  "performance_pg_5000_ms": 194.8,
+  "hashes": {
+    "before": {
+      "server/src/app.js": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab",
+      "server/src/purchase-requirement.js": null,
+      "server/src/access-policy.js": "68f5665d5aefbca2985d460694a87cab5bae5c89115c6c4fb18ee7a423773f4b",
+      "public/index.html": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32",
+      "public/purchase-requirement.js": null,
+      "public/desktop-responsive.css": "5d1678f53d5a2e375aa29c2532d7f34d1f78f54817bdf5409bc2aa366ae94eb6"
+    },
+    "after": {
+      "server/src/app.js": "dfb160b96cce099f89283c221a3671affd3357e87f9b528b3bd2bb100c071576",
+      "server/src/purchase-requirement.js": "63490a4332454ef4e6807727b46017cac6210238bb4ce970ba1b2e5a551e5347",
+      "server/src/access-policy.js": "5e490184f5569968ad9c415b7ed27a426d8a15e7fd9ef543cae0a71056f09054",
+      "public/index.html": "06ad9349541563ef990fcf5c8a7ecf63c5db05b28b2688bfe25aaf8b63f524c1",
+      "public/purchase-requirement.js": "55a68638b2ec8f0d6a47400414b8c51ec122026d1ea26f0628c67c962eb1d070",
+      "public/desktop-responsive.css": "f30b44ebf7936886ec7cb75142149ab4370669d287d65fcf06aa7fef00f4584c"
+    }
+  }
+}

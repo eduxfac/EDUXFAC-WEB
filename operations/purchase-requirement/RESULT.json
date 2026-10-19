@@ -1,0 +1,66 @@
+{
+  "status": "GO_NOT_DEPLOYED",
+  "changed_functional_files": {
+    "server/src/app.js": {
+      "before": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab",
+      "after": "dfb160b96cce099f89283c221a3671affd3357e87f9b528b3bd2bb100c071576"
+    },
+    "server/src/access-policy.js": {
+      "before": "68f5665d5aefbca2985d460694a87cab5bae5c89115c6c4fb18ee7a423773f4b",
+      "after": "5e490184f5569968ad9c415b7ed27a426d8a15e7fd9ef543cae0a71056f09054"
+    },
+    "public/index.html": {
+      "before": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32",
+      "after": "06ad9349541563ef990fcf5c8a7ecf63c5db05b28b2688bfe25aaf8b63f524c1"
+    },
+    "public/desktop-responsive.css": {
+      "before": "5d1678f53d5a2e375aa29c2532d7f34d1f78f54817bdf5409bc2aa366ae94eb6",
+      "after": "f30b44ebf7936886ec7cb75142149ab4370669d287d65fcf06aa7fef00f4584c"
+    }
+  },
+  "added_files_sha256": {
+    "server/src/purchase-requirement.js": "63490a4332454ef4e6807727b46017cac6210238bb4ce970ba1b2e5a551e5347",
+    "public/purchase-requirement.js": "55a68638b2ec8f0d6a47400414b8c51ec122026d1ea26f0628c67c962eb1d070",
+    "tests/purchase-requirement.test.js": "ff3289b8d1084264ec5a023900c47da536e76921a336348c4e2b5229879afafa",
+    "tests/purchase-requirement-native.test.js": "e8f4647bf2a4b417b7e31bae7a521014188381d02e5bff3b4adb143bb27d284a",
+    "tests/purchase-requirement-ui.test.js": "d96a01a9f665c649236d197629c6e5506dd4f01fa4c289ff99b9b8c2ce76888d",
+    "tests/helpers/purchase-requirement-seed.js": "dbeea11b105e39074aaad2662165ea94bae850e968a7bb866d0cdb3daa557c94",
+    "tests/helpers/purchase-requirement-checks.js": "56f63ae66fe3d42d72d43655e377b00eede42db51a2f1a66c6a9d3284c56e56e"
+  },
+  "tests": {
+    "Windows_regression": 52,
+    "Linux_functional": 16,
+    "PostgreSQL_native_RLS": 18
+  },
+  "passed": 86,
+  "failed": 0,
+  "skipped": 0,
+  "UI_final_test_cases": 9,
+  "UI_tests_already_in_windows_total": true,
+  "rule": "stock_actual <= producto_sucursal.stock_minimo; includes stock0/min0",
+  "supplier_rule": "Supplier from latest dated real purchase having a known supplier in same company/branch; not a frequency ranking.",
+  "cost_rule": "Last dated purchase detail cost in same company/branch, ordered fecha/created_at/purchaseUUID/detailUUID, no lot cost or cross-branch fallback.",
+  "manual_quantity_only": true,
+  "no_purchase_order_created": true,
+  "module_queries_read_only": true,
+  "RLS_FORCE_tables": 44,
+  "schema_migration": false,
+  "performance_5000": {
+    "Windows_PGlite_http_ms": 114.0,
+    "Linux_PostgreSQL_http_ms": 195.0
+  },
+  "refresh": "module open + focus + visible every30s + server revalidation for generation/export/print",
+  "vps_connected": false,
+  "deployed": false,
+  "real_data_changed": false,
+  "UI_proof": {
+    "viewport_width": 1265,
+    "global_scroll_width": 1265,
+    "list_rows": 7,
+    "requested_rows": 1,
+    "manual_quantity": 12,
+    "export_via_browser": true,
+    "secondary_branch_no_equal_product": true,
+    "screenshot": "REQUERIMIENTO_FICTICIO.jpg"
+  }
+}

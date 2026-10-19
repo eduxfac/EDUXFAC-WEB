@@ -1,0 +1,31 @@
+{
+  "dry_run": true,
+  "plan_sha256": "24183551964bfa9b334853ce4dfd98254458d38b85d32fbf361b24ae1457f6c0",
+  "changes": [
+    {
+      "lote_id": "16a942c2-9776-4a80-8251-1187421adb6f",
+      "lote": "EDU2",
+      "antes": "60",
+      "despues": "0",
+      "stock": "3.000",
+      "costo": "15"
+    },
+    {
+      "lote_id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+      "lote": "EDU3",
+      "antes": "75",
+      "despues": "0",
+      "stock": "5.000",
+      "costo": "15"
+    },
+    {
+      "lote_id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+      "lote": "EDU1",
+      "antes": "45",
+      "despues": "0",
+      "stock": "3.000",
+      "costo": "15"
+    }
+  ],
+  "stock_total": 11
+}

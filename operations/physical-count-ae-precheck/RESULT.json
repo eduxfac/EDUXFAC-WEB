@@ -1,0 +1,98 @@
+{
+  "status": "BLOCKER_MANDATORY_AE_RULE_FAILED",
+  "expected_http": 201,
+  "actual_http": 400,
+  "error": "El stock cambió desde la exportación. Descargue un nuevo conteo y revise las cantidades.",
+  "edited_informative_columns": {
+    "B": "BARRA_MANIPULADA",
+    "C": "NOMBRE_MANIPULADO",
+    "D": 1009,
+    "F": 777,
+    "G": 888,
+    "H": 999,
+    "I": 111,
+    "J": 222,
+    "K": 333,
+    "L": 444
+  },
+  "column_A": "P-A",
+  "column_E": 8,
+  "stock_before": 10,
+  "stock_after": 10,
+  "all_compared_tables_unchanged": true,
+  "per_table": {
+    "productos": {
+      "rows_before": 2,
+      "rows_after": 2,
+      "unchanged": true,
+      "sha256_before": "f2c4b644ee31693cbe0c647fa0282957d5edd5ab6834764bdeb2aee4a612e2c5",
+      "sha256_after": "f2c4b644ee31693cbe0c647fa0282957d5edd5ab6834764bdeb2aee4a612e2c5"
+    },
+    "producto_sucursal": {
+      "rows_before": 3,
+      "rows_after": 3,
+      "unchanged": true,
+      "sha256_before": "dbb2aef9001f78515698180d6b9ebd8d51e846a8a65bfc40a84b9e3066c49f22",
+      "sha256_after": "dbb2aef9001f78515698180d6b9ebd8d51e846a8a65bfc40a84b9e3066c49f22"
+    },
+    "lotes": {
+      "rows_before": 2,
+      "rows_after": 2,
+      "unchanged": true,
+      "sha256_before": "f8d152814d391709c2009ca9458a94a108811f3ac66fd6c60e474d785333edf3",
+      "sha256_after": "f8d152814d391709c2009ca9458a94a108811f3ac66fd6c60e474d785333edf3"
+    },
+    "precios_producto": {
+      "rows_before": 0,
+      "rows_after": 0,
+      "unchanged": true,
+      "sha256_before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256_after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "compras": {
+      "rows_before": 0,
+      "rows_after": 0,
+      "unchanged": true,
+      "sha256_before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256_after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "compra_detalles": {
+      "rows_before": 0,
+      "rows_after": 0,
+      "unchanged": true,
+      "sha256_before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256_after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "ventas": {
+      "rows_before": 0,
+      "rows_after": 0,
+      "unchanged": true,
+      "sha256_before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256_after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "venta_detalles": {
+      "rows_before": 0,
+      "rows_after": 0,
+      "unchanged": true,
+      "sha256_before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256_after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "movimientos_inventario": {
+      "rows_before": 0,
+      "rows_after": 0,
+      "unchanged": true,
+      "sha256_before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256_after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "ajustes_inventario": {
+      "rows_before": 0,
+      "rows_after": 0,
+      "unchanged": true,
+      "sha256_before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256_after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "vps_connected": false,
+  "deployed": false,
+  "only_fictitious_in_memory_database": true
+}

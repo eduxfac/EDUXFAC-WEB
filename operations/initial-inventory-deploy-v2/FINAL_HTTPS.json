@@ -1,0 +1,17 @@
+[
+  {
+    "url": "https://app.eduxfac.com/api/health",
+    "status": 200,
+    "ok": true,
+    "database": true,
+    "data_mode": "PILOTO"
+  },
+  {
+    "url": "https://app.eduxfac.com/",
+    "status": 200
+  },
+  {
+    "url": "https://admin.eduxfac.com/",
+    "status": 200
+  }
+]

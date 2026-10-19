@@ -1,0 +1,7 @@
+{
+  "work": "/home/eduxadmin/.local/share/eduxfac/initial_inventory_timeout_20261014_201400",
+  "script_sha256": "f610967ceab36deba3162e39d3e799e5b51bcecfb92cc1e58dbb991a9d5e6cea",
+  "before": "292a0bc8365d3d2e1fbdf9e03e1f84f83fee3945420bcd4b255baa6bf917f9db",
+  "after": "8c59627f6f46d3ed6d799eacbd4976b635823dbbde3a4cb29078ba21e4cb51d2",
+  "fragment": "    location ^~ /api/import/inventory/ {\n        proxy_pass http://127.0.0.1:3001;\n        proxy_http_version 1.1;\n        proxy_set_header Host $host;\n        proxy_set_header X-Real-IP $remote_addr;\n        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n        proxy_set_header X-Forwarded-Proto $scheme;\n        proxy_read_timeout 90s;\n    }\n"
+}

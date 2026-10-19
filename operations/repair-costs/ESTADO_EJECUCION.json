@@ -1,0 +1,23 @@
+{
+  "status": "APPLIED_VERIFIED_DO_NOT_REPEAT",
+  "reference": "2a34059b-c614-4cbe-9e77-af7e20d3583a",
+  "utc": "2026-10-14T01:21:34.827Z",
+  "result": "GO_MANUAL_VALIDATION",
+  "stock_total": "120",
+  "value_apronax": "188.40",
+  "inventory_total": "219.60",
+  "backup": {
+    "utc": "2026-10-14T01:20:33.363650+00:00",
+    "path": "/home/eduxadmin/.local/share/eduxfac/apronax_repair_20261014_011938/backup/eduxfac_web_piloto_before_apronax.dump",
+    "sha256": "753d4c7a3c4a7843be53143f54d7456a42d2b6db9d5bc38e4712bd762c41cd72",
+    "bytes": 258218,
+    "database": "eduxfac_web_piloto",
+    "archive_parse_valid": true,
+    "rows_verified": true,
+    "tables_verified": 48,
+    "affected_scope_snapshot": "/home/eduxadmin/.local/share/eduxfac/apronax_repair_20261014_011938/AFFECTED_BEFORE.json",
+    "affected_scope_sha256": "81ea45c40d1b833dab1a1b87d59dd43a08c7e05665d6f78ca3653213e87f9497",
+    "previous_backups_preserved": true
+  },
+  "report": "D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\docs\\APRONAX_REPARACION_RESULTADO.md"
+}

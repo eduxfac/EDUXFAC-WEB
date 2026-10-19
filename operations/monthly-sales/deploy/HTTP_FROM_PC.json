@@ -1,0 +1,36 @@
+[
+  {
+    "url": "https://app.eduxfac.com/api/health",
+    "status": 200,
+    "sha256": "e8d6739d4b386cde72974024535d5cb38c04a1558f090b41a41225387e9387cb",
+    "body": {
+      "ok": true,
+      "database": true,
+      "now": "2026-10-15T13:23:28.167Z",
+      "data_mode": "PILOTO"
+    }
+  },
+  {
+    "url": "https://app.eduxfac.com/",
+    "status": 200,
+    "sha256": "c2c01c26cd4cd1298e94223f87a64d9901659ac3516e47927aa57398ffb68e06",
+    "matches_candidate": true
+  },
+  {
+    "url": "https://app.eduxfac.com/monthly-sales.js",
+    "status": 200,
+    "sha256": "158173086da9c1e5b3b0ef0471a7cf68f2c8da1be5e1acbd33fe28ac7eb44a77",
+    "matches_candidate": true
+  },
+  {
+    "url": "https://app.eduxfac.com/desktop-responsive.css",
+    "status": 200,
+    "sha256": "a3e525f414f396b14e7a98edf995bbd631b496acd0ec4a23604625d64e9bcf25",
+    "matches_candidate": true
+  },
+  {
+    "url": "https://admin.eduxfac.com/",
+    "status": 200,
+    "sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df"
+  }
+]

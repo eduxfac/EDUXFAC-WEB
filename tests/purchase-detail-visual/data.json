@@ -1,0 +1,43 @@
+{
+  "tipo": "purchases",
+  "documento": {
+    "id": "DEMO-123",
+    "serie": "F001",
+    "numero": "000123",
+    "tipo_documento": "FACTURA",
+    "fecha_registro": "2026-10-14T16:30:00Z",
+    "fecha": "2026-10-14",
+    "sucursal": "PRINCIPAL ficticia",
+    "proveedor": "Distribuidora Farmaceutica Ficticia de Pruebas",
+    "proveedor_ruc": "20999999999",
+    "usuario_registro": "Administrador ficticio",
+    "moneda": "PEN",
+    "observacion": "Compra de prueba visual. Documento ficticio; todos los datos e importes se conservan tal como se recibieron.",
+    "descuento": 8.4,
+    "total": 208.8
+  },
+  "productos": [
+    {
+      "codigo_referencia": "P000001",
+      "descripcion_referencia": "APRONAX 550MG TABLETAS RECUBIERTAS - PRODUCTO FICTICIO",
+      "presentacion": "Caja de 120 unidades",
+      "lote": "DEMO-DFDF",
+      "fecha_vencimiento": "2028-12-31",
+      "cantidad": 120,
+      "precio_unitario": 1.57,
+      "descuento": 2.4,
+      "subtotal": 186
+    },
+    {
+      "codigo_referencia": "P000002",
+      "descripcion_referencia": "PARACETAMOL 500MG",
+      "unidad_referencia": "UNIDAD",
+      "lote": "DEMO-PARA",
+      "fecha_vencimiento": "2029-06-30",
+      "cantidad": 390,
+      "precio_unitario": 0.08,
+      "descuento": 0,
+      "subtotal": 31.2
+    }
+  ]
+}

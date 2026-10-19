@@ -1,0 +1,12 @@
+window.eduxfacChangeInitialPassword=token=>new Promise((resolve,reject)=>{
+ const overlay=document.createElement('div');overlay.style.cssText='position:fixed;inset:0;background:#142235aa;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto';
+ overlay.innerHTML='<form class="card" style="max-width:480px;width:100%;padding:24px" role="dialog" aria-modal="true" aria-labelledby="initial-password-title"><h2 id="initial-password-title">Cambia tu contraseña temporal</h2><p>Antes de usar EDUXFAC debes definir tu propia contraseña.</p><label>Contraseña temporal<input class="input" name="password_temporal" type="password" autocomplete="current-password" required maxlength="72"></label><label>Nueva contraseña<input class="input" name="password_nuevo" type="password" autocomplete="new-password" required minlength="12" maxlength="72"></label><label>Confirma la nueva contraseña<input class="input" name="confirm" type="password" autocomplete="new-password" required minlength="12" maxlength="72"></label><p class="muted">Al menos 12 caracteres. No se conservará la contraseña temporal.</p><p class="error" role="alert"></p><div style="display:flex;gap:12px"><button class="btn primary" type="submit">Cambiar y entrar</button><button class="btn" type="button">Cancelar</button></div></form>';
+ const form=overlay.querySelector('form'),inputs=[...form.querySelectorAll('input')],error=overlay.querySelector('[role="alert"]');
+ const clear=()=>inputs.forEach(x=>x.value='');
+ form.onsubmit=async event=>{
+  event.preventDefault();error.textContent='';if(form.elements.password_nuevo.value!==form.elements.confirm.value){error.textContent='Las contraseñas nuevas no coinciden.';return;}
+  const button=form.querySelector('[type="submit"]');button.disabled=true;
+  try{const response=await fetch('/api/auth/password/change',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({password_temporal:form.elements.password_temporal.value,password_nuevo:form.elements.password_nuevo.value})});const data=await response.json();if(!response.ok)throw Error(data.error||'No se pudo cambiar la contraseña.');clear();overlay.remove();token=undefined;resolve(data);}catch(e){error.textContent=e.message;}finally{button.disabled=false;}
+ };
+ form.querySelector('[type="button"]').onclick=()=>{clear();overlay.remove();token=undefined;reject(Error('Cambio inicial cancelado.'));};document.body.append(overlay);inputs[0].focus();
+});

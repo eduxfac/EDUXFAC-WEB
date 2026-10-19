@@ -1,0 +1,19 @@
+{
+  "prepared_only": true,
+  "never_executed": true,
+  "before": {
+    "server/src/app.js": "58d31e00d2414804e636429a38fdd1662b1888d5dfe7c26f533d798c76e6af0d",
+    "server/src/sale-profitability.js": null,
+    "public/index.html": "981647b74c4c971a498f51dae74e089a2ce8b2e836f9083555ae81ec9b983430",
+    "public/sale-profitability.js": null
+  },
+  "after": {
+    "server/src/app.js": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7",
+    "server/src/sale-profitability.js": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220",
+    "public/index.html": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e",
+    "public/sale-profitability.js": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+  },
+  "candidate_native_go": true,
+  "version": 2,
+  "remote_work": "/home/eduxadmin/.local/share/eduxfac/profitability_deploy_v2_20261013"
+}

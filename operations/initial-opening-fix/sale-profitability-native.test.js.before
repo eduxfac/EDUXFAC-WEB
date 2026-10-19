@@ -1,0 +1,175 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import vm from 'node:vm';
+import {readFileSync} from 'node:fs';
+import {createFixture,ids} from './helpers/native-profit-fixture.js';
+
+test('Rentabilidad: validación real API/SQL, equivalencias y rollback completo',{skip:process.platform!=='linux'||process.env.EDUXFAC_PROFIT_NATIVE!=='yes'},async t=>{
+ const f=await createFixture();t.after(()=>f.close());let sequence=0;
+ const cash=(await f.request('/api/cash/open',{token:f.tokenA,method:'POST',body:{sucursal_id:ids.sucursalA,monto_apertura:100}})).data;
+ assert.ok(cash.id);
+ const snapshot=async()=>{
+  const out={};for(const table of ['ventas','venta_detalles','venta_pagos','lotes','producto_sucursal','movimientos_inventario','sesiones_caja','movimientos_caja','auditoria','compras','compra_detalles','devoluciones_venta','devolucion_venta_detalles']){
+   const rows=(await f.query('SELECT * FROM '+table)).rows;out[table]=rows.sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)));
+  }return out;
+ };
+ async function product(cost=10,{lots,quantity=100}={}){
+  const id=randomUUID(),name='Producto ficticio margen '+(++sequence);
+  await f.query("INSERT INTO productos(id,empresa_id,codigo_interno,nombre,unidad_medida) VALUES($1,$2,$3,$4,'UNIDAD')",[id,ids.empresaA,'MARGIN-'+sequence,name]);
+  await f.query("INSERT INTO producto_sucursal(producto_id,sucursal_id,origen) VALUES($1,$2,'operacion')",[id,ids.sucursalA]);
+  for(const [index,lot]of (lots||[{cost,quantity}]).entries())await f.query('INSERT INTO lotes(producto_id,sucursal_id,numero_lote,cantidad_inicial,cantidad_disponible,costo_unitario,fecha_vencimiento) VALUES($1,$2,$3,$4,$4,$5,$6)',[id,ids.sucursalA,'MARGIN-'+sequence+'-'+index,lot.quantity,lot.cost,'2030-01-'+String(index+1).padStart(2,'0')]);
+  for(const [kind,factor]of [['UNIDAD',1],['BLISTER',6],['CAJA',12]])await f.query('INSERT INTO precios_producto(producto_id,sucursal_id,tipo,factor_unidades,precio_venta) VALUES($1,$2,$3,$4,$5)',[id,ids.sucursalA,kind,factor,Number(cost)*factor+1]);
+  return {id,name};
+ }
+ const item=(p,price,{factor=1,kind='UNIDAD',quantity=1}={})=>({producto_id:p.id,cantidad:quantity,precio_unitario:price,factor_unidades:factor,tipo_venta:kind});
+ const body=(items,{discount=0,...extra}={})=>({sucursal_id:ids.sucursalA,sesion_caja_id:cash.id,items,descuento:discount,pagos:[{metodo:'Efectivo',monto:Math.round((items.reduce((n,i)=>n+i.cantidad*i.precio_unitario,0)-discount)*100)/100}],...extra});
+ const sell=(items,options={})=>f.request('/api/sales',{token:f.tokenA,method:'POST',body:body(items,options)});
+ async function blocked(items,options={},expectedCode='VENTA_SIN_RENTABILIDAD'){
+  const before=await snapshot(),response=await sell(items,options);
+  assert.equal(response.status,422,JSON.stringify(response.data));assert.equal(response.data.code,expectedCode);
+  assert.ok(response.data.productos.length);assert.deepEqual(await snapshot(),before);
+  return response;
+ }
+ await t.test('utilidad positiva permite venta normal y conserva costo original',async()=>{
+  const p=await product();const response=await sell([item(p,11)]);assert.equal(response.status,201,JSON.stringify(response.data));
+  const detail=(await f.query('SELECT costo_snapshot,cantidad_base FROM venta_detalles WHERE venta_id=$1',[response.data.id])).rows[0];
+  assert.equal(Number(detail.costo_snapshot),10);assert.equal(Number(detail.cantidad_base),1);
+  assert.equal(Number((await f.query('SELECT cantidad_disponible FROM lotes WHERE producto_id=$1',[p.id])).rows[0].cantidad_disponible),99);
+ });
+ await t.test('utilidad cero bloquea y devuelve precio/costo/utilidad con stock y caja intactos',async()=>{
+  const p=await product();const r=await blocked([item(p,10)]);const d=r.data.productos[0];
+  assert.equal(d.producto,p.name);assert.equal(Number(d.precio_venta),10);assert.equal(Number(d.costo),10);assert.equal(Number(d.utilidad_total),0);
+ });
+ await t.test('utilidad negativa bloquea toda la operación',async()=>{
+  const p=await product();const r=await blocked([item(p,9)]);assert.equal(Number(r.data.productos[0].utilidad_total),-1);
+ });
+ await t.test('varios productos: uno con pérdida bloquea incluso si el total tiene margen',async()=>{
+  const good=await product(),bad=await product();const r=await blocked([item(good,30),item(bad,9)]);
+  assert.equal(r.data.productos.length,1);assert.equal(r.data.productos[0].producto_id,bad.id);
+ });
+ await t.test('unidad/blíster/caja usan costo proporcional y bloquean igualdad',async()=>{
+  for(const [kind,factor]of [['UNIDAD',1],['BLISTER',6],['CAJA',12]]){
+   const p=await product(2);const r=await blocked([item(p,2*factor,{kind,factor})]);
+   assert.equal(Number(r.data.productos[0].costo),2*factor);
+   const ok=await sell([item(p,2*factor+1,{kind,factor})]);assert.equal(ok.status,201,JSON.stringify(ok.data));
+   const d=(await f.query('SELECT costo_snapshot,cantidad_base FROM venta_detalles WHERE venta_id=$1',[ok.data.id])).rows[0];
+   assert.equal(Number(d.costo_snapshot),2*factor);assert.equal(Number(d.cantidad_base),factor);
+  }
+ });
+ await t.test('API directa no confía en costo/utilidad/override administrativos enviados',async()=>{
+  const p=await product();await blocked([{...item(p,9),costo:0,costo_snapshot:0,utilidad:999999,ignorar_rentabilidad:true}],{override_admin:true,permitir_perdida:true});
+ });
+ await t.test('factor o presentación inventados no pueden eludir el control',async()=>{
+  const p=await product();
+  for(const args of [{factor:0.1,kind:'CAJA'},{factor:1,kind:'CAJA'},{factor:3,kind:'BLISTER'}]){
+   const before=await snapshot(),r=await sell([item(p,1,args)]);assert.equal(r.status,400);assert.equal(r.data.code,'PRESENTACION_INVALIDA');assert.deepEqual(await snapshot(),before);
+  }
+ });
+ await t.test('descuento global no oculta utilidad cero/negativa aunque el precio bruto sea mayor',async()=>{
+  const p=await product();const zero=await blocked([item(p,11)],{discount:1});assert.equal(Number(zero.data.productos[0].precio_venta_neto),10);
+  await blocked([item(p,11)],{discount:2});
+ });
+ await t.test('costos decimales no se redondean a favor de una venta con pérdida',async()=>{
+  const p=await product(0.1001);const r=await blocked([item(p,0.10)]);assert.equal(Number(r.data.productos[0].utilidad_total),-0.0001);
+  assert.equal((await sell([item(p,0.11)])).status,201);
+ });
+ await t.test('varios lotes: costo ponderado FEFO de la presentación consumida',async()=>{
+  const p=await product(10,{lots:[{cost:8,quantity:1},{cost:12,quantity:10}]});
+  const r=await blocked([item(p,10,{quantity:2})]);assert.equal(Number(r.data.productos[0].costo),10);
+  assert.equal((await sell([item(p,11,{quantity:2})])).status,201);
+ });
+ await t.test('blíster repartido en tres lotes no oculta margen cero por fracciones 0.333',async()=>{
+  const p=await product(2,{lots:[{cost:2,quantity:1},{cost:2,quantity:1},{cost:2,quantity:1}]});
+  await f.query("INSERT INTO precios_producto(producto_id,sucursal_id,tipo,factor_unidades,precio_venta) VALUES($1,$2,'BLISTER',3,6)",[p.id,ids.sucursalA]);
+  const r=await blocked([item(p,6,{factor:3,kind:'BLISTER'})]);assert.equal(Number(r.data.productos[0].costo),6);
+  assert.equal((await sell([item(p,7,{factor:3,kind:'BLISTER'})])).status,201);
+ });
+ await t.test('costo ausente bloquea; no convierte el cero por defecto en ganancia',async()=>{
+  const p=await product(0);
+  const r=await blocked([item(p,5)],{},'VENTA_COSTO_NO_VERIFICABLE');assert.equal(r.data.productos[0].costo,null);assert.equal(r.data.productos[0].utilidad_total,null);
+ });
+ await t.test('un costo negativo inválido no se interpreta como ganancia',async()=>{
+  const p=await product(0);await f.query('UPDATE lotes SET costo_unitario=-1 WHERE producto_id=$1',[p.id]);
+  await blocked([item(p,1)],{},'VENTA_COSTO_NO_VERIFICABLE');
+ });
+ await t.test('stock faltante sin costo verificable también bloquea y no crea lote permanente',async()=>{
+  const p=await product(0,{lots:[]});await blocked([item(p,5)],{},'VENTA_COSTO_NO_VERIFICABLE');
+ });
+ await t.test('API no admite cantidades submilésimas que eviten generar detalles/costo',async()=>{
+  const p=await product();const before=await snapshot(),r=await sell([item(p,100000000000,{quantity:0.0000000001})]);
+  assert.equal(r.status,400);assert.equal(r.data.code,'VENTA_PRECISION_INVALIDA');assert.deepEqual(await snapshot(),before);
+ });
+ await t.test('mismo producto con dos precios no compensa una línea con pérdida',async()=>{
+  const p=await product();const r=await blocked([item(p,9),item(p,30)]);
+  assert.equal(Number(r.data.productos[0].precio_venta),9);
+ });
+ await t.test('costo cero documentado en compra es verificable, distinto del cero por defecto',async()=>{
+  const p=await product(0);
+  const purchase=(await f.query('INSERT INTO compras(empresa_id,sucursal_id,fecha,total,usuario_id) VALUES($1,$2,current_date,0,$3) RETURNING id',[ids.empresaA,ids.sucursalA,ids.usuarioA])).rows[0];
+  const detail=(await f.query('INSERT INTO compra_detalles(compra_id,producto_id,cantidad,costo_unitario,total) VALUES($1,$2,100,0,0) RETURNING id',[purchase.id,p.id])).rows[0];
+  await f.query('UPDATE lotes SET compra_detalle_id=$2 WHERE producto_id=$1',[p.id,detail.id]);
+  assert.equal((await sell([item(p,1)])).status,201);
+ });
+ await t.test('cajero/vendedor recibe el mismo bloqueo absoluto que administrador',async()=>{
+  const p=await product();const role=(await f.query("SELECT id FROM roles WHERE nombre='Cajero / Vendedor'")).rows[0].id;
+  const admin=(await f.query("SELECT id FROM roles WHERE nombre='Administrador'")).rows[0].id;
+  await f.query('UPDATE usuario_sucursal SET rol_id=$2 WHERE usuario_id=$1',[ids.usuarioA,role]);
+  try{await blocked([item(p,10)]);}
+  finally{await f.query('UPDATE usuario_sucursal SET rol_id=$2 WHERE usuario_id=$1',[ids.usuarioA,admin]);}
+ });
+ await t.test('anulación/devolución siguen operativas y no aplican el guard de nueva venta',async()=>{
+  const p=await product();const sale=await sell([item(p,11,{quantity:2})]);assert.equal(sale.status,201);
+  const d=(await f.query('SELECT id FROM venta_detalles WHERE venta_id=$1',[sale.data.id])).rows[0];
+  const partial=await f.request('/api/sales/'+sale.data.id+'/return',{token:f.tokenA,method:'POST',body:{tipo:'PARCIAL',motivo:'Prueba ficticia',metodo_reembolso:'Efectivo',items:[{venta_detalle_id:d.id,cantidad:1}],sesion_caja_id:cash.id}});
+  assert.equal(partial.status,201,JSON.stringify(partial.data));
+  const total=await f.request('/api/sales/'+sale.data.id+'/return',{token:f.tokenA,method:'POST',body:{tipo:'TOTAL',motivo:'Prueba ficticia',metodo_reembolso:'Efectivo',sesion_caja_id:cash.id}});
+  assert.equal(total.status,201,JSON.stringify(total.data));assert.equal(total.data.estado_venta,'ANULADA');
+ });
+});
+
+test('Rentabilidad: API conserva datos y modal real muestra detalle sin HTML ni recarga',async()=>{
+ const html=readFileSync(new URL('../public/index.html',import.meta.url),'utf8');
+ const elements=new Map(),shown=[],cart=new Map([['p',1]]);
+ for(const id of ['checkout','saleStatus','saleDocType','saleClientId','pay','received'])elements.set(id,{value:'',textContent:'',disabled:false});
+ elements.get('saleDocType').value='ORDEN';elements.get('pay').value='Efectivo';
+ const data={error:'Venta no permitida.',code:'VENTA_SIN_RENTABILIDAD',productos:[{producto:'<img src=x onerror=alert(1)>',presentacion:'CAJA',factor_unidades:'12',cantidad:'1',precio_venta:'10',precio_venta_neto:'10',costo:'12',utilidad:'-2',utilidad_total:'-2'}]};
+ const sandbox={Intl,Map,setTimeout:()=>{},$:id=>elements.get(id),state:{token:'TOKEN_FICTICIO',branchId:'BRANCH_FICTICIO',cart,cash:null},total:()=>10,
+  productById:()=>({id:'p',factor_unidades:12,tipo_venta:'CAJA'}),salePrice:()=>10,
+  focusSalesSearchIfReady(){},showAppNotice:async(message,options)=>shown.push({message,options}),
+  fetch:async()=>({ok:false,status:422,json:async()=>data})};
+ sandbox.window=sandbox;vm.createContext(sandbox);
+ vm.runInContext(readFileSync(new URL('../public/sale-profitability.js',import.meta.url),'utf8'),sandbox);
+ vm.runInContext(html.split('\n').find(x=>x.startsWith('async function api(')),sandbox);
+ await assert.rejects(()=>vm.runInContext("api('/api/sales',{method:'POST'})",sandbox),error=>error.code===data.code&&error.status===422&&error.productos===data.productos);
+ vm.runInContext("let checkoutPending=false;\n"+html.split('\n').find(x=>x.startsWith("$('checkout').onclick=")),sandbox);
+ await elements.get('checkout').onclick();
+ assert.equal(shown.length,1);assert.match(shown[0].message,/El precio de venta es igual o menor al costo/);
+ assert.match(shown[0].message,/Costo por presentación/);assert.match(shown[0].message,/Utilidad estimada por presentación/);assert.match(shown[0].message,/Utilidad estimada total: S\/ -2/);assert.match(shown[0].message,/<img/);
+ assert.equal(shown[0].options.title,'Venta no permitida');assert.equal(cart.size,1);assert.equal(elements.get('checkout').disabled,false);
+ await sandbox.eduxfacShowSaleProfitability({code:'VENTA_COSTO_NO_VERIFICABLE',productos:[{producto:'Sin costo',costo:null,utilidad:null,utilidad_total:null,motivo:'COSTO_NO_VERIFICABLE'}]});
+ assert.match(shown.at(-1).message,/Registre o revise el costo/);assert.match(shown.at(-1).message,/No verificable/);
+ // app-dialogs.js renders the message as text, so product text cannot inject HTML.
+ assert.match(readFileSync(new URL('../public/app-dialogs.js',import.meta.url),'utf8'),/message\.textContent=String/);
+});
+
+test('Rentabilidad nativa: dos ventas simultáneas no compensan lote caro ni caja',{skip:process.platform!=='linux'||process.env.EDUXFAC_PROFIT_NATIVE!=='yes'},async t=>{
+ const f=await createFixture();t.after(()=>f.close());
+ const p=randomUUID();
+ await f.query("INSERT INTO productos(id,empresa_id,codigo_interno,nombre,unidad_medida) VALUES($1,$2,'CONCURRENT-PROFIT','Ficticio concurrente','UNIDAD')",[p,ids.empresaA]);
+ await f.query("INSERT INTO producto_sucursal(producto_id,sucursal_id,origen) VALUES($1,$2,'operacion')",[p,ids.sucursalA]);
+ for(const [cost,date]of [[1,'2030-01-01'],[10,'2030-02-01']])await f.query('INSERT INTO lotes(producto_id,sucursal_id,numero_lote,fecha_vencimiento,cantidad_inicial,cantidad_disponible,costo_unitario) VALUES($1,$2,$3,$4,1,1,$5)',[p,ids.sucursalA,'COST-'+cost,date,cost]);
+ const cash=(await f.request('/api/cash/open',{token:f.tokenA,method:'POST',body:{sucursal_id:ids.sucursalA,monto_apertura:100}})).data;
+ const sale={sucursal_id:ids.sucursalA,sesion_caja_id:cash.id,items:[{producto_id:p,cantidad:1,factor_unidades:1,tipo_venta:'UNIDAD',precio_unitario:5}],pagos:[{metodo:'Efectivo',monto:5}]};
+ const beforeCash=Number((await f.query('SELECT coalesce(sum(monto),0) n FROM movimientos_caja')).rows[0].n);
+ const results=await Promise.all([1,2].map(()=>f.request('/api/sales',{token:f.tokenA,method:'POST',body:sale})));
+ assert.deepEqual(results.map(r=>r.status).sort(),[201,422],JSON.stringify(results));
+ assert.equal(results.find(r=>r.status===422).data.code,'VENTA_SIN_RENTABILIDAD');
+ const lots=(await f.query('SELECT costo_unitario,cantidad_disponible FROM lotes WHERE producto_id=$1 ORDER BY costo_unitario',[p])).rows;
+ assert.deepEqual(lots.map(x=>[Number(x.costo_unitario),Number(x.cantidad_disponible)]),[[1,0],[10,1]]);
+ assert.equal((await f.query('SELECT count(*)::int n FROM ventas')).rows[0].n,1);
+ assert.equal((await f.query('SELECT count(*)::int n FROM venta_pagos')).rows[0].n,1);
+ assert.equal(Number((await f.query('SELECT coalesce(sum(monto),0) n FROM movimientos_caja')).rows[0].n)-beforeCash,5);
+ const pnl=(await f.query('SELECT sum(importe_neto-cantidad_base*l.costo_unitario)::numeric profit FROM venta_detalles vd JOIN lotes l ON l.id=vd.lote_id WHERE vd.producto_id=$1',[p])).rows[0];
+ assert.equal(Number(pnl.profit),4);
+});

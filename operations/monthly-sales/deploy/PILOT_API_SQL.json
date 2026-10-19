@@ -1,0 +1,339 @@
+{
+  "ok": true,
+  "checks_passed": 46,
+  "checks": [
+    "PILOT_READ_ONLY",
+    "EXISTING_PILOT_USER_ACTIVE",
+    "BRANCH_ASSIGNED",
+    "TENANT_ROLE_UNIQUE",
+    "RUNTIME_NO_BYPASS",
+    "44_FORCE_RLS",
+    "RLS_FOREIGN_SALES_INVISIBLE",
+    "MONTHLY_HTTP_200",
+    "TWELVE_MONTHS",
+    "ANNUAL_SUM",
+    "TIMEZONE_LIMA",
+    "DEPLOYED_API_EQUALS_NATIVE_RLS",
+    "REPORT_01_200",
+    "REPORT_01_EXACT_TOTAL",
+    "REPORT_02_200",
+    "REPORT_02_EXACT_TOTAL",
+    "REPORT_03_200",
+    "REPORT_03_EXACT_TOTAL",
+    "REPORT_04_200",
+    "REPORT_04_EXACT_TOTAL",
+    "REPORT_05_200",
+    "REPORT_05_EXACT_TOTAL",
+    "REPORT_06_200",
+    "REPORT_06_EXACT_TOTAL",
+    "REPORT_07_200",
+    "REPORT_07_EXACT_TOTAL",
+    "REPORT_08_200",
+    "REPORT_08_EXACT_TOTAL",
+    "REPORT_09_200",
+    "REPORT_09_EXACT_TOTAL",
+    "REPORT_10_200",
+    "REPORT_10_EXACT_TOTAL",
+    "REPORT_11_200",
+    "REPORT_11_EXACT_TOTAL",
+    "REPORT_12_200",
+    "REPORT_12_EXACT_TOTAL",
+    "YEAR_CHANGE",
+    "EMPTY_YEAR",
+    "UNAUTHENTICATED_401",
+    "INVALID_TOKEN_401",
+    "FOREIGN_BRANCH_403",
+    "FOREIGN_COMPANY_403",
+    "INVALID_YEAR_400",
+    "TIMED_HTTP_0",
+    "TIMED_HTTP_1",
+    "TIMED_HTTP_2"
+  ],
+  "force_rls": 44,
+  "read_only": true,
+  "identity": "existing_pilot_user",
+  "validation_token_persisted": false,
+  "branch_code": "PRINCIPAL",
+  "year": 2026,
+  "years": [
+    2026
+  ],
+  "months": [
+    {
+      "month": 1,
+      "total": "0"
+    },
+    {
+      "month": 2,
+      "total": "0"
+    },
+    {
+      "month": 3,
+      "total": "0"
+    },
+    {
+      "month": 4,
+      "total": "0"
+    },
+    {
+      "month": 5,
+      "total": "0"
+    },
+    {
+      "month": 6,
+      "total": "0"
+    },
+    {
+      "month": 7,
+      "total": "0"
+    },
+    {
+      "month": 8,
+      "total": "0"
+    },
+    {
+      "month": 9,
+      "total": "0"
+    },
+    {
+      "month": 10,
+      "total": "434.40"
+    },
+    {
+      "month": 11,
+      "total": "0"
+    },
+    {
+      "month": 12,
+      "total": "0"
+    }
+  ],
+  "total_year": "434.40",
+  "report_comparison": [
+    {
+      "year": 2026,
+      "month": 1,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 2,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 3,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 4,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 5,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 6,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 7,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 8,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 9,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 10,
+      "monthly": "434.40",
+      "report": "434.40",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 11,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    },
+    {
+      "year": 2026,
+      "month": 12,
+      "monthly": "0",
+      "report": "0.00",
+      "equal": true
+    }
+  ],
+  "year_change": {
+    "year": 2025,
+    "total_year": "0",
+    "months": [
+      {
+        "month": 1,
+        "total": "0"
+      },
+      {
+        "month": 2,
+        "total": "0"
+      },
+      {
+        "month": 3,
+        "total": "0"
+      },
+      {
+        "month": 4,
+        "total": "0"
+      },
+      {
+        "month": 5,
+        "total": "0"
+      },
+      {
+        "month": 6,
+        "total": "0"
+      },
+      {
+        "month": 7,
+        "total": "0"
+      },
+      {
+        "month": 8,
+        "total": "0"
+      },
+      {
+        "month": 9,
+        "total": "0"
+      },
+      {
+        "month": 10,
+        "total": "0"
+      },
+      {
+        "month": 11,
+        "total": "0"
+      },
+      {
+        "month": 12,
+        "total": "0"
+      }
+    ]
+  },
+  "empty_year": {
+    "year": 1900,
+    "total_year": "0",
+    "months": [
+      {
+        "month": 1,
+        "total": "0"
+      },
+      {
+        "month": 2,
+        "total": "0"
+      },
+      {
+        "month": 3,
+        "total": "0"
+      },
+      {
+        "month": 4,
+        "total": "0"
+      },
+      {
+        "month": 5,
+        "total": "0"
+      },
+      {
+        "month": 6,
+        "total": "0"
+      },
+      {
+        "month": 7,
+        "total": "0"
+      },
+      {
+        "month": 8,
+        "total": "0"
+      },
+      {
+        "month": 9,
+        "total": "0"
+      },
+      {
+        "month": 10,
+        "total": "0"
+      },
+      {
+        "month": 11,
+        "total": "0"
+      },
+      {
+        "month": 12,
+        "total": "0"
+      }
+    ]
+  },
+  "performance": {
+    "first_https_ms": 295.634,
+    "https_ms": [
+      49.125,
+      64.675,
+      96.254
+    ],
+    "native_sql_rls_ms": [
+      5.348,
+      3.59,
+      4.599
+    ]
+  },
+  "observed_data": {
+    "sales_states": [
+      {
+        "estado": "ANULADA",
+        "count": 4
+      },
+      {
+        "estado": "EMITIDA",
+        "count": 6
+      }
+    ],
+    "refunds": 4,
+    "document_types": [
+      {
+        "tipo_comprobante": "ORDEN",
+        "count": 10
+      }
+    ]
+  },
+  "destructive_scenarios": "Previously validated in isolated PostgreSQL/RLS; no pilot data created or modified"
+}

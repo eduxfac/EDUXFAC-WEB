@@ -1,0 +1,13 @@
+{
+  "source": "Read-only diagnosis against PILOT; no deployment",
+  "database_type": "date",
+  "node_timezone": "Europe/Berlin",
+  "postgres_timezone": "Europe/Berlin",
+  "example": {
+    "lot": "DFFFFF",
+    "database_calendar": "2026-10-30",
+    "pg_driver_json_before": "2026-10-29T23:00:00.000Z",
+    "days_unchanged": 15
+  },
+  "cause": "pg-types OID1082 -> JS Date at server local midnight -> UTC JSON previous day; browser formatter extracts already shifted prefix. Report already casts DATE::text."
+}

@@ -1,0 +1,10 @@
+{
+  "server/src/app.js": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab",
+  "server/src/access-policy.js": "68f5665d5aefbca2985d460694a87cab5bae5c89115c6c4fb18ee7a423773f4b",
+  "public/index.html": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32",
+  "public/desktop-responsive.css": "5d1678f53d5a2e375aa29c2532d7f34d1f78f54817bdf5409bc2aa366ae94eb6",
+  "server/src/inventory-count.js": "d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656",
+  "database/schema.sql": "693f6f2ba6f4b2aa35d7103375d9780c7db80b63d78ccd24b24886a6b2225e40",
+  "server/src/stock-cost.js": "f2f1bb2c8f05f8ee4b1a9b6a2d468a141575281680afb0b41e43c871819ddab8",
+  "server/src/inventory-entry.js": "0b3a49ac0ea077db9bc29fb8dbc08aa2d92d20aa8761a47f81652eb1c4de897f"
+}

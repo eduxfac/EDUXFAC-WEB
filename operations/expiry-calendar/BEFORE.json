@@ -1,0 +1,6 @@
+{
+  "public/index.html": "c2c01c26cd4cd1298e94223f87a64d9901659ac3516e47927aa57398ffb68e06",
+  "server/src/app.js": "3a22cf3c1482aceac2788b86c8318aa9efbe70c9ca66e8e4571fefe861209d90",
+  "server/src/report-document.js": "6d6f5b4e872548b7d3f2399c8b0b4533f562069b474e9155646fddfe5a6fd061",
+  "server/src/inventory-count.js": "d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656"
+}

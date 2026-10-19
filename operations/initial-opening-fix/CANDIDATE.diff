@@ -1,0 +1,14 @@
+--- before/server/src/initial-inventory.js
++++ candidate/server/src/initial-inventory.js
+@@ -173,8 +173,10 @@
+   }else existing++;
+   await linkProduct(db,p.id,branch,{stock_minimo:f.stock_minimo});
+   if(!g.hasPrice)await db.query("insert into precios_producto(producto_id,sucursal_id,tipo,factor_unidades,precio_venta) values($1,$2,'unidad',1,$3)",[p.id,branch,f.precio]);
++  // Initial value is fully represented by INVENTARIO_INICIAL movements.
++  // Opening value is only for legacy stock NOT represented in the movement ledger.
+   for(const r of g.lots.values()){
+-   const lot=(await db.query('insert into lotes(producto_id,sucursal_id,numero_lote,fecha_vencimiento,costo_unitario,cantidad_inicial,cantidad_disponible,valor_base_costos) values($1,$2,$3,$4,$5,$6,$6,$6::numeric*$5::numeric) returning id',[p.id,branch,r.lote||null,r.vencimiento,r.costo,r.stock])).rows[0];
++   const lot=(await db.query('insert into lotes(producto_id,sucursal_id,numero_lote,fecha_vencimiento,costo_unitario,cantidad_inicial,cantidad_disponible,valor_base_costos) values($1,$2,$3,$4,$5,$6,$6,0) returning id',[p.id,branch,r.lote||null,r.vencimiento,r.costo,r.stock])).rows[0];
+    await db.query("insert into movimientos_inventario(empresa_id,sucursal_id,producto_id,lote_id,tipo,cantidad,costo_unitario,referencia_tipo,referencia_id,usuario_id) values($1,$2,$3,$4,'INVENTARIO_INICIAL',$5,$6,'INVENTARIO_INICIAL',$7,$8)",[user.empresa_id,branch,p.id,lot.id,r.stock,r.costo,batch,user.sub]);lots++;
+   }
+  }

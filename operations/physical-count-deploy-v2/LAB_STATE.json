@@ -1,0 +1,10 @@
+{
+  "container": "eduxfac-count-lab-20261014-171810",
+  "user": "eduxfac",
+  "linuxRoot": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL",
+  "network": "none",
+  "utc": "2026-10-14T22:18:20.9782825Z",
+  "candidate_sha256": "d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656",
+  "image": "sha256:0a77b086357153cbf0092d178c66f1f4cd882538a246cfed02ce10c5a5b571e2",
+  "id": "a86eb60d93a328ec40e9ced2219d392e90f76f6a7bc2233a5ed287f85d40c3c0"
+}

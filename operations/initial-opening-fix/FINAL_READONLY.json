@@ -1,0 +1,38 @@
+{
+  "dbGuard": {
+    "db": "eduxfac_web_piloto",
+    "read_only": "on"
+  },
+  "lots": [
+    {
+      "id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+      "numero_lote": "EDU1",
+      "cantidad_disponible": "3.000",
+      "costo_unitario": "15",
+      "valor_base_costos": "45"
+    },
+    {
+      "id": "16a942c2-9776-4a80-8251-1187421adb6f",
+      "numero_lote": "EDU2",
+      "cantidad_disponible": "3.000",
+      "costo_unitario": "15",
+      "valor_base_costos": "60"
+    },
+    {
+      "id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+      "numero_lote": "EDU3",
+      "cantidad_disponible": "5.000",
+      "costo_unitario": "15",
+      "valor_base_costos": "75"
+    }
+  ],
+  "repair_audit_count": 0,
+  "force_rls": 44,
+  "remote_importer_sha256": "57abcde45bc6b165875e1f8b6ad6c956e87bc4759a4483476f3bfef159b62377",
+  "health": {
+    "http": 200,
+    "ok": true,
+    "data_mode": "PILOTO"
+  },
+  "read_only": true
+}

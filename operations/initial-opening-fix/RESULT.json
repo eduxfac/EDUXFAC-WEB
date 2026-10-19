@@ -1,0 +1,95 @@
+{
+  "status": "GO_DEPLOY_THEN_CONTROLLED_REPAIR_NOT_EXECUTED",
+  "functional_files": [
+    "server/src/initial-inventory.js"
+  ],
+  "modified_tests": [
+    "tests/cost-consistency-native.test.js",
+    "tests/initial-inventory-rls-native.test.js",
+    "tests/initial-inventory.test.js",
+    "tests/product-required-fields.test.js",
+    "tests/sale-profitability-native.test.js",
+    "tests/sale-profitability.test.js",
+    "tests/tenant-isolation.test.js"
+  ],
+  "new_files": [
+    "tests/helpers/initial-cost-checks.js",
+    "tests/helpers/native-web-cost-fixture.js",
+    "tests/initial-opening-cost.test.js",
+    "operations/initial-opening-fix/repair-abrilar-opening.mjs",
+    "operations/initial-opening-fix/PLAN_ABRILAR.json"
+  ],
+  "hashes": {
+    "server/src/initial-inventory.js": "6509028c9ab0d4a39a2671d87637fb99b8c6584ed407f6099b3e1c39971f8ccd",
+    "tests/cost-consistency-native.test.js": "050d082d08ad7b2c071e0b30333a5e8d9bc9d503883d84ad136e0b4b9eec9300",
+    "tests/initial-inventory-rls-native.test.js": "77e65240b990223f24b78cf4e49cf2cea2a1849de938b5f8515403a211e9b23a",
+    "tests/initial-inventory.test.js": "7cb6cfd4276504a241258ca34ef1a991ebf06df3961b782c8717fc6b201b9938",
+    "tests/product-required-fields.test.js": "8785881e0d83aba372c5055de070780b15224d1364bfad8bd2cdb238d45c8e57",
+    "tests/sale-profitability-native.test.js": "190129431bcb61aa5c38e1db49950c9f6bd7ebb9a63d6496745fde004a3c37de",
+    "tests/sale-profitability.test.js": "0af675ebf3aa299ee92fdc0df1d8cbbfaaae443da6e70e6514b2e189c0cb57aa",
+    "tests/tenant-isolation.test.js": "d3e4b7c0cf8e68535db78b8d3ee366bc7506a1c019976024ca2e76e22366bf35",
+    "tests/helpers/initial-cost-checks.js": "37d555aa22f1fe98047c9fe8920aca07749a7c8034f3867100acf20d879dd1d1",
+    "tests/helpers/native-web-cost-fixture.js": "61c6a7e71ebd9d767e1fbd9d7ae0743296d80cbf4f6910066d7c79832bdc8abd",
+    "tests/initial-opening-cost.test.js": "9ed611e5a92f39c350084b888b4b25d1c5cc35b734d17f9a298e6dd5cc602e11",
+    "operations/initial-opening-fix/repair-abrilar-opening.mjs": "60ac4b2e867374dd11260e2d54658d9c5ca4e5d0cfb0898b67b00de794711295",
+    "operations/initial-opening-fix/PLAN_ABRILAR.json": "836713a40abbac2323c90b150afbb8dffe8b6a985829244c4b801fc95d6fd030"
+  },
+  "tests": {
+    "Windows": {
+      "tests": 206,
+      "pass": 206,
+      "fail": 0,
+      "skipped": 0
+    },
+    "Linux_PostgreSQL": {
+      "tests": 147,
+      "pass": 147,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "passed": 353,
+  "failed": 0,
+  "skipped": 0,
+  "schema_migration_required": false,
+  "valuation_rule": "opening not represented in movements + valued movements; initial import opening=0 because full INVENTARIO_INICIAL movement exists",
+  "company_products_audited": 4,
+  "affected_products": 1,
+  "affected_lots": 3,
+  "duplicated_opening_total": "180",
+  "current_real_stock": 11,
+  "repair_expected_openings": [
+    0,
+    0,
+    0
+  ],
+  "repair_expected_stocks": [
+    3,
+    3,
+    5
+  ],
+  "repair_expected_costs": [
+    15,
+    15,
+    15
+  ],
+  "repair_expected_inventory_value": 165,
+  "expected_sale_8": {
+    "cost": 120,
+    "revenue": 200,
+    "profit": 80
+  },
+  "VPS_connected_only_readonly": true,
+  "VPS_files_uploaded": false,
+  "deployed": false,
+  "real_data_repaired": false,
+  "panel_modified": false,
+  "global_postgresql_modified": false,
+  "nginx_modified": false,
+  "certificates_modified": false,
+  "lab_cleanup": {
+    "cleaned": true,
+    "id": "79d45ea9e22dbc793ae491f5b3ef0c5e7d071c856a69aa14a037057c39ad2bba",
+    "only_own_container": true
+  }
+}

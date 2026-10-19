@@ -1,0 +1,117 @@
+{
+  "prepared_utc": "2026-10-13T23:16:15.335183+00:00",
+  "status": "V2_PREPARED_NOT_UPLOADED_NOT_EXECUTED",
+  "historical_failure": {
+    "exception": "HTTPError",
+    "historical_url": null,
+    "historical_status": null,
+    "first_url_in_script": "https://app.eduxfac.com/api/health",
+    "other_urls": [
+      "https://app.eduxfac.com/",
+      "https://app.eduxfac.com/sale-profitability.js",
+      "https://admin.eduxfac.com/",
+      "https://eduxfac.com/"
+    ],
+    "exact_script_local_remote_sha256": "f72c8c98d9ad64ec90528ff28d57c393b57c426ba4bf5c217d254a270bfd42d1",
+    "fixed_sleep_seconds": 1,
+    "before_utc": "2026-10-13T22:43:55.632086+00:00",
+    "failure_after_rollback_utc": "2026-10-13T22:43:58.233050+00:00",
+    "pm2_candidate_online_lima": "2026-10-13T17:43:56-05:00",
+    "pm2_rollback_start_lima": "2026-10-13T17:43:58-05:00",
+    "pm2_log_timezone": "Europe/Berlin UTC+02:00",
+    "candidate_pid": 297320,
+    "restored_pid": 297349,
+    "stdout_ready_lines_total": 4,
+    "stdout_last_write_utc": "2026-10-13T22:43:59.137038+00:00",
+    "stdout_has_timestamps": false,
+    "candidate_listening_historical": "NOT_PROVABLE",
+    "stderr_bytes": 0,
+    "nginx_access_error_logs_readable": false,
+    "most_probable": "STARTUP_READINESS_RACE_HTTP_UPSTREAM_FAILURE",
+    "hypothesis_not_proven": true
+  },
+  "readonly_current": {
+    "checked_utc": "2026-10-13T23:05:07+00:00",
+    "loopback_health": 200,
+    "https_health": 200,
+    "health": {
+      "ok": true,
+      "database": true,
+      "data_mode": "PILOTO"
+    },
+    "domains": {
+      "app.eduxfac.com": 200,
+      "admin.eduxfac.com": 200,
+      "eduxfac.com": 200
+    },
+    "listener": "127.0.0.1:3001",
+    "nginx_upstream": "http://127.0.0.1:3001",
+    "original_restored": {
+      "server/src/app.js": "58d31e00d2414804e636429a38fdd1662b1888d5dfe7c26f533d798c76e6af0d",
+      "server/src/sale-profitability.js": null,
+      "public/index.html": "981647b74c4c971a498f51dae74e089a2ce8b2e836f9083555ae81ec9b983430",
+      "public/sale-profitability.js": null
+    },
+    "panel_unchanged": true,
+    "old_web_unchanged": true
+  },
+  "v2_tests": {
+    "windows": {
+      "passed": 34,
+      "failed": 0
+    },
+    "linux_wsl_ubuntu": {
+      "passed": 34,
+      "failed": 0
+    },
+    "unique_scenarios": 34,
+    "simulated_http_pm2": true,
+    "live_vps_deployment_test": false
+  },
+  "candidate": {
+    "unchanged": true,
+    "sha256": {
+      "server/src/app.js": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7",
+      "server/src/sale-profitability.js": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220",
+      "public/index.html": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e",
+      "public/sale-profitability.js": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+    },
+    "previous_business_validation": {
+      "passed": 338,
+      "failed": 0,
+      "rerun": false
+    }
+  },
+  "v2": {
+    "directory": "D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\operations\\profitability-deploy-v2",
+    "uploaded": false,
+    "executed": false,
+    "bundle_sha256": {
+      "APPLY_RENTABILIDAD_V2.py": "90a1393ac5090aa3a95dd85730cd795cfc0269c37425ecfda7863827d090a785",
+      "ROLLBACK_RENTABILIDAD_V2.py": "dae131cf2b803ce5ed5aa3f85edad79705693cffcd4d7720f37d42c80a1af09f",
+      "MANIFEST.json": "66a2d7af4d7fb7c83b947932903d1586b879c300f3d43428195bcf4ba66829eb",
+      "payload/server/src/app.js": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7",
+      "payload/server/src/sale-profitability.js": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220",
+      "payload/public/index.html": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e",
+      "payload/public/sale-profitability.js": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+    },
+    "readiness": "same PID and restart counter; three consecutive samples per endpoint; loopback then verified HTTPS",
+    "health_budget_seconds_per_endpoint": 45,
+    "http_timeout_seconds": 3,
+    "content_budget_seconds": 20,
+    "domain_budget_seconds": 15,
+    "restart_retries": 0,
+    "evidence": [
+      "EVENTS.jsonl",
+      "BEFORE.json",
+      "FAILURE.json",
+      "DIAGNOSTICS.json",
+      "APPLY_DONE.json",
+      "ROLLBACK_DONE.json"
+    ],
+    "secrets": "No raw responses, cookies, headers, PM2 environment dumps, credentials or arbitrary error messages",
+    "functional_smoke": "Pending next authorized deployment; no customer writes performed"
+  },
+  "vps_modified_in_investigation": false,
+  "next_action": "User review before any V2 transfer or execution"
+}

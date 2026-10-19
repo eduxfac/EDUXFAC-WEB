@@ -1,0 +1,55 @@
+{
+  "read_only": true,
+  "checks": [
+    "candidate_hashes",
+    "protected_inventory_exact_four_changes",
+    "other_processes_unchanged",
+    "rollback_preflight_eligible",
+    "backup_hashes",
+    "absence_markers"
+  ],
+  "tests": [
+    {
+      "utc": "2026-10-13T23:26:58.749205+00:00",
+      "url": "http://127.0.0.1:3001/api/health",
+      "status": 200,
+      "body_sanitized": {
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:26:58.774374+00:00",
+      "url": "https://app.eduxfac.com/api/health",
+      "status": 200,
+      "body_sanitized": {
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:26:58.806162+00:00",
+      "url": "https://app.eduxfac.com/",
+      "status": 200
+    },
+    {
+      "utc": "2026-10-13T23:26:58.827030+00:00",
+      "url": "https://admin.eduxfac.com/",
+      "status": 200
+    },
+    {
+      "utc": "2026-10-13T23:26:58.861825+00:00",
+      "url": "https://eduxfac.com/",
+      "status": 200
+    }
+  ],
+  "web_pm2": {
+    "id": 4,
+    "pid": 300850,
+    "status": "online",
+    "restarts": 5
+  },
+  "rollback_executed": false
+}

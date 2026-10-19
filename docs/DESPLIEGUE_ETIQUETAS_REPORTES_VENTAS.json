@@ -1,0 +1,86 @@
+{
+  "utc": "2026-10-13T23:52:02.073064+00:00",
+  "result": "VISUAL_LABELS_DEPLOY_OK",
+  "file": "public/index.html",
+  "before_sha256": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e",
+  "after_sha256": "a08a0ec8aa8837d92842682ea56f467081d6a1d247d05732faedf6c8560d1c04",
+  "backup": "/home/eduxadmin/.local/share/eduxfac/reports_sales_labels_20261013_235123/backup/public/index.html",
+  "work": "/home/eduxadmin/.local/share/eduxfac/reports_sales_labels_20261013_235123",
+  "readiness": {
+    "loopback": {
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempts": 4,
+      "pid": 303082,
+      "restarts": 6,
+      "stable_samples": 3
+    },
+    "https": {
+      "url": "https://app.eduxfac.com/api/health",
+      "attempts": 3,
+      "pid": 303082,
+      "restarts": 6,
+      "stable_samples": 3
+    }
+  },
+  "final_health": {
+    "loopback": {
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempts": 3,
+      "pid": 303082,
+      "restarts": 6,
+      "stable_samples": 3
+    },
+    "https": {
+      "url": "https://app.eduxfac.com/api/health",
+      "attempts": 3,
+      "pid": 303082,
+      "restarts": 6,
+      "stable_samples": 3
+    }
+  },
+  "other_processes_unchanged": true,
+  "only_labels_changed": true,
+  "menu_filters_calculations_exports_unchanged": true,
+  "csp_checked": true,
+  "web_pm2": {
+    "id": 4,
+    "pid": 303082,
+    "status": "online",
+    "restarts": 6,
+    "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+    "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+    "mode": "PILOTO",
+    "port": "3001",
+    "worker": "false",
+    "mutation": "no"
+  },
+  "real_sales_performed": false,
+  "public_http": 200,
+  "health": {
+    "ok": true,
+    "database": true,
+    "data_mode": "PILOTO"
+  },
+  "visual_verification": {
+    "served_html_syntax": "5/5 OK",
+    "report_load_render": "OK",
+    "labels": [
+      "Venta total",
+      "Tickets",
+      "Unidades",
+      "Costo total",
+      "Ganancia"
+    ],
+    "values": [
+      "S/ 213.80",
+      "2",
+      "4",
+      "S/ 145.60",
+      "S/ 68.20"
+    ],
+    "filters_forwarded": true,
+    "sidebar_sales_unchanged": true,
+    "data": "FICTITIOUS_LOCAL_FIXTURE_NO_REAL_API_CALL"
+  },
+  "manual_validation": "GO"
+}

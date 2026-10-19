@@ -1,0 +1,26 @@
+{
+  "GO": true,
+  "deployed": false,
+  "automated_equivalence_passed": 6,
+  "responsive_comparisons_passed": 10,
+  "mobile_table_scroll_verified": true,
+  "total_checks_passed": 17,
+  "failed": 0,
+  "widths": [
+    1920,
+    1366,
+    1024,
+    768,
+    375
+  ],
+  "same_fields_values_totals_discounts_table": true,
+  "global_overflow": false,
+  "overlaps": false,
+  "cancellation_markup_geometry_unchanged": true,
+  "backend_unchanged": true,
+  "scope": "fictitious data; real frontend renderer and open/close functions; no real API or database",
+  "source_hashes": {
+    "public/index.html": "3e73a96aa412757b51409f2783fa84e8112fff8af623664a1d3bfecacb0a3295",
+    "public/desktop-responsive.css": "5d1678f53d5a2e375aa29c2532d7f34d1f78f54817bdf5409bc2aa366ae94eb6"
+  }
+}

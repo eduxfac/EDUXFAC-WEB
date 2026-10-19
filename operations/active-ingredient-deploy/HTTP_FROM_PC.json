@@ -1,0 +1,9 @@
+{
+  "app_https": 200,
+  "admin_https": 200,
+  "health_http": 200,
+  "data_mode": "PILOTO",
+  "placeholder_exact": true,
+  "show_more_button_present": true,
+  "HTML_D_equals_HTTPS": true
+}

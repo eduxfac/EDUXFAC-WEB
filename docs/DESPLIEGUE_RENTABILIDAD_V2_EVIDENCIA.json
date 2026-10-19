@@ -1,0 +1,1463 @@
+{
+  "BEFORE.json": {
+    "utc": "2026-10-13T23:23:09.044410+00:00",
+    "processes": {
+      "eduxfac": {
+        "id": 0,
+        "pid": 988,
+        "status": "online",
+        "restarts": 0,
+        "cwd": "/var/www/eduxfac",
+        "script": "/usr/bin/npm",
+        "mode": null,
+        "port": "",
+        "worker": null,
+        "mutation": null
+      },
+      "EDUXFAC-PANEL-PILOTO": {
+        "id": 3,
+        "pid": 269525,
+        "status": "online",
+        "restarts": 4,
+        "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel",
+        "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/panel/server/start.mjs",
+        "mode": "PILOTO",
+        "port": "4310",
+        "worker": "false",
+        "mutation": null
+      },
+      "EDUXFAC-WEB-PILOTO": {
+        "id": 4,
+        "pid": 297349,
+        "status": "online",
+        "restarts": 4,
+        "cwd": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web",
+        "script": "/home/eduxadmin/eduxfac/releases/phase12b_20261013_0625/web/server/start.mjs",
+        "mode": "PILOTO",
+        "port": "3001",
+        "worker": "false",
+        "mutation": "no"
+      }
+    },
+    "files": {
+      "server/src/app.js": {
+        "exists": true,
+        "sha256": "58d31e00d2414804e636429a38fdd1662b1888d5dfe7c26f533d798c76e6af0d",
+        "mode": 436
+      },
+      "server/src/sale-profitability.js": {
+        "exists": false,
+        "sha256": null,
+        "mode": 436
+      },
+      "public/index.html": {
+        "exists": true,
+        "sha256": "981647b74c4c971a498f51dae74e089a2ce8b2e836f9083555ae81ec9b983430",
+        "mode": 436
+      },
+      "public/sale-profitability.js": {
+        "exists": false,
+        "sha256": null,
+        "mode": 436
+      }
+    },
+    "protected": {
+      "server/start.mjs": "4dafff578fc2ff6d328485b6ccca82505362a0416d34d19de751210f16d4e1e3",
+      "server/scripts/expire-subscriptions.js": "a3806166083d6ca8cc2088a4ff0eed0320aa130bc435bd8cb790cef5ed3d0ef2",
+      "server/scripts/global-rls.js": "1def39ffca0ac81df8a5db3e3e0098c3519118ca8006735f958617fb5b490a9b",
+      "server/scripts/migrate.js": "7791a29649b6e2a66c544247b20f0da85d5c368429ffe20ed6d06e7bd3dd8379",
+      "server/scripts/staging-rls.js": "d138a563191b5f62d4bd35a4e7668910dc34531bf0092a574dd0d46d3bd18bd9",
+      "server/scripts/expiration-worker.js": "0a59269a16f2a2e625498eda1109469fea46a26b9558d0b6be72bd14a9bd6cbe",
+      "server/src/app.js": "58d31e00d2414804e636429a38fdd1662b1888d5dfe7c26f533d798c76e6af0d",
+      "server/src/commercial-conditions.js": "17ff82503ceb4ec77f725d16e57e12adcb016545c5d522b21ea5dc8af4a4b35e",
+      "server/src/subscription-service.js": "6461c5f697a4b03e4f02a9712026212add01dd0fb6524dbaffbcf283bf315f32",
+      "server/src/onboarding-api.js": "62755082a74cf66b6ea94a1c745cdb9d2112ea791645c7d18a6ed306192c308d",
+      "server/src/report-document.js": "6d6f5b4e872548b7d3f2399c8b0b4533f562069b474e9155646fddfe5a6fd061",
+      "server/src/auth.js": "3d1d5ffe4b1a90d46711b96da4e688d43df21c9259e85a55a8cd7c01547a4797",
+      "server/src/db.js": "370b275531d9898cd83f9951461bc746d0404e37a6c75e8642d40f9f8e7daffd",
+      "server/src/export-xlsx.js": "bdd739f3d475c4a6b5a8afedda7a1ec9c7f35a25e3e083fa261f9c1851f00e79",
+      "server/src/company-state-policy.js": "15854df304cd6433f3c760c27d0b58bc09551c0476b85318ff322d6fedb33748",
+      "server/src/branch-catalog.js": "636fe2ec2944da653f7e22f47814520c0d5bd7ae043e99f6abc6007427b2ab98",
+      "server/src/backup-maintenance.js": "9a23be244b7b36cf5ecb9e9d86f9b7bde0709b041c979ae26768debb8370737d",
+      "server/src/operations-api.js": "317c21d7e20cbcb4af5783d074978c41482348333248c9798dc8f7510489a5f1",
+      "server/src/inventory-count.js": "1e99adfc02152a633bcc3724d5fdc5f5d7f6b3871ff1f6feaf30fa2ddb488e65",
+      "server/src/admin-service-api.js": "b46ded8548c00bce73d23a6ee48919af5308a9f81ae0cd335429f5ad708ac9a2",
+      "server/src/password-change.js": "ef2b08ff7dfd2def17cb47d275ccb8af27cabeeb3b67a5e1252011a8f07cc7e5",
+      "server/src/commercial-api.js": "eb70eaa5e492891e0ef4dda88b59d7ebb873a79a6a9c650bf073455057807b32",
+      "server/src/access-policy.js": "68f5665d5aefbca2985d460694a87cab5bae5c89115c6c4fb18ee7a423773f4b",
+      "server/src/csp-header.js": "08bf1b39221dff3e4d932f0e95b7db0c830b10296ba920e9e3224ef61aa3fe7c",
+      "server/src/inventory-entry.js": "8ab55caf191240b9fd4b69239e930967f75dd4de9dfb3275d700819852e8e1e9",
+      "server/src/subscription-api.js": "c4190018f9bff29cb2a05e010e8dbb3fb6b925e285f60db42dc44ada8ea057bc",
+      "server/src/tenant-guard.js": "60e4342d23270b812560b07d500e880cb2398b1f103ce726719d253792a78a3d",
+      "server/src/service-auth.js": "56501ee0c4d94d3af20058931c965f101b30848cd2db7925fbcb96be7301a421",
+      "server/src/branch-admin.js": "8e08df9c2cab4335cb0cf0e8d02ce131ba336273ae603651f9d80773f7222b59",
+      "server/src/company-access.js": "f18d81b0d166df23af52258d4ebf60bf892b5a51dda2959a241b7ad43db99293",
+      "server/src/subscription-calendar.js": "6ced7a6b7e1f4801bae641b2856a21dbf6ad485fbee9e84c70f0e66094e43911",
+      "server/src/request-limits.js": "ef89f4fc5617d326a030a6b1f49bd5df893254df228a1834320312a5bd226cde",
+      "server/src/environment-mode.js": "13c10960a7b13a1419bf5760b53dcafd87273074e214c3e7cca43813f3e0254f",
+      "public/desktop-responsive.css": "2f14c508ae82fc96843e63dde768aabf8884565b584e36a8064672fab9f2a0f9",
+      "public/initial-password.js": "b276fd51eebca90942c9b4f1addf4e83a325dc463ce482f04cb4117af48900cb",
+      "public/app-dialogs.js": "77b57e715876d0f572065118535b3819d72e247ca96b8457f500b9d49838f01a",
+      "public/login-pharmacy-bg.png": "c792ab240abf50fd6a9f53348504d999d4f8db15fdb0bab3dba3831975aaac20",
+      "public/delegated-events.js": "8fc11957be7a1809c67060b9126819f0f072f3f267b8b72401d746a252c52505",
+      "public/index.html": "981647b74c4c971a498f51dae74e089a2ce8b2e836f9083555ae81ec9b983430",
+      "public/app-dialogs.css": "ef3773b9e3a0c71f6b46af2dba5ae4d5b9e3dc9ea02c18933ac140d891572ab3",
+      "database/upgrade_v44_4.sql": "0d83829835e064b4079ab238e6e591348e593dddca7be82864cc475b25507381",
+      "database/upgrade_v6.sql": "9d0ff80f0b533378a7083adf33e1281011a21769d5a5dd15922c3cc5632e5f42",
+      "database/upgrade_v27_1_devoluciones.sql": "2cdc8648534a8b250539a73792ec450ed715742b7a1c3bcd2b0a07b44b30a95b",
+      "database/upgrade_v8_excel_real.sql": "5d1e7964ac00919ef48b1dd686446268852138735c5009eb807460e262611ae3",
+      "database/upgrade_v9_proveedores.sql": "9b07a3b9b92c62dfa25484bc8af24d7a40e2bcf2d348866c01f8ca808046bd67",
+      "database/upgrade_v10_compras.sql": "8597e57409c16dbba3dfd0f49e8dc41264b4cd3084e9b4d0e180c671707c11ef",
+      "database/schema.sql": "71a5d8d80d8d2236a6773ae6e9fafa1e52bb38e43b44f25e96db5764fde24856",
+      "database/upgrade_v5.sql": "0336086372085d0f9f4529febc9212c465b72274e46a2c03b09359dc4de77e83",
+      "database/upgrade_v12_performance.sql": "dc30d7d1ff951478c744ae993e46b5410dd27492d4fe478d279009854a5ad3dd",
+      "database/upgrade_ticket_print_width.sql": "27fbeb52f619f1c5542a7a8383885d377720fd482492166e41a2f1766df7c9f8",
+      "database/upgrade_v4.sql": "57b587bb91bef76c3f9e5c784801ffaa16ccefccea0c69723b17726dbabfe1d1",
+      "database/upgrade_count_unlotted.sql": "24e21c35ce8f4a504d709dabf1f323d355243174be8952f483f4e206d6bb6376",
+      "database/upgrade_final.sql": "6f07f7a6d4a1534972cbcd0600753ad4c3112d3dc798bc98b18e8b5db9da40b6",
+      "database/upgrade_product_identity.sql": "a113ba15c27fdb35b16bf3b1005bca36c0fbc1441099bdd27fe55f1d24301473",
+      "database/upgrade_branch_catalog.sql": "d289fec961abf6a2afcaa3869b295adcd9bf10a5ffc5763653c0b536db47d378",
+      "database/migrations/004_planes_limites.sql": "9e6736ad4c736c2a5e1c5d3ddec8b3241d43e24afe823db613bfb44a59bb3f40",
+      "database/migrations/003_estados_empresa.sql": "08d08c2ca3cbb4a15bc34c5ffbaf6ae65ea17a519b2b94ae1d848a2405a0a6c3",
+      "database/migrations/002_alta_clientes_empresas.sql": "e6c5f96f0de95603b1e4120ea80e80dea804c66ec11691c25406f1424faae114",
+      "database/migrations/001_empresa_acceso.sql": "bf3ca01919e289e266ca2512abb781d4a3cee580ba0890a3095ae88a740af53e",
+      "database/migrations/006_operacion_workers.sql": "df2992079871c580ebea6c6f37f15208d542b21690140dad3ace9c80f6c0928a",
+      "database/migrations/005_suscripciones_vigencia.sql": "53198793154df0fb53eaa8badb49aba67ba535f78009e24b5c983f9f3ef2afaf"
+    }
+  },
+  "APPLY_DONE.json": {
+    "utc": "2026-10-13T23:23:42.505888+00:00",
+    "applied": true,
+    "files": [
+      "server/src/app.js",
+      "server/src/sale-profitability.js",
+      "public/index.html",
+      "public/sale-profitability.js"
+    ],
+    "before": {
+      "server/src/app.js": "58d31e00d2414804e636429a38fdd1662b1888d5dfe7c26f533d798c76e6af0d",
+      "server/src/sale-profitability.js": null,
+      "public/index.html": "981647b74c4c971a498f51dae74e089a2ce8b2e836f9083555ae81ec9b983430",
+      "public/sale-profitability.js": null
+    },
+    "after": {
+      "server/src/app.js": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7",
+      "server/src/sale-profitability.js": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220",
+      "public/index.html": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e",
+      "public/sale-profitability.js": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+    },
+    "readiness": {
+      "loopback": {
+        "url": "http://127.0.0.1:3001/api/health",
+        "attempts": 5,
+        "pid": 300850,
+        "restarts": 5,
+        "stable_samples": 3
+      },
+      "https": {
+        "url": "https://app.eduxfac.com/api/health",
+        "attempts": 3,
+        "pid": 300850,
+        "restarts": 5,
+        "stable_samples": 3
+      }
+    },
+    "final_readiness": {
+      "loopback": {
+        "url": "http://127.0.0.1:3001/api/health",
+        "attempts": 3,
+        "pid": 300850,
+        "restarts": 5,
+        "stable_samples": 3
+      },
+      "https": {
+        "url": "https://app.eduxfac.com/api/health",
+        "attempts": 3,
+        "pid": 300850,
+        "restarts": 5,
+        "stable_samples": 3
+      }
+    },
+    "other_processes_unchanged": true,
+    "functional_post_deploy": "PENDING_SEPARATE_ISOLATED_SMOKE_NO_REAL_CUSTOMER_MUTATIONS",
+    "rollback": "/home/eduxadmin/.local/share/eduxfac/profitability_deploy_v2_20261013/ROLLBACK_RENTABILIDAD_V2.py"
+  },
+  "MANIFEST.json": {
+    "prepared_only": true,
+    "never_executed": true,
+    "before": {
+      "server/src/app.js": "58d31e00d2414804e636429a38fdd1662b1888d5dfe7c26f533d798c76e6af0d",
+      "server/src/sale-profitability.js": null,
+      "public/index.html": "981647b74c4c971a498f51dae74e089a2ce8b2e836f9083555ae81ec9b983430",
+      "public/sale-profitability.js": null
+    },
+    "after": {
+      "server/src/app.js": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7",
+      "server/src/sale-profitability.js": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220",
+      "public/index.html": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e",
+      "public/sale-profitability.js": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+    },
+    "candidate_native_go": true,
+    "version": 2,
+    "remote_work": "/home/eduxadmin/.local/share/eduxfac/profitability_deploy_v2_20261013"
+  },
+  "events": [
+    {
+      "utc": "2026-10-13T23:23:02.452668+00:00",
+      "phase": "baseline_readiness",
+      "kind": "phase"
+    },
+    {
+      "utc": "2026-10-13T23:23:02.917620+00:00",
+      "phase": "baseline_readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:02.880533+00:00",
+      "ended_utc": "2026-10-13T23:23:02.917403+00:00",
+      "duration_ms": 36.88,
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 1,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "fa0558dfe7fd7345a0a1fb14499032074208b29aecdeb7a9543837ceb1cf65a0",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:02.944733+00:00",
+      "phase": "baseline_readiness",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 1,
+      "consecutive": 1,
+      "process": {
+        "id": 4,
+        "pid": 297349,
+        "status": "online",
+        "restarts": 4
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:04.385582+00:00",
+      "phase": "baseline_readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:04.378952+00:00",
+      "ended_utc": "2026-10-13T23:23:04.385451+00:00",
+      "duration_ms": 6.53,
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 2,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "8a694b7a69f24a24f852a1f2107486898b375ada8085777258acb6f9c1016679",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:04.404101+00:00",
+      "phase": "baseline_readiness",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 2,
+      "consecutive": 2,
+      "process": {
+        "id": 4,
+        "pid": 297349,
+        "status": "online",
+        "restarts": 4
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:05.813483+00:00",
+      "phase": "baseline_readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:05.806999+00:00",
+      "ended_utc": "2026-10-13T23:23:05.813352+00:00",
+      "duration_ms": 6.36,
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 3,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "09ac8fcd21ca2fcd43c593e8224ad08665ea1c61126eb63472d799b5db2d6792",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:05.818615+00:00",
+      "phase": "baseline_readiness",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 3,
+      "consecutive": 3,
+      "process": {
+        "id": 4,
+        "pid": 297349,
+        "status": "online",
+        "restarts": 4
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:06.280292+00:00",
+      "phase": "baseline_readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:06.257234+00:00",
+      "ended_utc": "2026-10-13T23:23:06.280178+00:00",
+      "duration_ms": 22.95,
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 1,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "7cc864ab6ecd168c9490c6309992dbff8b3b9d5c3ebd3ffd16cd1485c526f5c9",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:06.287637+00:00",
+      "phase": "baseline_readiness",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 1,
+      "consecutive": 1,
+      "process": {
+        "id": 4,
+        "pid": 297349,
+        "status": "online",
+        "restarts": 4
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:07.611301+00:00",
+      "phase": "baseline_readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:07.592983+00:00",
+      "ended_utc": "2026-10-13T23:23:07.611045+00:00",
+      "duration_ms": 18.2,
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 2,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "46a92ea229d4c5df3f144b364143e09b9ee876f91f551cfe3f90e56edb22621b",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:07.613961+00:00",
+      "phase": "baseline_readiness",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 2,
+      "consecutive": 2,
+      "process": {
+        "id": 4,
+        "pid": 297349,
+        "status": "online",
+        "restarts": 4
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:08.968116+00:00",
+      "phase": "baseline_readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:08.947563+00:00",
+      "ended_utc": "2026-10-13T23:23:08.967985+00:00",
+      "duration_ms": 20.42,
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 3,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "e7aa94a3d14eec6b127de64ab940f4c8f36223b039d4d5b4502a63bff2ffa751",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:09.004690+00:00",
+      "phase": "baseline_readiness",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 3,
+      "consecutive": 3,
+      "process": {
+        "id": 4,
+        "pid": 297349,
+        "status": "online",
+        "restarts": 4
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:09.615030+00:00",
+      "phase": "backup",
+      "kind": "phase"
+    },
+    {
+      "utc": "2026-10-13T23:23:10.026448+00:00",
+      "phase": "apply_files",
+      "kind": "phase"
+    },
+    {
+      "utc": "2026-10-13T23:23:10.035214+00:00",
+      "phase": "apply_files",
+      "kind": "file_applied",
+      "file": "server/src/app.js",
+      "before": "58d31e00d2414804e636429a38fdd1662b1888d5dfe7c26f533d798c76e6af0d",
+      "after": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7"
+    },
+    {
+      "utc": "2026-10-13T23:23:10.062727+00:00",
+      "phase": "apply_files",
+      "kind": "file_applied",
+      "file": "server/src/sale-profitability.js",
+      "before": null,
+      "after": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220"
+    },
+    {
+      "utc": "2026-10-13T23:23:10.156373+00:00",
+      "phase": "apply_files",
+      "kind": "file_applied",
+      "file": "public/index.html",
+      "before": "981647b74c4c971a498f51dae74e089a2ce8b2e836f9083555ae81ec9b983430",
+      "after": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e"
+    },
+    {
+      "utc": "2026-10-13T23:23:10.254110+00:00",
+      "phase": "apply_files",
+      "kind": "file_applied",
+      "file": "public/sale-profitability.js",
+      "before": null,
+      "after": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+    },
+    {
+      "utc": "2026-10-13T23:23:10.286290+00:00",
+      "phase": "restart",
+      "kind": "phase"
+    },
+    {
+      "utc": "2026-10-13T23:23:10.600375+00:00",
+      "phase": "restart",
+      "kind": "restart_requested",
+      "id": 4,
+      "pid": 297349,
+      "restarts": 4
+    },
+    {
+      "utc": "2026-10-13T23:23:11.131781+00:00",
+      "phase": "restart",
+      "kind": "restart_result",
+      "return_code": 0
+    },
+    {
+      "utc": "2026-10-13T23:23:11.136235+00:00",
+      "phase": "readiness",
+      "kind": "phase"
+    },
+    {
+      "utc": "2026-10-13T23:23:11.491039+00:00",
+      "phase": "readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:11.490513+00:00",
+      "ended_utc": "2026-10-13T23:23:11.490951+00:00",
+      "duration_ms": 0.42,
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 1,
+      "status": null,
+      "error_type": "CONNECTION_REFUSED",
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:11.496223+00:00",
+      "phase": "readiness",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 1,
+      "consecutive": 0,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:12.901403+00:00",
+      "phase": "readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:12.894572+00:00",
+      "ended_utc": "2026-10-13T23:23:12.901045+00:00",
+      "duration_ms": 6.5,
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 2,
+      "status": null,
+      "error_type": "CONNECTION_REFUSED",
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:12.906186+00:00",
+      "phase": "readiness",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 2,
+      "consecutive": 0,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:14.475814+00:00",
+      "phase": "readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:14.442708+00:00",
+      "ended_utc": "2026-10-13T23:23:14.475686+00:00",
+      "duration_ms": 32.99,
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 3,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "5e45905a2166e3432d4d4b68a06f412e38939bc644b9f2fb5ca41a317249ef95",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:14.480744+00:00",
+      "phase": "readiness",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 3,
+      "consecutive": 1,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:16.429137+00:00",
+      "phase": "readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:16.420894+00:00",
+      "ended_utc": "2026-10-13T23:23:16.429011+00:00",
+      "duration_ms": 8.12,
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 4,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "f7684ba7f971e150814d568398f7170b97cfd92469796cf3a33dfb0716f2346d",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:16.683654+00:00",
+      "phase": "readiness",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 4,
+      "consecutive": 2,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:18.119146+00:00",
+      "phase": "readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:18.101836+00:00",
+      "ended_utc": "2026-10-13T23:23:18.118948+00:00",
+      "duration_ms": 17.11,
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 5,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "9b333c41e13d4e081e23e29531f93264c6c6d5e1eb29e1afd2c275dfad258047",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:18.153243+00:00",
+      "phase": "readiness",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 5,
+      "consecutive": 3,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:18.588207+00:00",
+      "phase": "readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:18.504656+00:00",
+      "ended_utc": "2026-10-13T23:23:18.588095+00:00",
+      "duration_ms": 83.44,
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 1,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "b8edde33779a9439e1f74a313b0ef0ab2e46d342c70d5bd4f09468a6cfd85025",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:18.618957+00:00",
+      "phase": "readiness",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 1,
+      "consecutive": 1,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:20.061649+00:00",
+      "phase": "readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:20.042380+00:00",
+      "ended_utc": "2026-10-13T23:23:20.061529+00:00",
+      "duration_ms": 19.16,
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 2,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "b6ca2e99343fe65b4186f7c1b47fe7b060a6a0f9d8fb2bac26d866147060f742",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:20.064964+00:00",
+      "phase": "readiness",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 2,
+      "consecutive": 2,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:21.418552+00:00",
+      "phase": "readiness",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:21.400061+00:00",
+      "ended_utc": "2026-10-13T23:23:21.418380+00:00",
+      "duration_ms": 18.3,
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 3,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "b9bc6437c51cbf006e1ca6720501c98e8e70ecbcc7db99c6ae60e4959bfd9ed9",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:21.422425+00:00",
+      "phase": "readiness",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 3,
+      "consecutive": 3,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:21.426679+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "phase"
+    },
+    {
+      "utc": "2026-10-13T23:23:21.724223+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:21.714575+00:00",
+      "ended_utc": "2026-10-13T23:23:21.721672+00:00",
+      "duration_ms": 7.1,
+      "url": "http://127.0.0.1:3001/",
+      "attempt": 1,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 395167,
+        "sha256": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:21.739263+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/",
+      "attempt": 1,
+      "consecutive": 1,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:23.073717+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:23.055918+00:00",
+      "ended_utc": "2026-10-13T23:23:23.066528+00:00",
+      "duration_ms": 10.62,
+      "url": "http://127.0.0.1:3001/",
+      "attempt": 2,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 395167,
+        "sha256": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:23.093980+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/",
+      "attempt": 2,
+      "consecutive": 2,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:24.374356+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:24.361938+00:00",
+      "ended_utc": "2026-10-13T23:23:24.371307+00:00",
+      "duration_ms": 9.38,
+      "url": "http://127.0.0.1:3001/",
+      "attempt": 3,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 395167,
+        "sha256": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:24.389974+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/",
+      "attempt": 3,
+      "consecutive": 3,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:24.660891+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:24.632113+00:00",
+      "ended_utc": "2026-10-13T23:23:24.657534+00:00",
+      "duration_ms": 25.42,
+      "url": "https://app.eduxfac.com/",
+      "attempt": 1,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 395167,
+        "sha256": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:24.674728+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/",
+      "attempt": 1,
+      "consecutive": 1,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:26.018831+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:25.992395+00:00",
+      "ended_utc": "2026-10-13T23:23:26.015352+00:00",
+      "duration_ms": 22.97,
+      "url": "https://app.eduxfac.com/",
+      "attempt": 2,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 395167,
+        "sha256": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:26.032314+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/",
+      "attempt": 2,
+      "consecutive": 2,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:27.333690+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:27.310049+00:00",
+      "ended_utc": "2026-10-13T23:23:27.330252+00:00",
+      "duration_ms": 20.7,
+      "url": "https://app.eduxfac.com/",
+      "attempt": 3,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 395167,
+        "sha256": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:27.350738+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/",
+      "attempt": 3,
+      "consecutive": 3,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:27.682347+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:27.661695+00:00",
+      "ended_utc": "2026-10-13T23:23:27.682213+00:00",
+      "duration_ms": 20.52,
+      "url": "https://app.eduxfac.com/sale-profitability.js",
+      "attempt": 1,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 1469,
+        "sha256": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:27.685169+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/sale-profitability.js",
+      "attempt": 1,
+      "consecutive": 1,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:28.962543+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:28.947396+00:00",
+      "ended_utc": "2026-10-13T23:23:28.962375+00:00",
+      "duration_ms": 14.99,
+      "url": "https://app.eduxfac.com/sale-profitability.js",
+      "attempt": 2,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 1469,
+        "sha256": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:28.968032+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/sale-profitability.js",
+      "attempt": 2,
+      "consecutive": 2,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:30.330993+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:30.308864+00:00",
+      "ended_utc": "2026-10-13T23:23:30.330854+00:00",
+      "duration_ms": 21.99,
+      "url": "https://app.eduxfac.com/sale-profitability.js",
+      "attempt": 3,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 1469,
+        "sha256": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:30.342593+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/sale-profitability.js",
+      "attempt": 3,
+      "consecutive": 3,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:30.681681+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:30.664455+00:00",
+      "ended_utc": "2026-10-13T23:23:30.679841+00:00",
+      "duration_ms": 15.36,
+      "url": "https://admin.eduxfac.com/",
+      "attempt": 1,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 3821,
+        "sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:30.684900+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://admin.eduxfac.com/",
+      "attempt": 1,
+      "consecutive": 1,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:32.041611+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:32.026258+00:00",
+      "ended_utc": "2026-10-13T23:23:32.041427+00:00",
+      "duration_ms": 15.17,
+      "url": "https://admin.eduxfac.com/",
+      "attempt": 2,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 3821,
+        "sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:32.044260+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://admin.eduxfac.com/",
+      "attempt": 2,
+      "consecutive": 2,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:33.333942+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:33.320970+00:00",
+      "ended_utc": "2026-10-13T23:23:33.333787+00:00",
+      "duration_ms": 12.83,
+      "url": "https://admin.eduxfac.com/",
+      "attempt": 3,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 3821,
+        "sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:33.336782+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://admin.eduxfac.com/",
+      "attempt": 3,
+      "consecutive": 3,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:33.624756+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:33.598488+00:00",
+      "ended_utc": "2026-10-13T23:23:33.621738+00:00",
+      "duration_ms": 23.25,
+      "url": "https://eduxfac.com/",
+      "attempt": 1,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 392285,
+        "sha256": "8ed33e3069c77bdf951edfff933fc9d0864f7c4ed1136d0cd62ae575d3a0c033"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:33.628672+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://eduxfac.com/",
+      "attempt": 1,
+      "consecutive": 1,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:34.949744+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:34.927327+00:00",
+      "ended_utc": "2026-10-13T23:23:34.947666+00:00",
+      "duration_ms": 20.34,
+      "url": "https://eduxfac.com/",
+      "attempt": 2,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 392285,
+        "sha256": "8ed33e3069c77bdf951edfff933fc9d0864f7c4ed1136d0cd62ae575d3a0c033"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:34.952800+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://eduxfac.com/",
+      "attempt": 2,
+      "consecutive": 2,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:36.265356+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:36.241008+00:00",
+      "ended_utc": "2026-10-13T23:23:36.263820+00:00",
+      "duration_ms": 22.82,
+      "url": "https://eduxfac.com/",
+      "attempt": 3,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 392285,
+        "sha256": "8ed33e3069c77bdf951edfff933fc9d0864f7c4ed1136d0cd62ae575d3a0c033"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:36.271333+00:00",
+      "phase": "frontend_and_domains",
+      "kind": "readiness",
+      "url": "https://eduxfac.com/",
+      "attempt": 3,
+      "consecutive": 3,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:36.555025+00:00",
+      "phase": "final_health",
+      "kind": "phase"
+    },
+    {
+      "utc": "2026-10-13T23:23:36.896268+00:00",
+      "phase": "final_health",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:36.845599+00:00",
+      "ended_utc": "2026-10-13T23:23:36.896157+00:00",
+      "duration_ms": 50.56,
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 1,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "c83cffab440d792c0531687158c12f8a5ddab76560b50543b1af238e4ee63429",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:36.899494+00:00",
+      "phase": "final_health",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 1,
+      "consecutive": 1,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:38.220205+00:00",
+      "phase": "final_health",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:38.208450+00:00",
+      "ended_utc": "2026-10-13T23:23:38.220085+00:00",
+      "duration_ms": 11.62,
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 2,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "d4e715a72f199d05e752d8c118e4a3a192653b2b938b1dc4e5b934191ea51f44",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:38.251300+00:00",
+      "phase": "final_health",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 2,
+      "consecutive": 2,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:39.571239+00:00",
+      "phase": "final_health",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:39.565250+00:00",
+      "ended_utc": "2026-10-13T23:23:39.571131+00:00",
+      "duration_ms": 5.89,
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 3,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "ceacdc7e0c78372e2e632f37ebb3e46f14cbc1426dcd5679be5f42160b8ccd86",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:39.575154+00:00",
+      "phase": "final_health",
+      "kind": "readiness",
+      "url": "http://127.0.0.1:3001/api/health",
+      "attempt": 3,
+      "consecutive": 3,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:39.847986+00:00",
+      "phase": "final_health",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:39.833808+00:00",
+      "ended_utc": "2026-10-13T23:23:39.847869+00:00",
+      "duration_ms": 14.07,
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 1,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "02d2bf3b4b52022bfab8c59aaf272902f935453b3b77eb3ef1b21ac26b0dbae4",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:39.852521+00:00",
+      "phase": "final_health",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 1,
+      "consecutive": 1,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:41.170749+00:00",
+      "phase": "final_health",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:41.150556+00:00",
+      "ended_utc": "2026-10-13T23:23:41.170644+00:00",
+      "duration_ms": 20.1,
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 2,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "b0543b85e92f3606d00f5c9b00f28c6929d968b6eb0bbfde517f3c4782a23d72",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:41.174940+00:00",
+      "phase": "final_health",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 2,
+      "consecutive": 2,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:42.491414+00:00",
+      "phase": "final_health",
+      "kind": "http",
+      "started_utc": "2026-10-13T23:23:42.472884+00:00",
+      "ended_utc": "2026-10-13T23:23:42.491313+00:00",
+      "duration_ms": 18.43,
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 3,
+      "status": 200,
+      "error_type": null,
+      "redirected": false,
+      "body_sanitized": {
+        "bytes": 81,
+        "sha256": "a5c6ef79eabb9c39fdfec8a38764bfb0fae0259be3b407b4510094102ca61fb4",
+        "ok": true,
+        "database": true,
+        "data_mode": "PILOTO"
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:42.503981+00:00",
+      "phase": "final_health",
+      "kind": "readiness",
+      "url": "https://app.eduxfac.com/api/health",
+      "attempt": 3,
+      "consecutive": 3,
+      "process": {
+        "id": 4,
+        "pid": 300850,
+        "status": "online",
+        "restarts": 5
+      }
+    },
+    {
+      "utc": "2026-10-13T23:23:42.510333+00:00",
+      "phase": "final_health",
+      "kind": "success"
+    }
+  ],
+  "actual_sha256": {
+    "server/src/app.js": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7",
+    "server/src/sale-profitability.js": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220",
+    "public/index.html": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e",
+    "public/sale-profitability.js": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+  },
+  "backup_verified": true,
+  "rollback_sha256": "dae131cf2b803ce5ed5aa3f85edad79705693cffcd4d7720f37d42c80a1af09f",
+  "processes": [
+    {
+      "name": "eduxfac",
+      "id": 0,
+      "pid": 988,
+      "status": "online",
+      "restarts": 0
+    },
+    {
+      "name": "EDUXFAC-PANEL-PILOTO",
+      "id": 3,
+      "pid": 269525,
+      "status": "online",
+      "restarts": 4
+    },
+    {
+      "name": "EDUXFAC-WEB-PILOTO",
+      "id": 4,
+      "pid": 300850,
+      "status": "online",
+      "restarts": 5
+    }
+  ],
+  "stderr_bytes": 0
+}

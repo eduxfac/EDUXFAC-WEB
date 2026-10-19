@@ -1,0 +1,134 @@
+{
+  "utc": "2026-10-14T01:50:07.841334+00:00",
+  "status": "CANDIDATE_D_VALIDATED_NOT_DEPLOYED",
+  "result": "GO_CONTROLLED_WEB_PILOT_DEPLOY",
+  "files": [
+    "server/src/app.js",
+    "public/index.html",
+    "tests/product-required-fields.test.js"
+  ],
+  "sha256": {
+    "server/src/app.js": {
+      "before": "aea688d15a8022b8c5fbb38616c4aa50a86c0efe65e14c788a18f0278cd03d16",
+      "after": "fd0f19d0837546630626a825b66c6cd3c72496faa25319f8cc9feab9327666d1"
+    },
+    "public/index.html": {
+      "before": "a03b1cf10bddd39ccb171accdf0e724498903f3656e20fdc5b31136e460c2392",
+      "after": "4ead28dfbf60c2af42c30ddb373c24c269e8fbb565601450816d1ecb2d16ea9e"
+    },
+    "tests/product-required-fields.test.js": {
+      "before": null,
+      "after": "1298d628d8e09a1ba6e76ebc57cff0c61bd6aa7ab0ac0119a35feab247a5f2e3"
+    }
+  },
+  "backup": "D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\docs\\PRODUCTOS_5_CAMPOS_ORIGINALES_20261014_014153",
+  "required_user_fields": [
+    "codigo_interno",
+    "nombre",
+    "unidad_medida",
+    "stock_minimo",
+    "precio"
+  ],
+  "optional_fields": [
+    "codigo_barras",
+    "principio_activo",
+    "concentracion",
+    "presentacion",
+    "stock_maximo",
+    "categoria_id",
+    "laboratorio_id",
+    "equivalencias"
+  ],
+  "normalization": {
+    "empty_optional_text_catalogs": "NULL",
+    "empty_stock_maximo": "0",
+    "empty_equivalences": "[]",
+    "missing_stock_minimo_or_precio": "REJECT",
+    "stock_minimo_0": "ALLOW",
+    "explicit_precio_0": "ALLOW_EXISTING_NONNEGATIVE_RULE"
+  },
+  "duplicate_rules": {
+    "code": "trimmed unique within empresa, supplied generated code validated and persisted",
+    "name": "current trim, whitespace collapse, case insensitive within empresa",
+    "barcode": "trimmed, unique only when present"
+  },
+  "database_findings": {
+    "optional_text_catalogs_nullable": true,
+    "codigo_interno_nombre_NOT_NULL": true,
+    "stock_minimo_maximo_NOT_NULL_default_0": true,
+    "branch_stock_minimo_maximo_CHECK_nonnegative": true,
+    "price_NOT_NULL_CHECK_nonnegative": true,
+    "barcode_unique_index_partial_nonempty": true,
+    "schema_files_changed": false,
+    "migration_required": false
+  },
+  "backend_changes": [
+    "required fields enforced on direct POST",
+    "valid creation unit selection",
+    "finite decimal nonnegative numeric fields",
+    "nullable optional catalog IDs only checked when supplied",
+    "optional descriptions trimmed to NULL",
+    "create persists form code and returns 409 on duplicate",
+    "shared edit validator accepts optional fields while preserving immutable existing code"
+  ],
+  "frontend_changes": [
+    "required/aria-required on five fields only",
+    "JavaScript missing/invalid numeric/unit validation",
+    "generated code submitted to API",
+    "optional fields need no input"
+  ],
+  "tests": {
+    "suites": {
+      "PRODUCTOS_5_CAMPOS_NATIVO.log": {
+        "tests": 27,
+        "pass": 27,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "PRODUCTOS_5_CAMPOS_REGRESION_LINUX.log": {
+        "tests": 327,
+        "pass": 327,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "PRODUCTOS_5_CAMPOS_REGRESION_COSTOS_RLS.log": {
+        "tests": 71,
+        "pass": 71,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    "total_executions_passed": 425,
+    "failed": 0,
+    "omitted": 0,
+    "unique_suite_checks": 398,
+    "new_cases_native": 27,
+    "same_27_cases_also_run_in_Linux_PGlite": true
+  },
+  "lab": {
+    "container": "eduxfac-profit-native-20261013",
+    "network": "none",
+    "host_mounts": [],
+    "ports": {},
+    "stopped": true
+  },
+  "constraints": {
+    "VPS_accessed": false,
+    "deployed": false,
+    "real_databases_or_APRONAX_changed": false,
+    "PANEL_modified": false,
+    "purchases_inventory_sales_reports_source_outside_product_creation_unchanged": true,
+    "Nginx_certificates_changed": false,
+    "ZIP_created": false
+  },
+  "deployment_notes": [
+    "Only deploy server/src/app.js and public/index.html after explicit user authorization; tests remain local.",
+    "No SQL/migration needed.",
+    "CSP caches HTML: a future deploy requires controlled WEB PILOTO restart/readiness.",
+    "Creation API requires codigo_interno; UI now supplies generated value. Duplicate generated code returns 409 rather than silently replacing it.",
+    "Price zero remains allowed in product creation; profitability rule in sales remains unchanged."
+  ]
+}

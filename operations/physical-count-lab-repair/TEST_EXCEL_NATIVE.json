@@ -1,0 +1,87 @@
+{
+  "output": "D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\docs\\physical_count_excel\\Conteo_Fisico_FICTICIO_CALCULADO.xlsx",
+  "user_workbooks_untouched": true,
+  "macros_disabled": true,
+  "engine": "Microsoft Excel",
+  "passed": 10,
+  "checks": [
+    {
+      "calculated": [
+        5.0,
+        0.0,
+        7.85,
+        0.0,
+        149.15
+      ],
+      "case": "COUNT-LESS",
+      "passed": true
+    },
+    {
+      "calculated": [
+        0.0,
+        5.0,
+        0.0,
+        10.0,
+        210.0
+      ],
+      "case": "COUNT-MORE",
+      "passed": true
+    },
+    {
+      "calculated": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        100.0
+      ],
+      "case": "COUNT-EQUAL",
+      "passed": true
+    },
+    {
+      "calculated": [
+        4.875,
+        0.0,
+        6.02,
+        0.0,
+        117.43
+      ],
+      "case": "COUNT-DECIMAL",
+      "passed": true
+    },
+    {
+      "calculated": [
+        5.0,
+        0.0,
+        8.05,
+        0.0,
+        152.95
+      ],
+      "case": "P-A",
+      "passed": true
+    },
+    {
+      "passed": true,
+      "case": "Costo desconocido no valoriza"
+    },
+    {
+      "passed": true,
+      "case": "E vacío conserva resultados vacíos"
+    },
+    {
+      "passed": true,
+      "case": "Solo E editable; J/K bloqueadas"
+    },
+    {
+      "passed": true,
+      "case": "Excel reconoce rellenos condicionales naranja y verde"
+    },
+    {
+      "passed": true,
+      "case": "Apertura y copia calculada nativa sin reparación"
+    }
+  ],
+  "version": "16.0",
+  "read_only_source": true,
+  "failed": 0
+}

@@ -1,0 +1,76 @@
+{
+  "result": "ABRILAR_VERIFIED",
+  "simulation": {
+    "rows": [
+      {
+        "id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+        "numero_lote": "EDU1",
+        "stock": "3.000",
+        "costo_unitario": "15",
+        "valor_base_costos": "0",
+        "valor": "45.000",
+        "costo_venta": "15.0000000000000000",
+        "tomar": "3.000",
+        "costo_consumido": "45.0000000000000000"
+      },
+      {
+        "id": "16a942c2-9776-4a80-8251-1187421adb6f",
+        "numero_lote": "EDU2",
+        "stock": "3.000",
+        "costo_unitario": "15",
+        "valor_base_costos": "0",
+        "valor": "45.000",
+        "costo_venta": "15.0000000000000000",
+        "tomar": "3.000",
+        "costo_consumido": "45.0000000000000000"
+      },
+      {
+        "id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+        "numero_lote": "EDU3",
+        "stock": "5.000",
+        "costo_unitario": "15",
+        "valor_base_costos": "0",
+        "valor": "75.000",
+        "costo_venta": "15.0000000000000000",
+        "tomar": "2.000",
+        "costo_consumido": "30.0000000000000000"
+      }
+    ],
+    "stock_total": 11,
+    "inventory_value": 165,
+    "quantity": 8,
+    "cost": 120,
+    "revenue": 200,
+    "profit": 80,
+    "SELECT_only": true
+  },
+  "health": [
+    {
+      "url": "http://127.0.0.1:3001/api/health",
+      "http": 200,
+      "ms": 150,
+      "body_sha256": "e7f99dadf9f10b9daa93848ba1b84de4aea4b0cb2f529d0f5d612337f05f28fb"
+    },
+    {
+      "url": "https://app.eduxfac.com/api/health",
+      "http": 200,
+      "ms": 36,
+      "body_sha256": "2a4824c98bf140de0e00390b63ceb9bb7dbf006b9179cd926bc945fc45d646b1"
+    },
+    {
+      "url": "https://app.eduxfac.com/",
+      "http": 200,
+      "ms": 64,
+      "body_sha256": "06ad9349541563ef990fcf5c8a7ecf63c5db05b28b2688bfe25aaf8b63f524c1"
+    },
+    {
+      "url": "https://admin.eduxfac.com/",
+      "http": 200,
+      "ms": 24,
+      "body_sha256": "7998b67868316348b51d9811dbccd114fd61f584b05944c4a073d108603614df"
+    }
+  ],
+  "audit_id": "43",
+  "all_protected_tables_unchanged": true,
+  "force_rls": 44
+}

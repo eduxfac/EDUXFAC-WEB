@@ -1,0 +1,6 @@
+{
+  "checks_completed": [],
+  "private_pid": 17052,
+  "error": "You cannot call a method on a null-valued expression.",
+  "position": "At D:\\EDUXFAC\\EDUXFAC WEB\\01_TRABAJO_ACTUAL\\EDUXFAC_WEB_ACTUAL\\operations\\physical-count-deploy-v2\\VERIFY_EXCEL_POSTDEPLOY.ps1:39 char:2\r\n+  $book=$excel.Workbooks.Open($inputFile,0,$true)\r\n+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+}

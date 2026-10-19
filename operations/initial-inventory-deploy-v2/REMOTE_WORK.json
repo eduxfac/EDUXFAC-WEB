@@ -1,0 +1,15 @@
+{
+  "work": "/home/eduxadmin/.local/share/eduxfac/initial_inventory_deploy_v2_20261014_204239",
+  "tool_hashes": {
+    "DEPLOY_INITIAL_INVENTORY.py": "a67d44e1cccbe22019dbc921c4d2e6e5d87831b829fee1d0e221f7df70ea14d4",
+    "html_integrity.py": "8eeb2f76dbad5b69bca884aa4ade26d5687ea08036bcd40bdc0ed942921e915f",
+    "READONLY_DB.mjs": "da51dad3bc04866655f5f4ceb10b35ce3b05e49d53d8e44498abf2d447274e4a",
+    "ROLLBACK_RENTABILIDAD_V2.py": "586983f04125ac5fc172ef6bd96f4270ad5ce7c28972692e1f2e347a5655e219",
+    "MANIFEST.json": "9e9db0a92e791030053f2291be58de53465f682e7f96cc488b13bd0412197291"
+  },
+  "candidate": {
+    "server/src/app.js": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab",
+    "server/src/initial-inventory.js": "57abcde45bc6b165875e1f8b6ad6c956e87bc4759a4483476f3bfef159b62377",
+    "public/index.html": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32"
+  }
+}

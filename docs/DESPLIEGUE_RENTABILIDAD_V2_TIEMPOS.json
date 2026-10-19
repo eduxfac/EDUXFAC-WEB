@@ -1,0 +1,58 @@
+{
+  "loopback": {
+    "first_200_since_restart_seconds": 3.875,
+    "stable_since_restart_seconds": 7.553,
+    "attempts": 5,
+    "observed_responses": [
+      {
+        "status": null,
+        "error_type": "CONNECTION_REFUSED",
+        "duration_ms": 0.42
+      },
+      {
+        "status": null,
+        "error_type": "CONNECTION_REFUSED",
+        "duration_ms": 6.5
+      },
+      {
+        "status": 200,
+        "error_type": null,
+        "duration_ms": 32.99
+      },
+      {
+        "status": 200,
+        "error_type": null,
+        "duration_ms": 8.12
+      },
+      {
+        "status": 200,
+        "error_type": null,
+        "duration_ms": 17.11
+      }
+    ]
+  },
+  "https": {
+    "first_200_since_restart_seconds": 7.988,
+    "stable_since_restart_seconds": 10.822,
+    "attempts": 3,
+    "observed_responses": [
+      {
+        "status": 200,
+        "error_type": null,
+        "duration_ms": 83.44
+      },
+      {
+        "status": 200,
+        "error_type": null,
+        "duration_ms": 19.16
+      },
+      {
+        "status": 200,
+        "error_type": null,
+        "duration_ms": 18.3
+      }
+    ]
+  },
+  "deployment_restart_utc": "2026-10-13T23:23:10.600375+00:00",
+  "total_since_restart_seconds": 31.91
+}

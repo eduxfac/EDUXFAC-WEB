@@ -1,0 +1,80 @@
+{
+  "guard": {
+    "db": "eduxfac_web_piloto",
+    "read_only": "on",
+    "snapshot": "2026-10-15T03:04:32.377Z"
+  },
+  "simulation": [
+    {
+      "id": "c77e5814-875d-4b7f-a818-82ba4140922f",
+      "numero_lote": "EDU1",
+      "vencimiento": "2026-10-29",
+      "stock": "3.000",
+      "costo_lote": "15",
+      "cantidad_movimientos": "3.000",
+      "valor_movimientos": "45.000",
+      "apertura": "45",
+      "valor_usado": "90.000",
+      "sucursal": "PRINCIPAL",
+      "anteriores": "0",
+      "tomar": "3.000",
+      "costo_snapshot_simulado": "30.0000000000000000",
+      "costo_consumido_sistema": "90.0000000000000000000",
+      "costo_consumido_lote": "45.000"
+    },
+    {
+      "id": "16a942c2-9776-4a80-8251-1187421adb6f",
+      "numero_lote": "EDU2",
+      "vencimiento": "2026-11-29",
+      "stock": "3.000",
+      "costo_lote": "15",
+      "cantidad_movimientos": "3.000",
+      "valor_movimientos": "45.000",
+      "apertura": "60",
+      "valor_usado": "105.000",
+      "sucursal": "PRINCIPAL",
+      "anteriores": "3.000",
+      "tomar": "3.000",
+      "costo_snapshot_simulado": "35.0000000000000000",
+      "costo_consumido_sistema": "105.0000000000000000000",
+      "costo_consumido_lote": "45.000"
+    },
+    {
+      "id": "b1dedd3b-54b2-44f7-aa88-19bca8d64e04",
+      "numero_lote": "EDU3",
+      "vencimiento": "2026-12-29",
+      "stock": "5.000",
+      "costo_lote": "15",
+      "cantidad_movimientos": "5.000",
+      "valor_movimientos": "75.000",
+      "apertura": "75",
+      "valor_usado": "150.000",
+      "sucursal": "PRINCIPAL",
+      "anteriores": "6.000",
+      "tomar": "2.000",
+      "costo_snapshot_simulado": "30.0000000000000000",
+      "costo_consumido_sistema": "60.0000000000000000000",
+      "costo_consumido_lote": "30.000"
+    }
+  ],
+  "lookup": [
+    {
+      "sucursal": "PRINCIPAL",
+      "costo_buscador": "15.0000",
+      "lote_fallback_buscador": "EDU3"
+    }
+  ],
+  "scopeRisk": [
+    {
+      "id": "d0cd1f3b-cdc1-4e8f-aef6-939f5debc8fe",
+      "nombre": "ABRILAR JARABE 120ML",
+      "lotes_iniciales": 3,
+      "apertura_guardada": "180",
+      "valor_movimientos_iniciales": "180.000",
+      "stock_actual": "11.000",
+      "lotes_con_apertura_duplicada": 3
+    }
+  ],
+  "executed_sale": false,
+  "writes": false
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "utc": "2026-10-13T23:28:28.409025+00:00",
+    "url": "https://app.eduxfac.com/api/health",
+    "status": 200,
+    "tls_verified": true,
+    "client": "local_PC_public_DNS",
+    "body_sanitized": {
+      "ok": true,
+      "database": true,
+      "data_mode": "PILOTO"
+    }
+  },
+  {
+    "utc": "2026-10-13T23:28:29.724631+00:00",
+    "url": "https://app.eduxfac.com/",
+    "status": 200,
+    "tls_verified": true,
+    "client": "local_PC_public_DNS",
+    "sha256": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e"
+  },
+  {
+    "utc": "2026-10-13T23:28:30.359012+00:00",
+    "url": "https://app.eduxfac.com/sale-profitability.js",
+    "status": 200,
+    "tls_verified": true,
+    "client": "local_PC_public_DNS",
+    "sha256": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407"
+  },
+  {
+    "utc": "2026-10-13T23:28:30.888170+00:00",
+    "url": "https://admin.eduxfac.com/",
+    "status": 200,
+    "tls_verified": true,
+    "client": "local_PC_public_DNS"
+  },
+  {
+    "utc": "2026-10-13T23:28:33.028608+00:00",
+    "url": "https://eduxfac.com/",
+    "status": 200,
+    "tls_verified": true,
+    "client": "local_PC_public_DNS"
+  }
+]

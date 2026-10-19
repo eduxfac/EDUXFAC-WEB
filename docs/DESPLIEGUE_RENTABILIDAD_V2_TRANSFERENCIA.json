@@ -1,0 +1,16 @@
+{
+  "upload": "VERIFIED",
+  "utc": "2026-10-13T23:22:47.444955+00:00",
+  "work": "/home/eduxadmin/.local/share/eduxfac/profitability_deploy_v2_20261013",
+  "sha256": {
+    "APPLY_RENTABILIDAD_V2.py": "90a1393ac5090aa3a95dd85730cd795cfc0269c37425ecfda7863827d090a785",
+    "BUNDLE_SHA256.json": "64f31e8fe0ac7dd09b87d7cb1ef9301e0401bbef2cd9d37553d78b1da34f8324",
+    "MANIFEST.json": "66a2d7af4d7fb7c83b947932903d1586b879c300f3d43428195bcf4ba66829eb",
+    "ROLLBACK_RENTABILIDAD_V2.py": "dae131cf2b803ce5ed5aa3f85edad79705693cffcd4d7720f37d42c80a1af09f",
+    "payload/public/index.html": "6be2da56ac48a65bed53563e947d94f604e0e0b604236db10c9bf31e7143f34e",
+    "payload/public/sale-profitability.js": "e67c194217b687f984a1334cf07d03c4a6c3d0987709582fe720a913b4fd2407",
+    "payload/server/src/app.js": "c6af9f4f01782fc6fb94aaa8b5b3ab989135775fe8f4a2291e7430b08fe670d7",
+    "payload/server/src/sale-profitability.js": "40ad48a5ab75088d1cf05c92f36137d33ec7b12f5515db71e4e76b7004a93220"
+  },
+  "release_modified": false
+}

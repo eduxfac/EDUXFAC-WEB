@@ -1,0 +1,10 @@
+{
+  "container": "eduxfac-requirement-lab-20261014-213850",
+  "user": "eduxfac",
+  "candidate_sha256": "d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656",
+  "image": "sha256:0a77b086357153cbf0092d178c66f1f4cd882538a246cfed02ce10c5a5b571e2",
+  "network": "none",
+  "utc": "2026-10-15T02:38:55.4941081Z",
+  "id": "7e4fe8c398554854f55d9c30e8a3125d17a9c11019e384de239cf4ab19aeb1db",
+  "linuxRoot": "/stage/EDUXFAC/EDUXFAC WEB/01_TRABAJO_ACTUAL/EDUXFAC_WEB_ACTUAL"
+}

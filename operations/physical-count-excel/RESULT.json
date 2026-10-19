@@ -1,0 +1,44 @@
+{
+  "status": "GO_LOCAL_NOT_DEPLOYED",
+  "tests": {
+    "Windows": 19,
+    "Linux_PostgreSQL_44_FORCE_RLS": 7,
+    "Microsoft_Excel_16": 10,
+    "total_passed": 36,
+    "failed": 0,
+    "skipped": 0
+  },
+  "hashes": {
+    "server/src/inventory-count.js": {
+      "before": "1e99adfc02152a633bcc3724d5fdc5f5d7f6b3871ff1f6feaf30fa2ddb488e65",
+      "after": "d244957d7b5c6983b4e7f2a1c3037e2e99d90e8d403678a1cdf9203aa83b5656"
+    },
+    "server/src/app.js": {
+      "before": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab",
+      "after": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab"
+    },
+    "server/src/stock-cost.js": {
+      "before": "f2f1bb2c8f05f8ee4b1a9b6a2d468a141575281680afb0b41e43c871819ddab8",
+      "after": "f2f1bb2c8f05f8ee4b1a9b6a2d468a141575281680afb0b41e43c871819ddab8"
+    },
+    "server/src/inventory-entry.js": {
+      "before": "0b3a49ac0ea077db9bc29fb8dbc08aa2d92d20aa8761a47f81652eb1c4de897f",
+      "after": "0b3a49ac0ea077db9bc29fb8dbc08aa2d92d20aa8761a47f81652eb1c4de897f"
+    },
+    "public/index.html": {
+      "before": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32",
+      "after": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32"
+    },
+    "database/schema.sql": {
+      "before": "693f6f2ba6f4b2aa35d7103375d9780c7db80b63d78ccd24b24886a6b2225e40",
+      "after": "693f6f2ba6f4b2aa35d7103375d9780c7db80b63d78ccd24b24886a6b2225e40"
+    }
+  },
+  "unchanged_import_and_adjustment_logic": true,
+  "performance_5000_products_ms": 1823,
+  "cost_policy": "Positive stock: existing lot valuation / current stock, only when costs verifiable. Nonpositive stock: cost of existing surplus destination lot; unknown cost blank. H/I/L estimates.",
+  "vps_contacted": false,
+  "real_data_changed": false,
+  "qa_container_removed": true,
+  "sample_calculated_excel_sha256": "facb9ca20f628183831643e4ae2be4700d15115d1423be0959a96d3288d75a77"
+}

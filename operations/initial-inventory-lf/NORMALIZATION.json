@@ -1,0 +1,15 @@
+{
+  "hash_before_crlf": "fa057a968001d037e63a41760911a9f5e5adbd1038c2c31ee320b0f700b7031d",
+  "hash_after_lf": "72abe70e9da810f7bc3c76b271f52e24cb3a800c0f5f2ba7f7db9e7f76a88a32",
+  "CRLF_removed": 2204,
+  "CR_remaining": 0,
+  "logical_diff_zero": true,
+  "protected_files_before": {
+    "server/src/app.js": "7fd8b9361cfbd54d791aa07cbe160fe7ba69bce7589188c7d27e52e1dc3984ab",
+    "server/src/initial-inventory.js": "57abcde45bc6b165875e1f8b6ad6c956e87bc4759a4483476f3bfef159b62377",
+    "server/src/csp-header.js": "08bf1b39221dff3e4d932f0e95b7db0c830b10296ba920e9e3224ef61aa3fe7c",
+    "server/src/db.js": "370b275531d9898cd83f9951461bc746d0404e37a6c75e8642d40f9f8e7daffd",
+    "public/desktop-responsive.css": "5d1678f53d5a2e375aa29c2532d7f34d1f78f54817bdf5409bc2aa366ae94eb6"
+  },
+  "deployed": false
+}
