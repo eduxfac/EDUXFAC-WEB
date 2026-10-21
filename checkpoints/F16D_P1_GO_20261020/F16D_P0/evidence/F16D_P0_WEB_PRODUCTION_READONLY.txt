@@ -1,0 +1,48 @@
+F16D_P0_AUDIT=READ_ONLY
+TIMESTAMP_UTC=2026-10-20T04:23:22Z
+ROOT=/var/www/eduxfac
+ROOT_REALPATH=/var/www/eduxfac
+ROOT_MODE_OWNER=755 eduxadmin:eduxadmin
+=== EXPECTED_ADMIN_FILES ===
+IMPLEMENTADO	server/src/app.js	c6d7103cd57190534d4805f0022b9b3d5dd463f76618d3f4023a94636423ce85
+FALTA	server/src/admin-service-api.js
+FALTA	server/src/onboarding-api.js
+FALTA	server/src/service-auth.js
+FALTA	server/src/commercial-api.js
+FALTA	server/src/subscription-api.js
+FALTA	server/src/operations-api.js
+FALTA	server/src/company-access.js
+IMPLEMENTADO	package.json	c87b2334b15195fd43f1caabdd6e2b6cdc6730892f28a88bd15b16fa1e6be79e
+IMPLEMENTADO	package-lock.json	ed7bf898b730bc2473c1bc42c984174d4716b6c638c42ce057272cdf609850fb
+=== ENDPOINT_REGISTRATION ===
+PARCIAL	/api/internal/admin/v1 mount	ARCHIVO_PRESENTE_RUTA_NO_ENCONTRADA
+FALTA	POST /clientes	ARCHIVO_AUSENTE
+FALTA	POST /empresas	ARCHIVO_AUSENTE
+FALTA	PUT /empresas/:id/plan	ARCHIVO_AUSENTE
+FALTA	POST /empresas/:id/sucursal-principal	ARCHIVO_AUSENTE
+FALTA	POST /empresas/:id/administrador-inicial	ARCHIVO_AUSENTE
+FALTA	PUT /empresas/:id/suscripcion	ARCHIVO_AUSENTE
+FALTA	POST /empresas/:id/activar	ARCHIVO_AUSENTE
+FALTA	GET /empresas/:id/operacion	ARCHIVO_AUSENTE
+=== PACKAGE_METADATA ===
+PACKAGE_NAME=eduxfac
+PACKAGE_VERSION=44.4.0
+dependencies	bcryptjs	^3.0.2
+dependencies	cors	^2.8.5
+dependencies	dotenv	^17.2.2
+dependencies	exceljs	^4.4.0
+dependencies	express	^5.1.0
+dependencies	jsonwebtoken	^9.0.2
+dependencies	pg	^8.16.3
+=== ENVIRONMENT_VARIABLE_NAMES_ONLY ===
+DATABASE_URL=[SECRETO_OCULTO]
+NODE_ENV=[SECRETO_OCULTO]
+PORT=[SECRETO_OCULTO]
+SESSION_SECRET=[SECRETO_OCULTO]
+EXAMPLE_DATABASE_URL=[SECRETO_OCULTO]
+EXAMPLE_NODE_ENV=[SECRETO_OCULTO]
+EXAMPLE_PORT=[SECRETO_OCULTO]
+EXAMPLE_SESSION_SECRET=[SECRETO_OCULTO]
+=== CODE_VERSION_READONLY ===
+GIT_HEAD=NOT_A_GIT_CHECKOUT
+F16D_P0_AUDIT_RESULT=EVIDENCE_CREATED_READ_ONLY

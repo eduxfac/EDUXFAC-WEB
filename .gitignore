@@ -13,6 +13,12 @@ npm-debug.log*
 *.key
 *.pfx
 *.p12
+*.pem
+*.dump
+*.bak
+backups/
+secrets/
+runtime/
 
 # Variables de entorno
 .env
