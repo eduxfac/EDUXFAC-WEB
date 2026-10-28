@@ -1,3 +1,4 @@
+import {registerSunat,enqueueSaleCpe} from './sunat-api.js';
 import {monthlySales} from './monthly-sales.js';
 import {prepareStockCosts,reconcileStockCosts} from './stock-cost.js';
 import {validateSalePresentation,assertSaleProfitability} from './sale-profitability.js';
@@ -155,6 +156,8 @@ app.use(async (req, res, next) => {
     }
   });
 });
+
+registerSunat(app,{requireAuth,ensureBranchAccess,isAdminUser});
 
 app.get('/api/health', async (_req, res) => {
   try {
@@ -461,6 +464,7 @@ app.post('/api/sales', requireAuth, async (req, res) => {
       for(const productId of [...new Set(normalized.map(i=>i.producto_id))].sort())
         await reconcileStockCosts(c,{empresaId:req.user.empresa_id,sucursalId:sucursal_id,productoId:productId,usuarioId:req.user.sub,referenciaTipo:'VENTA',referenciaId:sale.rows[0].id});
       for(const p of pagos){const amount=money(numeric(p.monto,'Pago'));if(amount<=0)throw new Error('El pago debe ser mayor que cero.');await c.query(`insert into venta_pagos(venta_id,metodo,monto,referencia) values($1,$2,$3,$4)`,[sale.rows[0].id,p.metodo,amount,p.referencia||null]);if(sesion_caja_id){await c.query(`insert into movimientos_caja(sesion_caja_id,tipo,concepto,metodo,monto,usuario_id) values($1,'INGRESO',$2,$3,$4,$5)`,[sesion_caja_id,`Venta ${sale.rows[0].id}`,p.metodo,amount,req.user.sub]);}}
+      await enqueueSaleCpe(c,req.user.empresa_id,sale.rows[0].id);
       await writeAudit(c,req.user,'REGISTRAR_VENTA','ventas',sale.rows[0].id,{sucursal_id,total});
       return sale.rows[0];
     });
@@ -649,7 +653,9 @@ app.get('/api/sales/:id/receipt', requireAuth, async (req,res)=>{
   const rr=await pool.query(`select dd.venta_detalle_id,coalesce(sum(dd.cantidad),0)::numeric(14,3) cantidad from devolucion_venta_detalles dd join devoluciones_venta dv on dv.id=dd.devolucion_id where dv.venta_id=$1 group by dd.venta_detalle_id`,[req.params.id]);
   const rm=new Map(rr.rows.map(x=>[x.venta_detalle_id,Number(x.cantidad)]));
   d.rows.forEach(x=>{x.cantidad_devuelta=rm.get(x.venta_detalle_id)||0;x.cantidad_devolvible=Math.max(0,Number(x.cantidad)-x.cantidad_devuelta)});
-  res.json({venta:h.rows[0],items:d.rows,pagos:p.rows});
+  let sunat=null;
+  if(process.env.CPE_API_URL&&process.env.NODE_ENV!=='test')sunat=(await pool.query('SELECT id,documento_id,estado,error FROM sunat_outbox WHERE empresa_id=$1 AND venta_id=$2',[req.user.empresa_id,req.params.id])).rows[0]||null;
+  res.json({venta:h.rows[0],items:d.rows,pagos:p.rows,sunat});
 });
 
 app.get('/api/dashboard/monthly-sales', requireAuth, async (req,res)=>{

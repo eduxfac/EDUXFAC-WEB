@@ -68,6 +68,15 @@ for(const action of ['SUSPENDER','REACTIVAR','CANCELAR','VENCER']){
   }
  });
 }
+router.post('/empresas/:id/sunat-config',requireServiceScope('empresas:sunat'),async(req,res)=>{
+ try{const b=req.body;if(!UUID_PATTERN.test(req.params.id)||!UUID_PATTERN.test(String(b.branch_id))||!['beta','produccion'].includes(b.environment)||typeof b.enabled!=='boolean'||!/^F[A-Z0-9]{3}$/.test(b.invoice_series)||!/^B[A-Z0-9]{3}$/.test(b.receipt_series))throw accessError(400,'SUNAT_CONFIG_INVALID','Configuración SUNAT inválida.');
+ const branch=await pool.query('SELECT id FROM sucursales WHERE id=$1 AND empresa_id=$2 AND activo=true',[b.branch_id,req.params.id]);if(!branch.rowCount)throw accessError(403,'SUCURSAL_INVALIDA','Sucursal ajena a la empresa.');
+ await pool.query(`INSERT INTO sunat_sucursales(empresa_id,sucursal_id,ambiente,habilitado,serie_factura,serie_boleta,fiscal_json) VALUES($1,$2,$3,$4,$5,$6,$7::jsonb) ON CONFLICT(sucursal_id) DO UPDATE SET ambiente=EXCLUDED.ambiente,habilitado=EXCLUDED.habilitado,serie_factura=EXCLUDED.serie_factura,serie_boleta=EXCLUDED.serie_boleta,fiscal_json=EXCLUDED.fiscal_json,updated_at=now()`,[req.params.id,b.branch_id,b.environment,b.enabled,b.invoice_series,b.receipt_series,JSON.stringify(b.config)]);res.json({ok:true});
+ }catch(e){sendAccessError(res,e);}
+});
+router.get('/empresas/:id/sucursales-fiscales',requireServiceScope('empresas:read'),async(req,res)=>{
+ try{if(!UUID_PATTERN.test(req.params.id))throw accessError(400,'EMPRESA_INVALIDA','Empresa inválida.');const rows=(await pool.query('SELECT s.id,s.nombre,s.codigo,s.es_principal,to_jsonb(sc) sunat FROM sucursales s LEFT JOIN sunat_sucursales sc ON sc.sucursal_id=s.id AND sc.empresa_id=s.empresa_id WHERE s.empresa_id=$1 AND s.activo=true ORDER BY s.nombre',[req.params.id])).rows;res.json({rows});}catch(e){sendAccessError(res,e);}
+});
 router.use(operationsApi);
 router.use(subscriptionApi);
 router.use(commercialApi);

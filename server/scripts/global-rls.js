@@ -5,12 +5,14 @@ const shared=['roles','permisos','rol_permisos'],metadata=['eduxfac_migraciones'
 const privateTables=['clientes_admin','legacy_import_runs','legacy_mappings','operacion_workers'];
 const direct=['empresas','sucursales','usuarios','categorias','laboratorios','productos','proveedores','clientes','compras','ventas','movimientos_inventario','auditoria','ordenes_compra','solicitudes_internas','transferencias','ajustes_inventario','secuencias_documento','empresa_config','empresa_config_avanzada','empresa_acceso','acciones_admin','acciones_admin_intentos','eventos_comerciales','suscripcion_eventos'];
 const inherited={precios_producto:['producto_id','productos','id'],lotes:['producto_id','productos','id'],cajas:['sucursal_id','sucursales','id'],sesiones_caja:['caja_id','cajas','id'],movimientos_caja:['sesion_caja_id','sesiones_caja','id'],compra_detalles:['compra_id','compras','id'],venta_detalles:['venta_id','ventas','id'],venta_pagos:['venta_id','ventas','id'],orden_compra_detalles:['orden_compra_id','ordenes_compra','id'],solicitud_interna_detalles:['solicitud_id','solicitudes_internas','id'],transferencia_detalles:['transferencia_id','transferencias','id'],devoluciones_venta:null,devolucion_venta_detalles:['devolucion_id','devoluciones_venta','id'],producto_sucursal:['producto_id','productos','id'],usuario_sucursal:['usuario_id','usuarios','id'],usuario_permisos:['usuario_id','usuarios','id']};
+const optionalCpe=['sunat_sucursales','sunat_outbox'];
+direct.push(...optionalCpe);
 direct.push('devoluciones_venta');delete inherited.devoluciones_venta;
-const serviceWrite=['clientes_admin','operacion_workers','empresas','sucursales','usuarios','usuario_sucursal','empresa_acceso','acciones_admin','acciones_admin_intentos','eventos_comerciales','suscripcion_eventos'];
+const serviceWrite=['sunat_sucursales','sunat_outbox','clientes_admin','operacion_workers','empresas','sucursales','usuarios','usuario_sucursal','empresa_acceso','acciones_admin','acciones_admin_intentos','eventos_comerciales','suscripcion_eventos'];
 const tenantNoAccess=['acciones_admin','acciones_admin_intentos','suscripcion_eventos'];
 const appendOnly=['auditoria','eventos_comerciales'];
 const authRead=['empresas','usuarios','sucursales','usuario_sucursal','empresa_acceso',...shared];
-const branchColumns={precios_producto:['sucursal_id'],producto_sucursal:['sucursal_id'],lotes:['sucursal_id'],cajas:['sucursal_id'],compras:['sucursal_id'],ventas:['sucursal_id'],movimientos_inventario:['sucursal_id'],ajustes_inventario:['sucursal_id'],secuencias_documento:['sucursal_id'],ordenes_compra:['sucursal_id'],devoluciones_venta:['sucursal_id'],solicitudes_internas:['sucursal_solicitante_id','sucursal_origen_id'],transferencias:['sucursal_origen_id','sucursal_destino_id']};
+const branchColumns={sunat_sucursales:['sucursal_id'],sunat_outbox:['sucursal_id'],precios_producto:['sucursal_id'],producto_sucursal:['sucursal_id'],lotes:['sucursal_id'],cajas:['sucursal_id'],compras:['sucursal_id'],ventas:['sucursal_id'],movimientos_inventario:['sucursal_id'],ajustes_inventario:['sucursal_id'],secuencias_documento:['sucursal_id'],ordenes_compra:['sucursal_id'],devoluciones_venta:['sucursal_id'],solicitudes_internas:['sucursal_solicitante_id','sucursal_origen_id'],transferencias:['sucursal_origen_id','sucursal_destino_id']};
 const company="nullif(current_setting('app.empresa_id',true),'')::uuid";
 const branches="string_to_array(coalesce(current_setting('app.sucursal_ids',true),''),',')::uuid[]";
 export const GLOBAL_TABLES=Object.freeze([...shared,...metadata]);
@@ -41,7 +43,7 @@ if(new Set([tenant,service,auth,backup,migrator]).size!==5)throw Error('RLS_ROLE
 const runtime=(await db.query('SELECT rolname,rolsuper,rolbypassrls FROM pg_roles WHERE rolname=ANY($1)',[[tenant,service,auth,backup,migrator]])).rows;if(runtime.length!==5||runtime.filter(r=>r.rolname!==migrator).some(r=>r.rolsuper||r.rolbypassrls))throw Error('RLS_RUNTIME_ROLE_UNSAFE');
 const schema=await inspectWebSchema(db);if(schema.tables.some(t=>t.owner===tenant))throw Error('RLS_APP_MUST_NOT_OWN_TABLES');const known=[...GLOBAL_TABLES,...PRIVATE_TABLES,...TENANT_TABLES];
 for(const t of schema.tables)if(!known.includes(t.name))throw Error('RLS_UNCLASSIFIED_TABLE:'+t.name);
-for(const name of known)if(!schema.tables.some(t=>t.name===name))throw Error('RLS_EXPECTED_TABLE_MISSING:'+name);
+for(const name of known)if(!optionalCpe.includes(name)&&!schema.tables.some(t=>t.name===name))throw Error('RLS_EXPECTED_TABLE_MISSING:'+name);
 if(!['DEMO','PILOTO','PRODUCCION'].includes(dataMode))throw Error('RLS_DATA_MODE_INVALID');const modeComment=JSON.stringify({eduxfac_data_mode:dataMode,purpose:dataMode==='DEMO'?'FASE10_ISOLATED_LINUX':'FASE11_PREPARACION_PILOTO'});const dbName=(await db.query('SELECT current_database() name')).rows[0].name;
 const statements=["COMMENT ON DATABASE "+q(dbName)+" IS '"+modeComment+"'",'REVOKE ALL ON ALL TABLES IN SCHEMA public FROM PUBLIC','REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM PUBLIC','REVOKE CREATE ON SCHEMA public FROM PUBLIC','REVOKE ALL ON ALL TABLES IN SCHEMA public FROM '+[tenant,service,auth,backup].map(q).join(','),'REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM '+[tenant,service,auth,backup].map(q).join(',')];
 statements.push('GRANT USAGE ON SCHEMA public TO '+[tenant,service,auth,backup].map(q).join(','));
@@ -53,6 +55,7 @@ statements.push('ALTER TABLE '+table+' ENABLE ROW LEVEL SECURITY','ALTER TABLE '
 statements.push('CREATE POLICY f10_migrator ON '+table+' FOR ALL TO '+q(migrator)+' USING(true) WITH CHECK(true)','CREATE POLICY f10_backup ON '+table+' FOR SELECT TO '+q(backup)+' USING(true)');
 statements.push('GRANT SELECT ON '+table+' TO '+q(backup));
 if(serviceWrite.includes(name)){statements.push('GRANT SELECT ON '+table+' TO '+q(service));statements.push('CREATE POLICY f10_service ON '+table+' FOR ALL TO '+q(service)+' USING(true) WITH CHECK(true)');if(serviceWrite.includes(name))statements.push('GRANT INSERT,UPDATE,DELETE ON '+table+' TO '+q(service));}
+if(name==='ventas'&&schema.tables.some(t=>t.name==='sunat_outbox'))statements.push('GRANT SELECT(id,empresa_id,serie,numero) ON '+table+' TO '+q(service),'GRANT UPDATE(serie,numero) ON '+table+' TO '+q(service),'CREATE POLICY f10_cpe_metadata_service ON '+table+' FOR ALL TO '+q(service)+' USING(EXISTS(SELECT 1 FROM public.sunat_outbox o WHERE o.venta_id=ventas.id AND o.empresa_id=ventas.empresa_id)) WITH CHECK(EXISTS(SELECT 1 FROM public.sunat_outbox o WHERE o.venta_id=ventas.id AND o.empresa_id=ventas.empresa_id))');
 if(authRead.includes(name)){statements.push('GRANT SELECT ON '+table+' TO '+q(auth),'CREATE POLICY f10_auth ON '+table+' FOR SELECT TO '+q(auth)+' USING(true)');}
 if(access){
 const owner=ownerExpr(name),branch=(branchColumns[name]||[]).map(col=>'('+q(col)+' IS NULL OR '+q(col)+'=ANY('+branches+'))');
@@ -61,6 +64,7 @@ const using='('+owner+')'+(branch.length?' AND '+branch.join(' AND '):''),withCh
 statements.push('CREATE POLICY f10_tenant ON '+table+' FOR ALL TO '+q(tenant)+' USING('+using+') WITH CHECK('+withCheck+')');
 statements.push('GRANT SELECT ON '+table+' TO '+q(tenant));
 if(name==='empresas')statements.push('GRANT UPDATE(razon_social,ruc,nombre_comercial,telefono,email,direccion_fiscal,logo_data,web,slogan,departamento,provincia,distrito) ON '+table+' TO '+q(tenant));
+else if(name==='sunat_sucursales'){}
 else if(name==='empresa_acceso')statements.push('GRANT UPDATE(cuota_revision) ON '+table+' TO '+q(tenant));
 else if(appendOnly.includes(name))statements.push('GRANT INSERT ON '+table+' TO '+q(tenant));
 else statements.push('GRANT INSERT,UPDATE,DELETE ON '+table+' TO '+q(tenant));
