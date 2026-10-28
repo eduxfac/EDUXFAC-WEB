@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';
+function monitor(){const context={window:{},URLSearchParams};vm.runInNewContext(readFileSync(new URL('../public/sunat-monitor.js',import.meta.url),'utf8'),context);return context.window.CpeMonitor;}
+test('Monitor cuenta resultados completos, escapa datos y pagina',()=>{const m=monitor();assert.equal(m.query('a','beta'),'page=1');const html=m.header({stats:{total:1174,accepted:1165,amount:'<script>'},page:2,pages:59});assert.match(html,/1174/);assert.match(html,/Página 2 de 59/);assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>/);assert.match(html,/data-page="3"/);assert.match(html,/RESULTADO_DESCONOCIDO/);});
+test('Cambiar de sucursal o ambiente limpia filtros anteriores',()=>{const m=monitor();assert.equal(m.query('a','beta'),'page=1');assert.equal(m.query('b','produccion'),'page=1');});
