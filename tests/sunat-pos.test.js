@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+const source=readFileSync(new URL('../public/sunat.js',import.meta.url),'utf8');
+function setup(fetch){const buttons=['FACTURA','BOLETA','NOTA DE CREDITO','ORDEN'].map(s=>({dataset:{saleDoc:s},disabled:false}));const nodes=Object.fromEntries(['cpeReceipt','cpeReceiptA4','cpeReceiptStatus'].map(k=>[k,{}]));const context={window:{},document:{querySelectorAll:()=>buttons,getElementById:id=>nodes[id],createElement:()=>({click(){}})},localStorage:{getItem:()=>''},fetch,URL:{createObjectURL:()=>'',revokeObjectURL(){}},setTimeout(){}};vm.runInNewContext(source,context);return {api:context.window.eduxfacSunat,buttons,nodes};}
+const response=cfg=>({ok:true,json:async()=>cfg});
+test('POS respeta comprobantes de la sucursal y descarta respuestas anteriores',async()=>{let first;const {api,buttons}=setup(path=>path.endsWith('a')?new Promise(r=>first=r):Promise.resolve(response({habilitado:true,comprobantes_habilitados:['03']})));const pending=api.updatePos('a');await api.updatePos('b');first(response({habilitado:true,comprobantes_habilitados:['01']}));await pending;assert.deepEqual(buttons.map(b=>b.disabled),[true,false,true,false]);});
+test('POS bloquea emisión si no puede verificar configuración',async()=>{const {api,buttons}=setup(async()=>{throw Error('offline');});await api.updatePos('a');assert.deepEqual(buttons.map(b=>b.disabled),[true,true,true,false]);});
+test('Recibo ofrece ticket 80 mm y A4 con descargas independientes',async()=>{const paths=[];const {api,nodes}=setup(async path=>{paths.push(path);return {ok:true,blob:async()=>({}),headers:{get:()=>null}};});api.receipt({documento_id:'doc',estado:'FIRMADO'});assert.equal(nodes.cpeReceipt.textContent,'Ticket SUNAT 80 mm');await nodes.cpeReceipt.onclick();await nodes.cpeReceiptA4.onclick();assert.deepEqual(paths,['/api/sunat/documents/doc/files/ticket','/api/sunat/documents/doc/files/pdf']);api.receipt(null);assert.equal(nodes.cpeReceipt.hidden,true);assert.equal(nodes.cpeReceiptA4.hidden,true);});
