@@ -7,6 +7,7 @@ export function routePermission(method, path, body = {}) {
   if (/^\/api\/import\//.test(path)) return ['inventory', method === 'GET' ? 'ver' : 'editar'];
   if (/^\/api\/export\//.test(path)) return ['reports', 'ver'];
   if (/^\/api\/purchasing\/requirements(?:\/(?:generate|export|print))?$/.test(path)) return ['replenishment','ver'];
+  if(path==='/api/sunat/schedule'&&method!=='GET')return ['settings','editar'];
   if(path.startsWith('/api/sunat/batches')&&method!=='GET')return ['settings','editar'];
   if(/^\/api\/sunat\/documents\/[^/]+\/note$/.test(path))return ['settings','editar'];
   const families = [
