@@ -1,4 +1,5 @@
-import {registerSunat,enqueueSaleCpe} from './sunat-api.js';
+import {createHash} from 'node:crypto';
+import {registerSunat,enqueueSaleCpe,completeCheckoutCpe} from './sunat-api.js';
 import {monthlySales} from './monthly-sales.js';
 import {prepareStockCosts,reconcileStockCosts} from './stock-cost.js';
 import {validateSalePresentation,assertSaleProfitability} from './sale-profitability.js';
@@ -268,6 +269,7 @@ app.post('/api/cash/open', requireAuth, async (req, res) => {
     if (amount < 0) throw new Error('El monto de apertura no puede ser negativo.');
     const result = await tx(async c => {
       await ensureBranchAccess(c, req.user, sucursal_id);
+
       let selectedCaja = caja_id;
       if (selectedCaja) {
         const q = await c.query(`select id from cajas where id=$1 and sucursal_id=$2 and activo=true for update`, [selectedCaja,sucursal_id]);
@@ -423,9 +425,12 @@ app.post('/api/sales', requireAuth, async (req, res) => {
   try {
     await ensureReturnsSchema(pool);
     const { sucursal_id, sesion_caja_id, cliente_id=null, tipo_comprobante='BOLETA', items=[], pagos=[] } = req.body || {};
+    const command=typeof req.body?.command_id==='string'?req.body.command_id.toLowerCase():req.body?.command_id;if(command!==undefined&&!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(String(command)))throw Object.assign(Error('Identificador de checkout inválido.'),{status:400});
+    const requestHash=command?createHash('sha256').update(JSON.stringify(Object.fromEntries(Object.entries(req.body).filter(([k])=>k!=='command_id').sort(([a],[b])=>a.localeCompare(b))))).digest('hex'):null;
     if (!sucursal_id || !Array.isArray(items) || !items.length || !Array.isArray(pagos) || !pagos.length) throw new Error('Sucursal, productos y pago son obligatorios.');
     const result = await tx(async c => {
       await ensureBranchAccess(c, req.user, sucursal_id);
+      if(command){await c.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[req.user.empresa_id+':checkout:'+command]);const prior=(await c.query('SELECT request_hash,venta_id FROM venta_checkout_comandos WHERE empresa_id=$1 AND command_id=$2',[req.user.empresa_id,command])).rows[0];if(prior){if(prior.request_hash!==requestHash)throw Object.assign(Error('Este checkout ya corresponde a otro contenido.'),{status:409});const existing=(await c.query('SELECT * FROM ventas WHERE id=$1 AND empresa_id=$2',[prior.venta_id,req.user.empresa_id])).rows[0];return existing;}}
       if(cliente_id){const cl=await c.query(`select id from clientes where id=$1 and empresa_id=$2 and activo=true`,[cliente_id,req.user.empresa_id]);if(!cl.rows[0])throw new Error('Cliente inválido para esta empresa.');}
       if(sesion_caja_id){
         const cash = await c.query(`select sc.id from sesiones_caja sc join cajas ca on ca.id=sc.caja_id where sc.id=$1 and ca.sucursal_id=$2 and sc.usuario_id=$3 and sc.estado='ABIERTA' for update`, [sesion_caja_id,sucursal_id,req.user.sub]);
@@ -465,10 +470,12 @@ app.post('/api/sales', requireAuth, async (req, res) => {
         await reconcileStockCosts(c,{empresaId:req.user.empresa_id,sucursalId:sucursal_id,productoId:productId,usuarioId:req.user.sub,referenciaTipo:'VENTA',referenciaId:sale.rows[0].id});
       for(const p of pagos){const amount=money(numeric(p.monto,'Pago'));if(amount<=0)throw new Error('El pago debe ser mayor que cero.');await c.query(`insert into venta_pagos(venta_id,metodo,monto,referencia) values($1,$2,$3,$4)`,[sale.rows[0].id,p.metodo,amount,p.referencia||null]);if(sesion_caja_id){await c.query(`insert into movimientos_caja(sesion_caja_id,tipo,concepto,metodo,monto,usuario_id) values($1,'INGRESO',$2,$3,$4,$5)`,[sesion_caja_id,`Venta ${sale.rows[0].id}`,p.metodo,amount,req.user.sub]);}}
       await enqueueSaleCpe(c,req.user.empresa_id,sale.rows[0].id);
+      if(command)await c.query('INSERT INTO venta_checkout_comandos(empresa_id,command_id,sucursal_id,venta_id,request_hash) VALUES($1,$2,$3,$4,$5)',[req.user.empresa_id,command,sucursal_id,sale.rows[0].id,requestHash]);
       await writeAudit(c,req.user,'REGISTRAR_VENTA','ventas',sale.rows[0].id,{sucursal_id,total});
       return sale.rows[0];
     });
-    res.status(201).json(result);
+    const sunat=await completeCheckoutCpe(req.user.empresa_id,result.id);
+    res.status(201).json({...result,...(sunat?{sunat}:{})});
   } catch (error) { res.status(error.status||400).json({ error: error.message,...(error.code?{code:error.code}:{}),...(error.productos?{productos:error.productos}:{}) }); }
 });
 
@@ -504,6 +511,8 @@ app.get('/api/settings', requireAuth, async (req,res)=>{
 app.put('/api/settings', requireAuth, async (req,res)=>{
   try{
     const b=req.body||{};
+    const protectedFiscal=['razon_social','ruc','nombre_comercial','direccion_fiscal','departamento','provincia','distrito','ubigeo','moneda','igv_porcentaje','afecto_igv','regimen_tributario','serie_factura','serie_boleta','sol_user','sol_password','certificate_base64'];
+    if(Object.keys(b).some(k=>protectedFiscal.includes(k)))return res.status(403).json({error:'Los datos fiscales, certificados y series se administran exclusivamente desde PANEL.',code:'FISCAL_PANEL_ONLY'});
     const result=await tx(async c=>{
       const role=await c.query(`select 1 from usuario_sucursal us join roles r on r.id=us.rol_id where us.usuario_id=$1 and r.nombre='Administrador' limit 1`,[req.user.sub]);
       if(!role.rows[0]){const e=new Error('Solo un administrador puede cambiar la configuración.');e.status=403;throw e;}

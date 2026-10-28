@@ -49,9 +49,10 @@ export function installBranchAdmin(app,{pool,tx,requireAuth,requireAdmin,ensureB
     if(nombre.length>120||direccion.length>220||telefono.length>40)throw new Error('Nombre, dirección o teléfono exceden la longitud permitida.');
     const result=await tx(async c=>{
       const old=await lock(c,req);
+      if(b.direccion!==undefined&&direccion!==String(old.direccion||'').trim())throw Object.assign(Error('La dirección fiscal se administra desde PANEL.'),{status:403});
       if(b.codigo!==undefined&&b.codigo!==old.codigo)throw new Error('El código interno de la sucursal no se puede modificar.');
       if(b.activo!==undefined&&b.activo!==old.activo)throw new Error('Utiliza Desactivar o Reactivar para cambiar el estado.');
-      const q=await c.query('update sucursales set nombre=$3,direccion=$4,telefono=$5 where id=$1 and empresa_id=$2 returning *',[req.params.id,req.user.empresa_id,nombre,direccion||null,telefono||null]);
+      const q=await c.query('update sucursales set nombre=$3,direccion=$4,telefono=$5 where id=$1 and empresa_id=$2 returning *',[req.params.id,req.user.empresa_id,nombre,old.direccion,telefono||null]);
       await writeAudit(c,req.user,'EDITAR_SUCURSAL','sucursales',req.params.id,{nombre,direccion,telefono});
       return q.rows[0];
     });res.json(result);

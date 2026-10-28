@@ -27,9 +27,17 @@ export async function processCpeJob(tenant,jobId,{send=true}={}){
   await db.query('UPDATE sunat_outbox SET estado=$3,error=$4,updated_at=now() WHERE id=$1 AND empresa_id=$2',[jobId,tenant,doc.state,doc.description||null]);return doc;
  });}catch(e){if(e.code!=='CPE_BUSY')await pool.query('UPDATE sunat_outbox SET intentos=intentos+1,error=$3,updated_at=now() WHERE id=$1 AND empresa_id=$2',[jobId,tenant,e.status?e.message:'Envío sin confirmación']);throw e;}
 }
+export async function completeCheckoutCpe(tenant,saleId){
+ if(!process.env.CPE_API_URL||(process.env.NODE_ENV==='test'&&process.env.CPE_TEST_ALLOW!=='yes'))return null;
+ // The sale has already committed. Fiscal failures must never turn a paid sale into a failed checkout.
+ try{const job=(await pool.query('SELECT o.*,c.envio_automatico FROM sunat_outbox o JOIN sunat_sucursales c ON c.sucursal_id=o.sucursal_id AND c.empresa_id=o.empresa_id WHERE o.empresa_id=$1 AND o.venta_id=$2',[tenant,saleId])).rows[0];if(!job)return null;
+  if(!job.envio_automatico)return {job_id:job.id,state:job.estado,automatic:false};
+  try{return {...await processCpeJob(tenant,job.id),job_id:job.id,automatic:true};}catch(e){return {job_id:job.id,state:'PENDIENTE',automatic:true,error:e.status?e.message:'Emisión sin confirmación; revisa el monitor SUNAT.'};}
+ }catch{return {state:'PENDIENTE',error:'Venta registrada; consulta el monitor SUNAT para verificar su emisión.'};}
+}
 export function registerSunat(app,{requireAuth,ensureBranchAccess,isAdminUser}){
  const handle=fn=>async(req,res)=>{try{await fn(req,res);}catch(e){res.status(e.status||503).json({error:e.status?e.message:'No se pudo completar la operación SUNAT.'});}};
- app.get('/api/sunat/config',requireAuth,handle(async(req,res)=>{const branch=validId(req.query.sucursal_id);await ensureBranchAccess(pool,req.user,branch);const r=(await pool.query('SELECT ambiente,habilitado,serie_factura,serie_boleta,fiscal_json FROM sunat_sucursales WHERE empresa_id=$1 AND sucursal_id=$2',[req.user.empresa_id,branch])).rows[0];res.json(r||{habilitado:false});}));
+ app.get('/api/sunat/config',requireAuth,handle(async(req,res)=>{const branch=validId(req.query.sucursal_id);await ensureBranchAccess(pool,req.user,branch);const r=(await pool.query('SELECT ambiente,habilitado,serie_factura,serie_boleta,fiscal_json,envio_automatico,series_notas FROM sunat_sucursales WHERE empresa_id=$1 AND sucursal_id=$2',[req.user.empresa_id,branch])).rows[0];res.json(r||{habilitado:false});}));
  app.get('/api/sunat/outbox',requireAuth,handle(async(req,res)=>{const branch=validId(req.query.sucursal_id);await ensureBranchAccess(pool,req.user,branch);res.json({rows:(await pool.query('SELECT id,venta_id,documento_id,estado,intentos,error,created_at FROM sunat_outbox WHERE empresa_id=$1 AND sucursal_id=$2 ORDER BY created_at DESC LIMIT 200',[req.user.empresa_id,branch])).rows});}));
  app.get('/api/sunat/documents',requireAuth,handle(async(req,res)=>{const branch=validId(req.query.sucursal_id);await ensureBranchAccess(pool,req.user,branch);const env=String(req.query.environment||'beta');res.json(await cpeRequest('web',req.user.empresa_id,'/v1/documents?'+new URLSearchParams({branch_id:branch,environment:env})));}));
  app.post('/api/sunat/sales/:id/prepare',requireAuth,handle(async(req,res)=>{
@@ -44,7 +52,8 @@ export function registerSunat(app,{requireAuth,ensureBranchAccess,isAdminUser}){
   if(req.method==='POST'&&['sign','send','consult'].includes(action)){const result=await cpeRequest('web',tenant,'/v1/documents/'+doc.id+'/'+action,{});await pool.query('UPDATE sunat_outbox SET estado=$3,error=$4,updated_at=now() WHERE empresa_id=$1 AND documento_id=$2',[tenant,doc.id,result.state,result.description]);return res.json(result);}
   if(req.method==='POST'&&action==='note'){
    if(!(await isAdminUser(pool,req.user.sub)))throw Object.assign(Error('Solo administradores emiten notas.'),{status:403});
-   const result=await cpeRequest('web',tenant,'/v1/notes',{reference_id:doc.id,command_id:validId(req.body.command_id),doc_type:req.body.doc_type,serie:req.body.serie,reason_code:req.body.reason_code,reason:req.body.reason,issued_at:req.body.issued_at,amount:req.body.amount});return res.json(result);
+   const settings=(await pool.query('SELECT series_notas FROM sunat_sucursales WHERE empresa_id=$1 AND sucursal_id=$2',[tenant,doc.branch_id])).rows[0];const noteSerie=settings?.series_notas?.[String(req.body.doc_type)+doc.serie[0]];if(!noteSerie)throw Object.assign(Error('Configura la serie de esta nota desde PANEL.'),{status:409});if(req.body.serie&&req.body.serie!==noteSerie)throw Object.assign(Error('La serie de notas se selecciona exclusivamente desde PANEL.'),{status:403});
+   const result=await cpeRequest('web',tenant,'/v1/notes',{reference_id:doc.id,command_id:validId(req.body.command_id),doc_type:req.body.doc_type,serie:noteSerie,reason_code:req.body.reason_code,reason:req.body.reason,issued_at:req.body.issued_at,amount:req.body.amount});return res.json(result);
   }
   throw Object.assign(Error('Operación inválida.'),{status:400});
  }));
