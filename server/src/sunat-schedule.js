@@ -5,8 +5,8 @@ export function validateSchedule(body){
 export function createSunatScheduler({pool,processJob,serviceContext,interval=60000,logger=console}={}){
  let timer,busy=false,stopping=false,pending;
  function tick(){if(stopping)return Promise.resolve();if(busy)return pending;busy=true;pending=(async()=>{try{await serviceContext(async()=>{
- const jobs=(await pool.query(`SELECT o.id,o.empresa_id FROM sunat_outbox o JOIN sunat_sucursales c ON c.empresa_id=o.empresa_id AND c.sucursal_id=o.sucursal_id
- WHERE c.habilitado AND c.ambiente=o.payload_json->>'environment'
+ const jobs=(await pool.query(`SELECT o.id,o.empresa_id FROM sunat_outbox o JOIN sunat_sucursales c ON c.empresa_id=o.empresa_id AND c.sucursal_id=o.sucursal_id JOIN ventas v ON v.id=o.venta_id AND v.empresa_id=o.empresa_id
+ WHERE v.estado='EMITIDA' AND c.habilitado AND c.ambiente=o.payload_json->>'environment'
  AND o.estado IN ('PENDIENTE','PREPARADO','FIRMADO','NO_RECIBIDO') AND o.intentos<20
  AND (o.intentos=0 OR o.updated_at<now()-interval '5 minutes')
  AND (COALESCE(c.envio_modo,CASE WHEN c.envio_automatico THEN 'inmediato' ELSE 'manual' END)='inmediato'

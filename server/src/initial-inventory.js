@@ -1,3 +1,4 @@
+import {productAffectation} from './product-affectation.js';
 import ExcelJS from 'exceljs';
 import {createHash,randomUUID} from 'node:crypto';
 import {linkProduct} from './branch-catalog.js';
@@ -9,7 +10,7 @@ export const INITIAL_COLUMNS=[
  ['unidad_medida','Unidad de medida',true,40],['categoria','Categoría',false,100],
  ['laboratorio','Laboratorio',false,120],['stock','Stock del lote',true],
  ['stock_minimo','Stock mínimo',true],['costo','Precio de compra',true],['precio','Precio de venta',true],
- ['lote','Lote',false,80],['vencimiento','Vencimiento',false]];
+ ['lote','Lote',false,80],['vencimiento','Vencimiento',false],['tipo_afectacion_igv','Afectación IGV',false,2]];
 export const INITIAL_UNITS=['UNIDAD','BLISTER','CAJA','PAQUETE','DOCENA','FRASCO','BOTELLA','SOBRE','TUBO','AMPOLLA','VIAL','BOLSA','TABLETA','CAPSULA','GRAMO','MILILITRO'];
 const clean=v=>String(v??'').trim().replace(/\s+/g,' ');
 const key=v=>clean(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[_\s]+/g,' ');
@@ -48,7 +49,8 @@ export async function initialTemplate(){
  ws.columns.forEach((c,i)=>{c.width=[0,1,13].includes(i)?20:i===2?36:22;if([0,1,13].includes(i))c.numFmt='@';});
  ws.getRow(1).height=36;
  ws.getRow(1).eachCell((c,i)=>{c.font={bold:true,color:{argb:'FFFFFFFF'}};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:INITIAL_COLUMNS[i-1][2]?'FF123F6D':'FF55718D'}};c.alignment={wrapText:true,vertical:'middle'};});
- ws.autoFilter='A1:O1';
+ ws.autoFilter='A1:P1';
+ ws.dataValidations.add('P2:P5001',{type:'list',allowBlank:true,formulae:['"10,20,30"']});
  ws.dataValidations.add('G2:G5001',{type:'list',allowBlank:false,formulae:['"'+INITIAL_UNITS.join(',')+'"']});
  const info=wb.addWorksheet('Información');info.getColumn(1).width=105;
  info.addRows([
@@ -62,13 +64,14 @@ export async function initialTemplate(){
  ['Sin Stock máximo ni Valor del stock. El sistema calcula stock × costo por lote.'],
  ['Solo saldo inicial: no reemplaza inventario ni crea compras. Productos con stock o movimientos previos en la sucursal se bloquean.'],
  ['Vista previa y resumen antes de confirmar. Cualquier error cancela toda la importación. Máximo 5.000 filas / 20 MB.'],
- ['Ejemplo: mismo producto, dos lotes; total 10 unidades y S/80.00.']
+ ['Ejemplo: mismo producto, dos lotes; total 10 unidades y S/80.00.'],
+ ['Afectación IGV opcional: 10 Gravado, 20 Exonerado, 30 Inafecto. Vacío: nuevo pendiente (bloquea CPE); existente conserva su valor. No cambia afectación de existentes: use Productos para corregirla.']
  ]);
  info.addRow(INITIAL_COLUMNS.map(c=>c[1]));
  info.addRow(['P000003','','LIMONADA AMRKOS 200ML','','','','BOTELLA','','',4,0,8,12.9,'EDED','29/10/2026']);
  info.addRow(['P000003','','LIMONADA AMRKOS 200ML','','','','BOTELLA','','',6,0,8,12.9,'DEDEEE','29/11/2026']);
  info.getRow(1).font={size:16,bold:true};info.getRow(12).font={bold:true};
- for(let c=2;c<=15;c++)info.getColumn(c).width=c===3?36:22;
+ for(let c=2;c<=16;c++)info.getColumn(c).width=c===3?36:22;
  return Buffer.from(await wb.xlsx.writeBuffer());
 }
 export async function parseInitialWorkbook(base64){
@@ -90,6 +93,7 @@ export async function parseInitialWorkbook(base64){
     const v=map[field]?primitive(excel.getCell(map[field])):null;
     if(['stock','stock_minimo','costo','precio'].includes(field))item[field]=number(v,label,field==='costo'?4:field==='precio'?2:3);
     else if(field==='vencimiento')item[field]=initialDate(v,wb.properties.date1904);
+    else if(field==='tipo_afectacion_igv'){item[field]=productAffectation(v==null||clean(v)===''?null:clean(v));if(item[field]===null)item.warnings.push('Afectación IGV no informada: existente conserva su valor; producto nuevo queda pendiente y no podrá emitir CPE.');}
     else{
      item[field]=clean(v);
      if(required&&!item[field])fail(label+' obligatorio');
@@ -110,7 +114,7 @@ export async function parseInitialWorkbook(base64){
  if(!rows.length)fail('No hay filas de inventario.');
  for(const [code,g]of groups){
   const f=g.first;
-  const fields=['nombre','unidad_medida','codigo_barras','principio_activo','concentracion','presentacion','categoria','laboratorio','stock_minimo','precio'];
+  const fields=['nombre','unidad_medida','codigo_barras','principio_activo','concentracion','presentacion','categoria','laboratorio','stock_minimo','precio','tipo_afectacion_igv'];
   const differences=fields.filter(k=>g.rows.some(r=>(['stock_minimo','precio','codigo_barras'].includes(k)?r[k]:same(r[k]))!==( ['stock_minimo','precio','codigo_barras'].includes(k)?f[k]:same(f[k]))));
   if(differences.length){const msg='Código '+code+', filas '+g.rows.map(r=>r.row).join(', ')+': campos diferentes: '+differences.join(', ');g.rows.forEach(r=>r.errors.push(msg));}
   for(const r of g.rows){
@@ -141,6 +145,7 @@ export async function validateInitialDatabase(db,user,branch,parsed){
    if(used.has(p.id))errors.push('Ya tiene lotes o movimientos en esta sucursal: no es un saldo inicial.');
    const dif=masterFields.filter(k=>k==='codigo_barras'?clean(p[k])!==clean(f[k]):same(p[k])!==same(f[k]));
    if(dif.length)errors.push('Datos maestros existentes diferentes: '+dif.join(', '));
+   if(f.tipo_afectacion_igv!==null&&f.tipo_afectacion_igv!==p.tipo_afectacion_igv)errors.push('Afectación IGV existente diferente; no se sobrescribe. Corríjala en Productos.');
    if(g.hasPrice&&prices.get(p.id)!==f.precio)errors.push('Precio existente diferente; no se sobrescribe.');
   }
   for(const [index,k,label]of [[names,same(f.nombre),'nombre'],[bars,f.codigo_barras,'código de barras']]){
@@ -169,7 +174,7 @@ export async function applyInitialInventory(db,user,branch,parsed,{catalog,audit
   const f=g.first;let p=g.existing;
   if(!p){
    const category=await catalog(db,'categorias',user.empresa_id,f.categoria),lab=await catalog(db,'laboratorios',user.empresa_id,f.laboratorio);
-   p=(await db.query('insert into productos(empresa_id,codigo_interno,codigo_barras,nombre,principio_activo,concentracion,presentacion,unidad_medida,categoria_id,laboratorio_id,stock_minimo,stock_maximo,requiere_lote) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,0,$12) returning id',[user.empresa_id,code,f.codigo_barras||null,f.nombre,f.principio_activo||null,f.concentracion||null,f.presentacion||null,f.unidad_medida,category,lab,f.stock_minimo,[...g.lots.values()].some(r=>r.lote||r.vencimiento)])).rows[0];created++;
+   p=(await db.query('insert into productos(empresa_id,codigo_interno,codigo_barras,nombre,principio_activo,concentracion,presentacion,unidad_medida,categoria_id,laboratorio_id,stock_minimo,stock_maximo,requiere_lote,tipo_afectacion_igv) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,0,$12,$13) returning id',[user.empresa_id,code,f.codigo_barras||null,f.nombre,f.principio_activo||null,f.concentracion||null,f.presentacion||null,f.unidad_medida,category,lab,f.stock_minimo,[...g.lots.values()].some(r=>r.lote||r.vencimiento),f.tipo_afectacion_igv])).rows[0];created++;
   }else existing++;
   await linkProduct(db,p.id,branch,{stock_minimo:f.stock_minimo});
   if(!g.hasPrice)await db.query("insert into precios_producto(producto_id,sucursal_id,tipo,factor_unidades,precio_venta) values($1,$2,'unidad',1,$3)",[p.id,branch,f.precio]);

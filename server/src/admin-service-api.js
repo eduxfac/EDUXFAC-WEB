@@ -1,3 +1,4 @@
+import {adminRecoveryApi} from './admin-recovery.js';
 import {operationsApi} from './operations-api.js';
 import express from 'express';
 import {onboardingApi} from './onboarding-api.js';
@@ -86,5 +87,6 @@ router.use(operationsApi);
 router.use(subscriptionApi);
 router.use(commercialApi);
 router.use(onboardingApi);
+router.use(adminRecoveryApi);
 router.use((_req,res)=>res.status(404).json({error:'Operación administrativa no disponible.'}));
 export {router as adminServiceApi};

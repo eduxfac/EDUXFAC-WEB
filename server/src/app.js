@@ -1,3 +1,5 @@
+import {installRecoveryCompletion} from './admin-recovery.js';
+import {productAffectation} from './product-affectation.js';
 import {createHash} from 'node:crypto';
 import {registerSunat,enqueueSaleCpe,completeCheckoutCpe} from './sunat-api.js';
 import {monthlySales} from './monthly-sales.js';
@@ -41,7 +43,9 @@ let runtimeSchemaReady=false;
 const allowedOrigin=process.env.CORS_ORIGIN || true;
 app.use(cors({origin:allowedOrigin,credentials:false}));
 app.use('/api/internal/admin/v1',express.json({limit:'16kb'}),adminServiceApi);
+app.use('/api/auth/recovery/complete',express.json({limit:'2kb'}));
 app.use(express.json({ limit: '30mb' }));
+installRecoveryCompletion(app);
 app.use('/api/auth/login',requestLimits({windowMs:900000,max:30,keyOf:req=>(req.socket.remoteAddress||'unknown')+'|'+String(req.body?.usuario||'').slice(0,80).toLowerCase()+'|'+String(req.body?.empresa_codigo||req.body?.ruc||'').slice(0,80).toLowerCase()}));
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -751,7 +755,7 @@ app.get('/api/admin/products', requireAuth, async (req,res)=>{
   const includeInactive=String(req.query.include_inactive||'false')==='true';
   const q=String(req.query.q||'').trim();
   const {rows}=await pool.query(`
-    select p.id,p.codigo_interno,p.codigo_barras,p.nombre,p.principio_activo,p.concentracion,p.presentacion,p.unidad_medida,
+    select p.id,p.codigo_interno,p.codigo_barras,p.nombre,p.principio_activo,p.concentracion,p.presentacion,p.unidad_medida,p.tipo_afectacion_igv,
            ps.stock_minimo,ps.stock_maximo,p.requiere_lote,ps.activo,p.categoria_id,c.nombre categoria,p.laboratorio_id,l.nombre laboratorio,
            coalesce((select pp.precio_venta from precios_producto pp where pp.producto_id=p.id and pp.vigente_hasta is null and (pp.sucursal_id=$4 or pp.sucursal_id is null) and pp.factor_unidades=1 order by pp.sucursal_id nulls last,pp.vigente_desde desc limit 1),0)::numeric(14,2) precio,
            coalesce((select jsonb_agg(jsonb_build_object('id',pp.id,'tipo',pp.tipo,'factor_unidades',pp.factor_unidades,'precio_venta',pp.precio_venta) order by pp.factor_unidades,pp.tipo)
@@ -824,7 +828,7 @@ async function validateProductFormFields(db,user,b,{create=false}={}){
 app.post('/api/admin/products', requireAuth, async (req,res)=>{
   try{
     await requireAnyBranchRole(pool,req.user,['Administrador','Almacén']);
-    const b={...(req.body||{})}; await validateProductFormFields(pool,req.user,b,{create:true}); await ensureBranchAccess(pool,req.user,b.sucursal_id); const max=numeric(b.stock_maximo??0,'Stock máximo');if(max<0)throw new Error('Stock máximo inválido.'); if(!String(b.nombre||'').trim()) throw new Error('El nombre del producto es obligatorio.');
+    const b={...(req.body||{})}; b.tipo_afectacion_igv=productAffectation(b.tipo_afectacion_igv); await validateProductFormFields(pool,req.user,b,{create:true}); await ensureBranchAccess(pool,req.user,b.sucursal_id); const max=numeric(b.stock_maximo??0,'Stock máximo');if(max<0)throw new Error('Stock máximo inválido.'); if(!String(b.nombre||'').trim()) throw new Error('El nombre del producto es obligatorio.');
     if(!String(b.unidad_medida||'').trim()) throw new Error('Selecciona la unidad de medida.');
     const min=numeric(b.stock_minimo??0,'Stock mínimo'); const price=numeric(b.precio??0,'Precio'); const equivalencias=normalizeEquivalences(b.equivalencias); if(min<0||price<0) throw new Error('Stock mínimo y precio no pueden ser negativos.');
     const result=await tx(async c=>{
@@ -834,8 +838,8 @@ app.post('/api/admin/products', requireAuth, async (req,res)=>{
       if((await c.query('select 1 from productos where empresa_id=$1 and btrim(codigo_interno)=$2',[req.user.empresa_id,codigo])).rowCount){
         const error=new Error('Ya existe un producto con ese código. Genera un código nuevo antes de guardar.');error.status=409;throw error;
       }
-      const q=await c.query(`insert into productos(empresa_id,codigo_interno,codigo_barras,nombre,principio_activo,concentracion,presentacion,unidad_medida,categoria_id,laboratorio_id,stock_minimo,requiere_lote)
-        values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) returning *`,[req.user.empresa_id,codigo,identity.cleanBarcode||null,identity.cleanName,b.principio_activo||null,b.concentracion||null,b.presentacion||null,String(b.unidad_medida).trim(),b.categoria_id||null,b.laboratorio_id||null,min,b.requiere_lote!==false]);
+      const q=await c.query(`insert into productos(empresa_id,codigo_interno,codigo_barras,nombre,principio_activo,concentracion,presentacion,unidad_medida,categoria_id,laboratorio_id,stock_minimo,requiere_lote,tipo_afectacion_igv)
+        values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) returning *`,[req.user.empresa_id,codigo,identity.cleanBarcode||null,identity.cleanName,b.principio_activo||null,b.concentracion||null,b.presentacion||null,String(b.unidad_medida).trim(),b.categoria_id||null,b.laboratorio_id||null,min,b.requiere_lote!==false,b.tipo_afectacion_igv]);
       await c.query(`insert into precios_producto(producto_id,tipo,factor_unidades,precio_venta,sucursal_id) values($1,$2,1,$3,$4)`,[q.rows[0].id,String(b.unidad_medida).trim().toUpperCase(),price,b.sucursal_id]);
       for(const e of equivalencias) await c.query(`insert into precios_producto(producto_id,tipo,factor_unidades,precio_venta,sucursal_id) values($1,$2,$3,$4,$5)`,[q.rows[0].id,e.tipo,e.factor_unidades,e.precio_venta,b.sucursal_id]);
       await linkProduct(c,q.rows[0].id,b.sucursal_id,{stock_minimo:min,stock_maximo:max});
@@ -848,7 +852,7 @@ app.post('/api/admin/products', requireAuth, async (req,res)=>{
 
 app.put('/api/admin/products/:id', requireAuth, async (req,res)=>{
   try{
-    await requireAnyBranchRole(pool,req.user,['Administrador','Almacén']); const b=req.body||{}; await validateProductFormFields(pool,req.user,b); await ensureBranchAccess(pool,req.user,b.sucursal_id); const max=numeric(b.stock_maximo??0,'Stock máximo');if(max<0)throw new Error('Stock máximo inválido.');
+    await requireAnyBranchRole(pool,req.user,['Administrador','Almacén']); const b=req.body||{}; const affectationProvided=Object.hasOwn(b,'tipo_afectacion_igv'); const affectation=affectationProvided?productAffectation(b.tipo_afectacion_igv):null; await validateProductFormFields(pool,req.user,b); await ensureBranchAccess(pool,req.user,b.sucursal_id); const max=numeric(b.stock_maximo??0,'Stock máximo');if(max<0)throw new Error('Stock máximo inválido.');
     const min=numeric(b.stock_minimo??0,'Stock mínimo'); const price=numeric(b.precio??0,'Precio'); const equivalencias=normalizeEquivalences(b.equivalencias); if(min<0||price<0) throw new Error('Stock mínimo y precio no pueden ser negativos.');
     const result=await tx(async c=>{
       await c.query(`select pg_advisory_xact_lock(hashtext($1::text),91001)`,[req.user.empresa_id]);
@@ -856,8 +860,8 @@ app.put('/api/admin/products/:id', requireAuth, async (req,res)=>{
       if(!String(b.nombre||'').trim()) throw new Error('El nombre del producto es obligatorio.');
       if(!String(b.unidad_medida||'').trim()) throw new Error('Selecciona la unidad de medida.');
       const identity=await assertProductIdentityAvailable(c,req.user.empresa_id,b,req.params.id);
-      const q=await c.query(`update productos set codigo_barras=$3,nombre=$4,principio_activo=$5,concentracion=$6,presentacion=$7,unidad_medida=$8,categoria_id=$9,laboratorio_id=$10,stock_minimo=stock_minimo,requiere_lote=$12,updated_at=now()
-        where id=$1 and empresa_id=$2 and $11::numeric>=0 returning *`,[req.params.id,req.user.empresa_id,identity.cleanBarcode||null,identity.cleanName,b.principio_activo||null,b.concentracion||null,b.presentacion||null,String(b.unidad_medida).trim(),b.categoria_id||null,b.laboratorio_id||null,min,b.requiere_lote!==false]);
+      const q=await c.query(`update productos set codigo_barras=$3,nombre=$4,principio_activo=$5,concentracion=$6,presentacion=$7,unidad_medida=$8,categoria_id=$9,laboratorio_id=$10,stock_minimo=stock_minimo,requiere_lote=$12,tipo_afectacion_igv=case when $14::boolean then $13::varchar else tipo_afectacion_igv end,updated_at=now()
+        where id=$1 and empresa_id=$2 and $11::numeric>=0 returning *`,[req.params.id,req.user.empresa_id,identity.cleanBarcode||null,identity.cleanName,b.principio_activo||null,b.concentracion||null,b.presentacion||null,String(b.unidad_medida).trim(),b.categoria_id||null,b.laboratorio_id||null,min,b.requiere_lote!==false,affectation,affectationProvided]);
       if(!q.rows[0]) throw new Error('Producto no encontrado.');
       await c.query(`update precios_producto set vigente_hasta=now() where producto_id=$1 and sucursal_id=$2 and vigente_hasta is null`,[req.params.id,b.sucursal_id]);
       await c.query(`insert into precios_producto(producto_id,tipo,factor_unidades,precio_venta,sucursal_id) values($1,$2,1,$3,$4)`,[req.params.id,String(b.unidad_medida).trim().toUpperCase(),price,b.sucursal_id]);
@@ -940,12 +944,12 @@ app.get('/api/admin/clients/by-doc/:doc',requireAuth,async(req,res)=>{
     if(!/^\d{8}$|^\d{11}$/.test(doc)) return res.status(400).json({error:'El documento debe tener 8 dígitos (DNI) u 11 dígitos (RUC).'});
     const {rows}=await pool.query(`select id,tipo_doc,nro_doc,nombres,telefono,email,direccion from clientes where empresa_id=$1 and activo=true and nro_doc=$2 order by updated_at desc nulls last limit 1`,[req.user.empresa_id,doc]);
     if(rows[0]) return res.json(rows[0]);
-    const result=await lookupPerudevs(doc,req.user.empresa_id);
-    if(!result.found||!result.client) return res.json(null);
     const client=await tx(async c=>{
       await c.query(`select pg_advisory_xact_lock(hashtext($1),hashtext($2))`,[String(req.user.empresa_id),doc]);
       const existing=await c.query(`select id,tipo_doc,nro_doc,nombres,telefono,email,direccion from clientes where empresa_id=$1 and activo=true and nro_doc=$2 order by updated_at desc nulls last limit 1`,[req.user.empresa_id,doc]);
       if(existing.rows[0])return existing.rows[0];
+      const result=await lookupPerudevs(doc,req.user.empresa_id);
+      if(!result.found||!result.client)return null;
       const inserted=await c.query(`insert into clientes(empresa_id,tipo_doc,nro_doc,nombres,direccion) values($1,$2,$3,$4,$5) returning id,tipo_doc,nro_doc,nombres,telefono,email,direccion`,[req.user.empresa_id,result.client.tipo_doc,doc,result.client.nombres,result.client.direccion]);
       return inserted.rows[0];
     });
