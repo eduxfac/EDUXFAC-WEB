@@ -2,7 +2,7 @@ import {pool,tx} from './db.js';
 import {validateSchedule} from './sunat-schedule.js';
 import {cpeRequest} from './cpe-client.js';
 const validId=v=>{if(!/^[a-f0-9-]{36}$/.test(String(v)))throw Object.assign(Error('Identificador inválido.'),{status:400});return v;};
-const taxCode=v=>{const s=String(v||'10').trim().toUpperCase();if(/^(10|20|30)(?:\D|$)/.test(s))return s.slice(0,2);if(s.includes('EXONERAD'))return '20';if(s.includes('INAFECT'))return '30';if(s.includes('GRAVAD'))return '10';throw Object.assign(Error('Afectación tributaria no soportada: '+s),{status:400});};
+import {productTaxCode as taxCode} from './product-tax.js';
 export async function enqueueSaleCpe(db,tenant,saleId){
  if(!process.env.CPE_API_URL||(process.env.NODE_ENV==='test'&&process.env.CPE_TEST_ALLOW!=='yes'))return;
  const sale=(await db.query(`SELECT v.*,c.tipo_doc,c.nro_doc,c.nombres,c.direccion cliente_direccion FROM ventas v LEFT JOIN clientes c ON c.id=v.cliente_id WHERE v.id=$1 AND v.empresa_id=$2`,[saleId,tenant])).rows[0];
