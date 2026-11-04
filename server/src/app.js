@@ -30,6 +30,7 @@ import { applyPositiveStockEntry } from './inventory-entry.js';
 import { adminServiceApi } from './admin-service-api.js';
 import { getCompanyAccess, assertCompanyAccess, sendAccessError } from './company-access.js';
 import { ensureCompanyProduct, ensureCompanyRequest } from './tenant-guard.js';
+import { lookupPerudevs } from './panel-perudevs-client.js';
 
 const app = express();
 app.use((_req,res,next)=>{res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Frame-Options','DENY');res.setHeader('Content-Security-Policy',contentSecurityPolicy);next();});
@@ -938,9 +939,18 @@ app.get('/api/admin/clients/by-doc/:doc',requireAuth,async(req,res)=>{
     const doc=String(req.params.doc||'').replace(/\D/g,'');
     if(!/^\d{8}$|^\d{11}$/.test(doc)) return res.status(400).json({error:'El documento debe tener 8 dígitos (DNI) u 11 dígitos (RUC).'});
     const {rows}=await pool.query(`select id,tipo_doc,nro_doc,nombres,telefono,email,direccion from clientes where empresa_id=$1 and activo=true and nro_doc=$2 order by updated_at desc nulls last limit 1`,[req.user.empresa_id,doc]);
-    if(!rows[0]) return res.json(null);
-    res.json(rows[0]);
-  }catch(error){res.status(400).json({error:error.message});}
+    if(rows[0]) return res.json(rows[0]);
+    const result=await lookupPerudevs(doc,req.user.empresa_id);
+    if(!result.found||!result.client) return res.json(null);
+    const client=await tx(async c=>{
+      await c.query(`select pg_advisory_xact_lock(hashtext($1),hashtext($2))`,[String(req.user.empresa_id),doc]);
+      const existing=await c.query(`select id,tipo_doc,nro_doc,nombres,telefono,email,direccion from clientes where empresa_id=$1 and activo=true and nro_doc=$2 order by updated_at desc nulls last limit 1`,[req.user.empresa_id,doc]);
+      if(existing.rows[0])return existing.rows[0];
+      const inserted=await c.query(`insert into clientes(empresa_id,tipo_doc,nro_doc,nombres,direccion) values($1,$2,$3,$4,$5) returning id,tipo_doc,nro_doc,nombres,telefono,email,direccion`,[req.user.empresa_id,result.client.tipo_doc,doc,result.client.nombres,result.client.direccion]);
+      return inserted.rows[0];
+    });
+    res.json(client);
+  }catch(error){res.status(error.status||503).json({error:error.message||'No se pudo consultar el documento.'});}
 });
 
 app.get('/api/admin/clients/by-dni/:dni',requireAuth,async(req,res)=>{

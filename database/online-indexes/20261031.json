@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "component": "web",
+  "indexes": [
+    {"name":"edx_perf_ventas_empresa_fecha","table":"ventas","columns":["empresa_id","created_at","id"],"keys":["empresa_id","created_at DESC","id DESC"],"purpose":"Historial de ventas de toda una empresa y paginación por fecha."},
+    {"name":"edx_perf_ventas_sucursal_fecha","table":"ventas","columns":["empresa_id","sucursal_id","created_at"],"keys":["empresa_id","sucursal_id","created_at DESC"],"purpose":"Conservar y comprobar cobertura del índice por empresa/sucursal existente."},
+    {"name":"edx_perf_ventas_dia_lima","table":"ventas","columns":["empresa_id","created_at","sucursal_id"],"keys":["empresa_id","((created_at AT TIME ZONE 'America/Lima'::text)::date)","sucursal_id"],"purpose":"Reportes actuales que filtran por fecha local con AT TIME ZONE."},
+    {"name":"edx_perf_detalles_venta","table":"venta_detalles","columns":["venta_id"],"keys":["venta_id"],"purpose":"Detalle, comprobante, rentabilidad y devoluciones de una venta."},
+    {"name":"edx_perf_pagos_venta","table":"venta_pagos","columns":["venta_id"],"keys":["venta_id"],"purpose":"Pagos y reportes netos sin recorrer todos los pagos."},
+    {"name":"edx_perf_devolucion_linea","table":"devolucion_venta_detalles","columns":["venta_detalle_id"],"keys":["venta_detalle_id"],"purpose":"Sumas de cantidades y montos ya devueltos por línea."},
+    {"name":"edx_perf_devolucion_venta","table":"devoluciones_venta","columns":["venta_id"],"keys":["venta_id"],"purpose":"Descontar devoluciones del total vendido; reutiliza el índice existente si cubre."},
+    {"name":"edx_perf_kardex_lote","table":"movimientos_inventario","columns":["lote_id","producto_id","sucursal_id"],"keys":["lote_id","producto_id","sucursal_id"],"purpose":"Reconciliación de cantidades y valor de un lote en checkout."},
+    {"name":"edx_perf_kardex_referencia","table":"movimientos_inventario","columns":["referencia_tipo","referencia_id","producto_id","lote_id"],"keys":["referencia_tipo","referencia_id","producto_id","lote_id"],"purpose":"Ubicar movimientos de una venta o devolución."},
+    {"name":"edx_perf_cliente_documento","table":"clientes","columns":["empresa_id","nro_doc","updated_at","activo"],"keys":["empresa_id","nro_doc","updated_at DESC NULLS LAST"],"where":"activo","purpose":"Búsqueda local de DNI/RUC antes de consumir PeruDevs."},
+    {"name":"edx_perf_precios_vigentes","table":"precios_producto","columns":["producto_id","sucursal_id","vigente_desde","id","vigente_hasta"],"keys":["producto_id","sucursal_id","vigente_desde DESC","id DESC"],"where":"vigente_hasta IS NULL","purpose":"Precio vigente por producto y sucursal."},
+    {"name":"edx_perf_lotes_fefo","table":"lotes","columns":["producto_id","sucursal_id","fecha_vencimiento","id","cantidad_disponible"],"keys":["producto_id","sucursal_id","fecha_vencimiento","id"],"where":"cantidad_disponible > 0::numeric","purpose":"Selección FEFO de lotes con existencia; no cambia reglas de stock."},
+    {"name":"edx_perf_compra_detalles","table":"compra_detalles","columns":["compra_id","producto_id"],"keys":["compra_id","producto_id"],"purpose":"Detalle de compras y reconstrucción de costos."},
+    {"name":"edx_perf_compras_sucursal_fecha","table":"compras","columns":["empresa_id","sucursal_id","created_at","id"],"keys":["empresa_id","sucursal_id","created_at DESC","id DESC"],"purpose":"Últimas compras de la sucursal para costos y reportes."},
+    {"name":"edx_perf_outbox_pendientes","table":"sunat_outbox","columns":["created_at","estado","intentos"],"keys":["created_at"],"where":"estado = ANY (ARRAY['PENDIENTE'::text,'PREPARADO'::text,'FIRMADO'::text,'NO_RECIBIDO'::text]) AND intentos < 20","purpose":"Programador fiscal; el índice excluye trabajos terminados."},
+    {"name":"edx_perf_outbox_documento","table":"sunat_outbox","columns":["empresa_id","documento_id"],"keys":["empresa_id","documento_id"],"where":"documento_id IS NOT NULL","purpose":"Sincronizar respuesta fiscal por documento."},
+    {"name":"edx_perf_caja_movimientos","table":"movimientos_caja","columns":["sesion_caja_id","created_at"],"keys":["sesion_caja_id","created_at"],"purpose":"Movimientos y cierre de una sesión de caja."}
+  ]
+}
