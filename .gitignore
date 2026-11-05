@@ -28,3 +28,13 @@ runtime/
 # Temporales y caches
 *.tmp
 *.cache
+
+# Material local de revisión y operación; nunca forma parte del código.
+logs/
+screenshots/
+test-results/
+playwright-report/
+certs/
+certificates/
+*.crt
+*.cer
