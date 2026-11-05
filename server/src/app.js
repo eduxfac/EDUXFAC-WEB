@@ -194,7 +194,7 @@ app.post('/api/auth/login',async(req,res)=>{
   if(typeof usuario!=='string'||!usuario.trim()||typeof password!=='string'||!password||password.length>256||(!code&&!document)||(code&&document))return res.status(400).json({error:'Indica empresa_codigo o RUC, usuario y contraseña.',code:'EMPRESA_REQUERIDA'});
   const company=await pool.query('select id from empresas where '+(code?'lower(btrim(empresa_codigo))=lower($1)':'btrim(ruc)=$1')+' limit 2',[code||document]);
   if(company.rows.length!==1)return res.status(401).json({error:'Empresa o credenciales inválidas.',code:'LOGIN_INVALIDO'});
-  const {rows}=await pool.query(`select u.id,u.empresa_id,u.nombre,u.usuario,u.password_hash,coalesce((to_jsonb(u)->>'debe_cambiar_password')::boolean,false) debe_cambiar_password from usuarios u where u.empresa_id=$1 and lower(u.usuario)=lower($2) and u.activo=true limit 2`,[company.rows[0].id,usuario.trim()]);
+  const {rows}=await pool.query(`select u.id,u.empresa_id,u.nombre,u.usuario,u.password_hash,u.password_version,coalesce((to_jsonb(u)->>'debe_cambiar_password')::boolean,false) debe_cambiar_password from usuarios u where u.empresa_id=$1 and lower(u.usuario)=lower($2) and u.activo=true limit 2`,[company.rows[0].id,usuario.trim()]);
   if(rows.length!==1||!(await bcrypt.compare(password,rows[0].password_hash)))return res.status(401).json({error:'Empresa o credenciales inválidas.',code:'LOGIN_INVALIDO'});
   const executeLogin=()=>tx(async db=>{
    const user=rows[0];const access=assertCompanyAccess(await getCompanyAccess(db,user.empresa_id,{lock:true}));
