@@ -5,6 +5,7 @@ const n=x=>Number(x).toLocaleString('es-PE',{maximumFractionDigits:3});
 const cost=x=>x.ultimo_costo==null?'':(x.costo_moneda==='PEN'?'S/ ':x.costo_moneda==='USD'?'US$ ':x.costo_moneda?x.costo_moneda+' ':'')+Number(x.ultimo_costo).toFixed(4);
 window.createPurchaseRequirement=function({api,getBranchId,getToken,onCount}){
  const $=id=>document.getElementById(id),draft=new Map();let branch=null,page=1,sequence=0,rows=[],total=0,busy=false,generated=null,signature='',draftSequence=0;
+ let refreshPending=false;const editing=()=>document.activeElement?.matches?.('[data-request-id]')===true;
  const visible=()=>document.getElementById('replenishment')?.classList.contains('active');
  const status=message=>{$('rqStatus').textContent=message};
  function invalidate(){generated=null;$('rqSummary').classList.add('hidden')}
@@ -15,11 +16,13 @@ window.createPurchaseRequirement=function({api,getBranchId,getToken,onCount}){
  async function load({reset=false}={}){
   const current=getBranchId();if(!current)return;
   if(current!==branch){branch=current;page=1;draft.clear();draftSequence++;invalidate()}
+  if(editing()&&!reset){refreshPending=true;return;}
   if(reset){page=1;invalidate()}
   const request=++sequence;status('Consultando existencias actuales…');
   try{
-   const result=await api('/api/purchasing/requirements?'+new URLSearchParams({sucursal_id:current,page,limit:100,q:$('rqSearch').value.trim()}));
+   const result=await api('/api/purchasing/requirements?'+new URLSearchParams({sucursal_id:current,page,limit:100,q:$('rqSearch').value.trim(),proveedor:$('rqSupplier').value.trim(),stock_estado:$('rqStockState').value}));
    if(request!==sequence||current!==getBranchId())return;
+   if(editing()){refreshPending=true;return;}refreshPending=false;
    rows=result.items;total=result.total;
    if(page>1&&rows.length===0){page=Math.max(1,Math.ceil(total/100));return load()}
    const nextSignature=JSON.stringify([result.total,result.items]);
@@ -50,6 +53,8 @@ window.createPurchaseRequirement=function({api,getBranchId,getToken,onCount}){
  }
  $('rqReload').onclick=()=>load({reset:true});let searchTimer;
  $('rqSearch').oninput=()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>load({reset:true}),250)};
+ for(const id of ['rqSupplier','rqStockState'])$(id).addEventListener('change',()=>load({reset:true}));
+ $('rqRows').addEventListener('focusout',()=>setTimeout(()=>{if(refreshPending&&!editing())load()},0));
  $('rqPrevious').onclick=()=>{if(page>1){page--;void load()}};
  $('rqNext').onclick=()=>{if(page*100<total){page++;void load()}};
  $('rqRows').oninput=e=>{const input=e.target.closest('[data-request-id]');if(!input)return;draft.set(input.dataset.requestId,input.value);draftSequence++;invalidate()};

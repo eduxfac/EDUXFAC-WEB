@@ -7,5 +7,5 @@ export function ui(){
  c.rcSetRows=(rows,cols)=>{c.cells=rows.map(r=>cols.map(f=>f(r)))};
  vm.createContext(c);vm.runInContext(formatter,c);
  for(const[a,b]of [['function renderDashExpiry(','function renderDashLowStock('],['async function loadAlerts()','async function repairInventoryMetadata()'],['function renderReportCenter(d){','function reportDocumentMarkup(data){'],['function reportDocumentMarkup(data){','async function showReportDocument(']]){const start=html.indexOf(a),end=html.indexOf(b,start+1);if(start<0||end<0)throw Error('MissingUI:'+a);vm.runInContext(html.slice(start,end),c)}
- return{c,el,preview(row){c.d={rows:[row]};const line=html.split('\n').find(x=>x.includes("$('inventoryPreviewRows').innerHTML=d.rows.map"));vm.runInContext(line,c);return el('inventoryPreviewRows').innerHTML}};
+ return{c,el,preview(row){c.pageRows=[row];const line=html.split('\n').find(x=>x.includes("$('inventoryPreviewRows').innerHTML=pageRows.map"));vm.runInContext(line,c);return el('inventoryPreviewRows').innerHTML}};
 }

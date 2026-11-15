@@ -1,0 +1,57 @@
+/* Papel de 80 mm; el relleno reserva márgenes físicos de 2 mm / 3 mm.
+   La vista previa y la impresión comparten medidas para calcular una sola tira. */
+body.edux-print-80 #receiptContent .edux-ticket {
+  box-sizing: border-box !important;
+  width: 80mm !important;
+  max-width: 80mm !important;
+  padding: 2mm 3mm !important;
+  margin: 0 auto;
+  font: 12px/1.3 Arial, sans-serif !important;
+  color: #000 !important;
+  background: #fff !important;
+  overflow-wrap: anywhere;
+}
+body.edux-print-80 #receiptContent .edux-ticket * {
+  box-sizing: border-box;
+  color: #000 !important;
+  text-shadow: none !important;
+}
+body.edux-print-80 #receiptContent .ticket-brand strong { font-size: 18px; letter-spacing: 0; }
+body.edux-print-80 #receiptContent .ticket-brand small,
+body.edux-print-80 #receiptContent .ticket-doc small,
+body.edux-print-80 #receiptContent .ticket-note,
+body.edux-print-80 #receiptContent .ticket-footer span { font-size: 10px; }
+body.edux-print-80 #receiptContent .company-logo-full { max-height: 20mm; }
+body.edux-print-80 #receiptContent .ticket-items {
+  width: 100%;
+  table-layout: fixed;
+  font-size: 11px !important;
+  font-variant-numeric: tabular-nums;
+}
+body.edux-print-80 #receiptContent .ticket-items th,
+body.edux-print-80 #receiptContent .ticket-items td {
+  font-size: inherit !important;
+  line-height: inherit;
+  padding: 4px 1px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+body.edux-print-80 #receiptContent .ticket-items th:nth-child(1) { width: 39%; }
+body.edux-print-80 #receiptContent .ticket-items th:nth-child(2) { width: 15%; }
+body.edux-print-80 #receiptContent .ticket-items th:nth-child(3) { width: 21%; }
+body.edux-print-80 #receiptContent .ticket-items th:nth-child(4) { width: 25%; }
+body.edux-print-80 #receiptContent .ticket-items td.desc small { font-size: 10px; }
+body.edux-print-80 #receiptContent .ticket-totals span {
+  width: 100%;
+  min-width: 0;
+  gap: 8px;
+  align-items: baseline;
+}
+body.edux-print-80 #receiptContent .ticket-totals b { text-align: right; }
+body.edux-print-80 #receiptContent .ticket-totals .grand { font-size: 16px; }
+@media print {
+  body.edux-print-80 #receiptContent .edux-ticket { margin: 0 !important; }
+}
+
+body.edux-print-80 #receiptContent .ticket-items th { white-space: nowrap; overflow-wrap: normal; }

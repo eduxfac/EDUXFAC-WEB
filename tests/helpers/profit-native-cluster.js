@@ -1,6 +1,6 @@
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
-import {mkdirSync,writeFileSync,existsSync} from 'node:fs';
+import {mkdirSync,writeFileSync,existsSync,rmSync} from 'node:fs';
 import {randomUUID} from 'node:crypto';
 import net from 'node:net';
 import path from 'node:path';
@@ -15,7 +15,7 @@ export async function createProfitNativeCluster(){
  const socket=net.createServer();await new Promise(r=>socket.listen(0,'127.0.0.1',r));const port=socket.address().port;await new Promise(r=>socket.close(r));
  const tools='/usr/lib/postgresql/16/bin',options={cwd:root,timeout:60000,maxBuffer:1024*1024};
  let started=false,pool;
- const close=async()=>{if(pool){await pool.end();pool=null;}if(started){await run(tools+'/pg_ctl',['-D',data,'stop','-m','fast','-w'],options);started=false;}};
+ const close=async()=>{if(pool){await pool.end();pool=null;}if(started){await run(tools+'/pg_ctl',['-D',data,'stop','-m','fast','-w'],options);started=false;}const parent=path.resolve(root,'tests/.profit-native');const target=path.resolve(directory);if(process.platform!=='linux'||!existsSync('/.dockerenv')||!target.startsWith(parent+path.sep)||!/^[-a-f0-9]{36}$/.test(path.basename(target)))throw Error('UNSAFE_FIXTURE_CLEANUP');rmSync(target,{recursive:true,force:true});};
  try{
   await run(tools+'/initdb',['-D',data,'-A','trust','-U','eduxfac_profit_fixture','-E','UTF8','--locale=C'],options);
   await run(tools+'/pg_ctl',['-D',data,'-l',path.join(directory,'postgres.log'),'-w','start','-o','-h 127.0.0.1 -p '+port+' -k /tmp -F -c max_connections=40 -c shared_buffers=16MB'],options);started=true;

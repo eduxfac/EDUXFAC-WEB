@@ -19,7 +19,7 @@ function frontend(f){
  const elements=new Map(),events=new Map(),requests=[],toasts=[];
  let reloads=0;
  const context={console,setTimeout,clearTimeout,queueMicrotask,requestAnimationFrame:fn=>queueMicrotask(fn),getComputedStyle:()=>({visibility:'visible'}),Option:function(text,value){this.text=text;this.value=value;},
-  state:{token:f.tokenA,branchId:ids.sucursalA},catalogs:{categorias:[],laboratorios:[]},productEquivalences:[],productFormPurchaseParent:false,
+  state:{token:f.tokenA,branchId:ids.sucursalA,permissions:{productsAdmin:{ver:true,crear:true}}},catalogs:{categorias:[],laboratorios:[]},productEquivalences:[],productFormPurchaseParent:false,
   location:{reload(){reloads++;}},showToast:(type,message)=>toasts.push({type,message}),
   clearProductForm:async()=>{},loadAdminProducts:async()=>{},loadProducts:async()=>{},loadDashboard:async()=>{},
   fetch:async(route,options={})=>{

@@ -14,7 +14,7 @@
     selectedYear=data.year;const years=[...new Set([...(data.years||[]),data.year])].filter(y=>Number.isInteger(y)&&y>=1900&&y<=9998).sort((a,b)=>b-a);
     year.innerHTML=years.map(y=>'<option value="'+y+'"'+(y===selectedYear?' selected':'')+'>'+y+'</option>').join('');year.value=String(selectedYear);
     const negative=data.months.some(m=>Number(m.total)<0);chart.classList.toggle('monthly-has-negative',negative);const max=Math.max(1,...data.months.map(m=>Math.abs(Number(m.total))));
-    chart.innerHTML=data.months.map((m,i)=>{const value=Number(m.total),label=MONTHS[i],amount=format.format(value),height=value!==0?Math.max(1,Math.abs(value)/max*(negative?50:100)):0,position=negative?(value<0?'top:50%;':'bottom:50%;'):'';return '<div class="monthly-bar-col" role="listitem" aria-label="'+label+': '+amount+'"><span class="monthly-bar-value" title="'+amount+'">'+amount+'</span><div class="monthly-bar-track" aria-hidden="true"><i style="height:'+height+'%;'+position+'"></i></div><b>'+label+'</b></div>'}).join('');
+    renderWebSalesCurve(chart,data.months.map((m,i)=>({...m,label:MONTHS[i]+' '+data.year,short:MONTHS[i]})));
     total.textContent=format.format(Number(data.total_year));status.textContent=data.months.every(m=>Number(m.total)===0)?'Sin ventas netas en el año seleccionado.':'Ventas netas según la fecha de venta · Sucursal activa';
    }catch(e){if(request===sequence&&branch===getBranchId()){chart.innerHTML='<div class="monthly-loading">No se pudieron cargar las ventas mensuales.</div>';total.textContent='—';status.textContent=e.message||'Intente nuevamente.'}}
    finally{if(request===sequence){chart.setAttribute('aria-busy','false');year.disabled=false}}

@@ -10,27 +10,23 @@ export const lowStockCTE=`with balances as (
 ), low_stock as (select * from balances where stock<=stock_minimo)`;
 export function lowStockCount(db,company,branch){return db.query(lowStockCTE+' select count(*)::int cantidad from low_stock',[company,branch]);}
 const search=`($3::text='' or nombre ilike $3 or codigo_interno ilike $3)`;
-const details=`select r.*,lc.costo_unitario ultimo_costo,lc.fecha ultima_compra,lc.moneda costo_moneda,supplier.razon_social proveedor from selected r
+const details=`select r.*,lc.costo_unitario ultimo_costo,lc.fecha ultima_compra,lc.moneda costo_moneda,lc.proveedor from selected r
  left join lateral (
- select cd.costo_unitario,c.fecha,c.moneda from compra_detalles cd join compras c on c.id=cd.compra_id
+ select cd.costo_unitario,c.fecha,c.moneda,pr.razon_social proveedor from compra_detalles cd join compras c on c.id=cd.compra_id
+ left join proveedores pr on pr.id=c.proveedor_id and pr.empresa_id=$1
  where cd.producto_id=r.id and c.empresa_id=$1 and c.sucursal_id=$2 and cd.cantidad>0
  order by c.fecha desc,c.created_at desc,c.id desc,cd.id desc limit 1
- ) lc on true
- left join lateral (
- select pr.razon_social from compra_detalles cd join compras c on c.id=cd.compra_id
- join proveedores pr on pr.id=c.proveedor_id and pr.empresa_id=$1
- where cd.producto_id=r.id and c.empresa_id=$1 and c.sucursal_id=$2 and cd.cantidad>0
- order by c.fecha desc,c.created_at desc,c.id desc,cd.id desc limit 1
- ) supplier on true order by r.nombre,r.id`;
+ ) lc on true order by r.nombre,r.id`;
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
-export async function requirementList(db,company,branch,{page=1,limit=100,q=''}={}){
- page=Number(page);limit=Number(limit);
- if(!Number.isSafeInteger(page)||page<1||!Number.isSafeInteger(limit)||limit<1||limit>200)throw new Error('Paginación inválida.');
- q=String(q).trim();if(q.length>100)throw new Error('Búsqueda demasiado larga.');
- const pattern=q?'%'+q.replace(/[\\%_]/g,'\\$&')+'%':'',params=[company,branch,pattern];
- const total=Number((await db.query(lowStockCTE+' select count(*)::int total from low_stock where '+search,params)).rows[0].total);
- const rows=(await db.query(lowStockCTE+', selected as (select * from low_stock where '+search+' order by nombre,id limit $4 offset $5) '+details,[...params,limit,(page-1)*limit])).rows;
- return {items:rows,total,page,limit};
+export async function requirementList(db,company,branch,{page=1,limit=100,q='',proveedor='',stock_estado='all'}={}){
+ page=Number(page);limit=Number(limit);if(!Number.isSafeInteger(page)||page<1||page>1000000||!Number.isSafeInteger(limit)||limit<1||limit>200)throw Error('Paginación inválida.');
+ if(typeof q!=='string'||typeof proveedor!=='string'||q.length>100||proveedor.length>100||!['all','zero','negative','positive'].includes(stock_estado))throw Error('Filtros inválidos.');
+ const literal=v=>v.trim()?'%'+v.trim().replace(/[\\%_]/g,'\\$&')+'%':'';
+ const params=[company,branch,literal(q),literal(proveedor),stock_estado];
+ const source=lowStockCTE+', enriched as ('+details.replace('from selected r','from low_stock r').replace(' order by r.nombre,r.id','')+')';
+ const filter=`($3::text='' or nombre ilike $3 or codigo_interno ilike $3) and ($4::text='' or coalesce(proveedor,'Sin proveedor') ilike $4) and ($5='all' or ($5='zero' and stock=0) or ($5='negative' and stock<0) or ($5='positive' and stock>0))`;
+ const total=Number((await db.query(source+' select count(*)::int total from enriched where '+filter,params)).rows[0].total);
+ const rows=(await db.query(source+' select * from enriched where '+filter+' order by nombre,id limit $6 offset $7',[...params,limit,(page-1)*limit])).rows;return{items:rows,total,page,limit};
 }
 export function requestedItems(items){
  if(!Array.isArray(items)||items.length>10000)throw new Error('Seleccione como máximo 10.000 productos.');
@@ -62,7 +58,7 @@ export async function requirementWorkbook(document){
  for(const p of document.items){const row=ws.addRow([p.codigo_interno,p.nombre,Number(p.stock),Number(p.stock_minimo),p.cantidad,p.ultimo_costo==null?null:Number(p.ultimo_costo),p.proveedor||'',p.sucursal]);row.getCell(6).numFmt=(p.costo_moneda==='PEN'?'"S/ " ':p.costo_moneda==='USD'?'"US$ " ':/^[A-Z]{3}$/.test(p.costo_moneda||'')?'"'+p.costo_moneda+' " ':'')+'#,##0.0000';}
  ws.getColumn(1).numFmt='@';for(const c of [3,4,5])ws.getColumn(c).numFmt='0.000';
  ws.getRow(1).font={bold:true,color:{argb:'FFFFFFFF'}};ws.getRow(1).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF0B376D'}};ws.views=[{state:'frozen',ySplit:1}];ws.autoFilter='A1:H1';
- const info=wb.addWorksheet('Información');info.addRows([['Empresa',document.empresa],['Sucursal',document.sucursal],['Generado',document.fecha],['Uso','Requerimiento informativo. No modifica stock ni crea una compra.'],['Cantidad','Elegida manualmente por el usuario; sin sugerencias automáticas.'],['Costo/proveedor','Última compra / última compra con proveedor registrado, de esta empresa y sucursal.'],['Moneda','Se conserva moneda de compra; no se realiza conversión.']]);info.getColumn(1).width=22;info.getColumn(2).width=100;info.getColumn(2).alignment={wrapText:true};
+ const info=wb.addWorksheet('Información');info.addRows([['Empresa',document.empresa],['Sucursal',document.sucursal],['Generado',document.fecha],['Uso','Requerimiento informativo. No modifica stock ni crea una compra.'],['Cantidad','Elegida manualmente por el usuario; sin sugerencias automáticas.'],['Costo/proveedor','Costo y proveedor de la misma última compra real, de esta empresa y sucursal.'],['Moneda','Se conserva moneda de compra; no se realiza conversión.']]);info.getColumn(1).width=22;info.getColumn(2).width=100;info.getColumn(2).alignment={wrapText:true};
  return wb.xlsx.writeBuffer();
 }
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -75,7 +71,7 @@ export function registerPurchaseRequirements(app,{db,auth,branchAccess}){
  const wrap=fn=>async(req,res)=>{try{const branch=req.query.sucursal_id??req.body?.sucursal_id;if(typeof branch!=='string'||!uuid.test(branch))throw new Error('Seleccione una sucursal válida.');await branchAccess(db,req.user,branch);await fn(req,res,branch);}catch(e){res.status(e.status||400).json({error:e.message})}};
  app.get(route,auth,wrap(async(req,res,branch)=>{res.set('Cache-Control','no-store');res.json(await requirementList(db,req.user.empresa_id,branch,req.query))}));
  for(const action of ['generate','export','print'])app.post(route+'/'+action,auth,wrap(async(req,res,branch)=>{
- const doc=await generateRequirement(db,req.user.empresa_id,branch,req.body?.items);res.set('Cache-Control','no-store');
+ if(action!=='generate'&&!req.financialAccess?.cost)throw Object.assign(Error('No tiene permiso para exportar costos de compra.'),{status:403});const doc=await generateRequirement(db,req.user.empresa_id,branch,req.body?.items);res.set('Cache-Control','no-store');
  if(!doc.items.length)throw new Error('Los productos seleccionados ya no requieren reposición. Actualice la lista.');
  if(action==='generate')return res.json(doc);
  if(action==='print')return res.json({html:requirementPrint(doc),productos:doc.items.length,omitidos:doc.omitidos});

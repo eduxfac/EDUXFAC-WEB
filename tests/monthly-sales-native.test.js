@@ -6,7 +6,7 @@ import {monthlyChecks} from './helpers/monthly-sales-checks.js';
 import pg from 'pg';import bcrypt from 'bcryptjs';import net from 'node:net';
 import {planGlobalRLS} from '../server/scripts/global-rls.js';
 const run=promisify(execFile),SECRET='FAKE_NATIVE_PROFIT_SESSION_ONLY_000000000000',PASS='FAKE_NATIVE_PROFIT_PASSWORD_ONLY';
-test('Ventas mensuales PostgreSQL nativo: 44 FORCE RLS',{skip:process.platform!=='linux'||process.env.EDUXFAC_PROFIT_NATIVE!=='yes'},async t=>{
+test('Ventas mensuales PostgreSQL nativo: FORCE RLS del esquema actual',{skip:process.platform!=='linux'||process.env.EDUXFAC_PROFIT_NATIVE!=='yes'},async t=>{
  const n=await createProfitNativeCluster();let db,server;
  t.after(async()=>{if(server&&server.exitCode===null){server.kill('SIGTERM');await new Promise(r=>server.once('exit',r));}if(db)await db.end();await n.close();});
  const roles={tenant:'profit_app',auth:'profit_auth',service:'profit_service',migrator:'profit_migrator',backup:'profit_backup'};
@@ -46,7 +46,7 @@ test('Ventas mensuales PostgreSQL nativo: 44 FORCE RLS',{skip:process.platform!=
 
  const ids={empresaA:A,empresaB:B,sucursalA:branchA,sucursalB:branchB,usuarioA:admin,usuarioB:other};
  const explain=async(sql,args)=>{const c=new pg.Client({connectionString:url(roles.tenant),options:'-c statement_timeout=15000'});await c.connect();try{await c.query('BEGIN READ ONLY');const branches=(await db.query('select id from sucursales where empresa_id=$1',[A])).rows.map(x=>x.id);await c.query("select set_config('app.empresa_id',$1,true),set_config('app.usuario_id',$2,true),set_config('app.sucursal_ids',$3,true)",[A,admin,branches.join(',')]);const r=await c.query('EXPLAIN (ANALYZE,BUFFERS,FORMAT JSON) '+sql,args);await c.query('ROLLBACK');return r.rows[0]['QUERY PLAN'];}finally{await c.end()}};
- await t.test('44 FORCE RLS al iniciar',async()=>assert.equal((await db.query("select count(*)::int n from pg_class where relnamespace='public'::regnamespace and relkind='r' and relforcerowsecurity")).rows[0].n,44));
+ await t.test('FORCE RLS del esquema actual al iniciar',async()=>assert.equal((await db.query("select count(*)::int n from pg_class where relnamespace='public'::regnamespace and relkind='r' and relforcerowsecurity")).rows[0].n,plan.rows.filter(r=>r.rls).length));
  await monthlyChecks(t,{query:db.query.bind(db),request,base,tokenA,tokenB,explain},ids,{native:true});
- await t.test('44 FORCE RLS intactas al terminar',async()=>assert.equal((await db.query("select count(*)::int n from pg_class where relnamespace='public'::regnamespace and relkind='r' and relforcerowsecurity")).rows[0].n,44));
+ await t.test('FORCE RLS del esquema actual intactas al terminar',async()=>assert.equal((await db.query("select count(*)::int n from pg_class where relnamespace='public'::regnamespace and relkind='r' and relforcerowsecurity")).rows[0].n,plan.rows.filter(r=>r.rls).length));
 });

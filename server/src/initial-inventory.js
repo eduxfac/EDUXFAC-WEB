@@ -131,17 +131,20 @@ export async function parseInitialWorkbook(base64){
    else mapName.set(k,code);
   }
  }
- return{rows,groups,sha256:createHash('sha256').update(buffer).digest('hex')};
+ const canonical=[...groups.values()].map(g=>JSON.stringify({master:INITIAL_COLUMNS.filter(([k])=>!['stock','costo','lote','vencimiento'].includes(k)).map(([k])=>typeof g.first[k]==='string'?same(g.first[k]):g.first[k]??null),lots:[...g.lots.values()].map(l=>JSON.stringify([same(l.lote||''),l.vencimiento,l.costo,l.stock])).sort()})).sort();
+ return{rows,groups,semantic_sha256:createHash('sha256').update(JSON.stringify(canonical)).digest('hex'),sha256:createHash('sha256').update(buffer).digest('hex')};
 }
 const masterFields=['nombre','unidad_medida','codigo_barras','principio_activo','concentracion','presentacion','categoria','laboratorio'];
 export async function validateInitialDatabase(db,user,branch,parsed){
  const records=(await db.query('select p.*,c.nombre categoria,l.nombre laboratorio from productos p left join categorias c on c.id=p.categoria_id left join laboratorios l on l.id=p.laboratorio_id where p.empresa_id=$1',[user.empresa_id])).rows;
  const codes=new Map(records.map(p=>[p.codigo_interno,p])),names=new Map(records.map(p=>[same(p.nombre),p])),bars=new Map(records.filter(p=>p.codigo_barras).map(p=>[p.codigo_barras,p]));
  const used=new Set((await db.query('select distinct p.id from productos p where p.empresa_id=$1 and (exists(select 1 from lotes l where l.producto_id=p.id and l.sucursal_id=$2) or exists(select 1 from movimientos_inventario m where m.producto_id=p.id and m.sucursal_id=$2))',[user.empresa_id,branch])).rows.map(p=>p.id));
- const prices=new Map((await db.query('select pp.producto_id,pp.precio_venta from precios_producto pp join productos p on p.id=pp.producto_id where p.empresa_id=$1 and pp.sucursal_id=$2 and pp.vigente_hasta is null and pp.factor_unidades=1',[user.empresa_id,branch])).rows.map(p=>[p.producto_id,Number(p.precio_venta)]));
+ const prices=new Map((await db.query('select distinct on (pp.producto_id) pp.producto_id,pp.precio_venta from precios_producto pp join productos p on p.id=pp.producto_id where p.empresa_id=$1 and (pp.sucursal_id=$2 or pp.sucursal_id is null) and pp.vigente_hasta is null and pp.factor_unidades=1 order by pp.producto_id,(pp.sucursal_id is not null) desc,pp.vigente_desde desc,pp.id desc',[user.empresa_id,branch])).rows.map(p=>[p.producto_id,Number(p.precio_venta)]));
+ const links=new Map((await db.query('select ps.* from producto_sucursal ps join productos p on p.id=ps.producto_id where p.empresa_id=$1 and ps.sucursal_id=$2',[user.empresa_id,branch])).rows.map(x=>[x.producto_id,x]));
  for(const [code,g]of parsed.groups){
   const f=g.first,p=codes.get(code);g.existing=p||null;g.hasPrice=p&&prices.has(p.id);const errors=[];
   if(p){
+   g.link=links.get(p.id);if(p.activo===false||g.link?.activo===false)errors.push('Producto o vínculo inactivo: no se reactiva mediante importación.');if(g.link&&Number(g.link.stock_minimo)!==f.stock_minimo)errors.push('Stock mínimo existente diferente: no se sobrescribe.');
    if(used.has(p.id))errors.push('Ya tiene lotes o movimientos en esta sucursal: no es un saldo inicial.');
    const dif=masterFields.filter(k=>k==='codigo_barras'?clean(p[k])!==clean(f[k]):same(p[k])!==same(f[k]));
    if(dif.length)errors.push('Datos maestros existentes diferentes: '+dif.join(', '));
@@ -151,7 +154,7 @@ export async function validateInitialDatabase(db,user,branch,parsed){
   for(const [index,k,label]of [[names,same(f.nombre),'nombre'],[bars,f.codigo_barras,'código de barras']]){
    const other=k&&index.get(k);if(other&&other.id!==p?.id)errors.push('Duplicado de '+label+' con código existente '+other.codigo_interno);
   }
-  for(const r of g.rows){r.action=p?'VINCULAR EXISTENTE':'NUEVO';r.errors.push(...errors.map(e=>'Código '+code+', fila '+r.row+': '+e));}
+  for(const r of g.rows){if(p&&!errors.length)r.warnings.push('Producto existente compatible: confirme el vínculo; maestros, precio e impuestos no se sobrescribirán.');r.action=errors.length?'CONFLICTO':p?'CONFIRMAR EXISTENTE':'NUEVO';r.errors.push(...errors.map(e=>'Código '+code+', fila '+r.row+': '+e));}
  }
  return parsed;
 }
@@ -163,12 +166,15 @@ export function initialSummary(parsed){
  stock_total:Number(units)/1000,valor_total:Number(cents)/100,
  errors:parsed.rows.filter(r=>r.errors.length).map(r=>({row:r.row,codigo:r.codigo_interno,errors:r.errors})),sha256:parsed.sha256};
 }
-export async function applyInitialInventory(db,user,branch,parsed,{catalog,audit}){
+export async function applyInitialInventory(db,user,branch,parsed,{catalog,audit,confirmExisting=false,fileName='Inventario_inicial.xlsx'}){
  // All validation and writes run inside caller's tenant-aware transaction.
+ if(parsed.rows.some(r=>r.errors.length))fail('Corrija los errores del archivo antes de confirmar. No se realizaron cambios.');
  await db.query('select pg_advisory_xact_lock(hashtext($1::text),91001)',[user.empresa_id]);
+ const previous=(await db.query('select resumen from inventario_inicial_importaciones where empresa_id=$1 and sucursal_id=$2 and (archivo_sha256=$3 or contenido_sha256=$4) limit 1',[user.empresa_id,branch,parsed.sha256,parsed.semantic_sha256])).rows[0];if(previous)return {...previous.resumen,replayed:true};
  await db.query('select ps.producto_id from producto_sucursal ps join productos p on p.id=ps.producto_id where p.empresa_id=$1 and ps.sucursal_id=$2 order by ps.producto_id for update of ps',[user.empresa_id,branch]);
  await validateInitialDatabase(db,user,branch,parsed);
  const summary=initialSummary(parsed);if(summary.errores)fail('Importación cancelada: '+summary.errors.slice(0,5).map(e=>e.errors.join('; ')).join(' | '));
+ if(summary.actualizar&&!confirmExisting)fail('Confirme expresamente los productos existentes compatibles. No se modifican precios, impuestos ni estados.');
  const batch=randomUUID();let created=0,existing=0,lots=0;
  for(const [code,g]of parsed.groups){
   const f=g.first;let p=g.existing;
@@ -176,7 +182,7 @@ export async function applyInitialInventory(db,user,branch,parsed,{catalog,audit
    const category=await catalog(db,'categorias',user.empresa_id,f.categoria),lab=await catalog(db,'laboratorios',user.empresa_id,f.laboratorio);
    p=(await db.query('insert into productos(empresa_id,codigo_interno,codigo_barras,nombre,principio_activo,concentracion,presentacion,unidad_medida,categoria_id,laboratorio_id,stock_minimo,stock_maximo,requiere_lote,tipo_afectacion_igv) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,0,$12,$13) returning id',[user.empresa_id,code,f.codigo_barras||null,f.nombre,f.principio_activo||null,f.concentracion||null,f.presentacion||null,f.unidad_medida,category,lab,f.stock_minimo,[...g.lots.values()].some(r=>r.lote||r.vencimiento),f.tipo_afectacion_igv])).rows[0];created++;
   }else existing++;
-  await linkProduct(db,p.id,branch,{stock_minimo:f.stock_minimo});
+  if(!g.link)await linkProduct(db,p.id,branch,{stock_minimo:f.stock_minimo});
   if(!g.hasPrice)await db.query("insert into precios_producto(producto_id,sucursal_id,tipo,factor_unidades,precio_venta) values($1,$2,'unidad',1,$3)",[p.id,branch,f.precio]);
   // Initial value is fully represented by INVENTARIO_INICIAL movements.
   // Opening value is only for legacy stock NOT represented in the movement ledger.
@@ -186,9 +192,12 @@ export async function applyInitialInventory(db,user,branch,parsed,{catalog,audit
   }
  }
  await audit(db,user,'IMPORTAR_INVENTARIO_INICIAL','productos',null,{batch_id:batch,sucursal_id:branch,archivo_sha256:parsed.sha256,filas:summary.filas,creados:created,existentes:existing,lotes:lots,stock:summary.stock_total,valor:summary.valor_total});
- return{...summary,creados:created,actualizados:existing,lotes_creados:lots,filas_procesadas:summary.filas,filas_rechazadas:0,batch_id:batch,modo:'INVENTARIO_INICIAL'};
+ const result={...summary,creados:created,actualizados:existing,lotes_creados:lots,filas_procesadas:summary.filas,filas_rechazadas:0,batch_id:batch,modo:'INVENTARIO_INICIAL'};
+ await db.query('insert into inventario_inicial_importaciones(id,empresa_id,sucursal_id,usuario_id,archivo_nombre,archivo_sha256,contenido_sha256,filas,productos,lotes,unidades,valor,resumen,detalle) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14::jsonb)',[batch,user.empresa_id,branch,user.sub,String(fileName).slice(0,240),parsed.sha256,parsed.semantic_sha256,summary.filas,summary.productos,lots,summary.stock_total,summary.valor_total,JSON.stringify(result),JSON.stringify(parsed.rows)]);
+ return result;
 }
 export function registerInitialInventory(app,{pool,tx,auth,branchAccess,catalog,audit}){
+ app.get('/api/import/inventory/history',auth,async(req,res)=>{try{await permission(pool,req.user,req.query.sucursal_id);res.json((await pool.query('select id,created_at,usuario_id,archivo_nombre,archivo_sha256,contenido_sha256,resumen from inventario_inicial_importaciones where empresa_id=$1 and sucursal_id=$2 order by created_at desc,id desc limit 100',[req.user.empresa_id,req.query.sucursal_id])).rows);}catch(e){res.status(e.status||400).json({error:e.message});}});
  const permission=async(db,user,branch)=>{const access=await branchAccess(db,user,branch);if(!['Administrador','Almacén'].includes(access.rol)){const e=new Error('Solo Administrador o Almacén de esta sucursal puede importar.');e.status=403;throw e;}};
  app.get('/api/import/inventory/template',auth,async(req,res)=>{try{
   await permission(pool,req.user,req.query.sucursal_id);
@@ -197,14 +206,14 @@ export function registerInitialInventory(app,{pool,tx,auth,branchAccess,catalog,
  app.post('/api/import/inventory/preview',auth,async(req,res)=>{try{
   const {sucursal_id,file_base64}=req.body||{};await permission(pool,req.user,sucursal_id);
   const parsed=await parseInitialWorkbook(file_base64);await validateInitialDatabase(pool,req.user,sucursal_id,parsed);
-  res.json({...initialSummary(parsed),total:parsed.rows.length,rows:parsed.rows.slice(0,100),warnings:parsed.rows.filter(r=>r.warnings.length).map(r=>({row:r.row,warnings:r.warnings}))});
+  res.json({...initialSummary(parsed),total:parsed.rows.length,rows:parsed.rows,warnings:parsed.rows.filter(r=>r.warnings.length).map(r=>({row:r.row,warnings:r.warnings}))});
  }catch(e){res.status(e.status||400).json({error:e.message});}});
  app.post('/api/import/inventory/commit',auth,async(req,res)=>{try{
-  const {sucursal_id,file_base64,preview_sha256}=req.body||{};
+  const {sucursal_id,file_base64,preview_sha256,confirm_existing=false,archivo_nombre}=req.body||{};
   await permission(pool,req.user,sucursal_id);
   const parsed=await parseInitialWorkbook(file_base64);
   if(preview_sha256!==parsed.sha256)fail('Genere una vista previa del archivo actual antes de confirmar.');
-  const result=await tx(async db=>{await permission(db,req.user,sucursal_id);return applyInitialInventory(db,req.user,sucursal_id,parsed,{catalog,audit});});
+  const result=await tx(async db=>{await permission(db,req.user,sucursal_id);return applyInitialInventory(db,req.user,sucursal_id,parsed,{catalog,audit,confirmExisting:confirm_existing===true,fileName:archivo_nombre});});
   res.status(201).json(result);
  }catch(e){res.status(e.status||400).json({error:e.message});}});
 }

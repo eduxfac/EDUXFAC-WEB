@@ -59,8 +59,8 @@ test('Principio activo Linux: servidor real con RLS global y catálogo de 10000 
   await db.query("INSERT INTO producto_sucursal(producto_id,sucursal_id,origen) VALUES($1,$2,'operacion')",[id,branch]);
  }
  const search=(term,token=tokenA,branch=branchA,extra='')=>request('/api/products?sucursal_id='+branch+'&q='+encodeURIComponent(term)+'&search_scope=ventas&limit=30'+extra,{token});
- await t.test('44 tablas FORCE RLS y rol tenant sin BYPASS/superusuario',async()=>{
-  assert.equal((await db.query("SELECT count(*)::int n FROM pg_class WHERE relnamespace='public'::regnamespace AND relkind='r' AND relrowsecurity AND relforcerowsecurity")).rows[0].n,44);
+ await t.test('FORCE RLS del esquema actual y rol tenant sin BYPASS/superusuario',async()=>{
+  assert.equal((await db.query("SELECT count(*)::int n FROM pg_class WHERE relnamespace='public'::regnamespace AND relkind='r' AND relrowsecurity AND relforcerowsecurity")).rows[0].n,plan.rows.filter(r=>r.rls).length);
   const role=(await db.query('SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname=$1',[roles.tenant])).rows[0];assert.equal(role.rolsuper,false);assert.equal(role.rolbypassrls,false);
  });
  for(const term of ['APRONAX','NAPROXENO','naproxeno','NaPrO','naproxeno sódico','sódico','SÓDICO','SóDiCo','APR-550','APR-OLD','7751234567890']){
