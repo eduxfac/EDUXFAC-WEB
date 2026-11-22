@@ -1,3 +1,4 @@
+import {frontendPaths} from './frontend-routes.js';
 import {installRecoveryCompletion} from './admin-recovery.js';
 import {productAffectation} from './product-affectation.js';
 import {createHash} from 'node:crypto';
@@ -50,7 +51,7 @@ app.use('/api/auth/login',requestLimits({windowMs:900000,max:30,keyOf:req=>(req.
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.resolve(here, '../../public');
-app.get(['/','/index.html'],(_req,res)=>res.type('html').send(webIndexHTML));
+app.get(['/','/index.html',...frontendPaths],(_req,res)=>res.type('html').send(webIndexHTML));
 app.use(express.static(publicDir));
 
 const money = n => Math.round((Number(n) + Number.EPSILON) * 100) / 100;
@@ -1934,7 +1935,7 @@ app.get('/api/reports/summary', requireAuth, async (req,res)=>{
 app.get('/api/reports/kardex', requireAuth, async (req,res)=>{const branch=req.query.sucursal_id;try{await ensureBranchAccess(pool,req.user,branch);}catch(error){return res.status(error.status||400).json({error:error.message});}const {rows}=await pool.query(`select mi.created_at,p.codigo_interno,p.nombre,mi.tipo,mi.cantidad,mi.costo_unitario,l.numero_lote,u.nombre usuario,mi.referencia_tipo from movimientos_inventario mi join productos p on p.id=mi.producto_id left join lotes l on l.id=mi.lote_id left join usuarios u on u.id=mi.usuario_id where mi.empresa_id=$1 and mi.sucursal_id=$2 and ($3::uuid is null or mi.producto_id=$3) order by mi.created_at desc limit 1000`,[req.user.empresa_id,branch,req.query.producto_id||null]);res.json(rows);});
 app.get('/api/reports/audit', requireAuth, async (req,res)=>{try{await requireAdmin(pool,req.user);const {rows}=await pool.query(`select a.id,a.created_at,a.accion,a.entidad,a.detalle,u.nombre usuario from auditoria a left join usuarios u on u.id=a.usuario_id where a.empresa_id=$1 order by a.created_at desc limit 500`,[req.user.empresa_id]);res.json(rows);}catch(error){res.status(error.status||400).json({error:error.message});}});
 
-app.get('/{*splat}', (_req,res)=>res.sendFile(path.join(publicDir,'index.html')));
+app.get('/{*splat}', (_req,res)=>res.status(404).json({error:'Ruta no encontrada.'}));
 
 const port=Number(process.env.PORT||3000);
 export async function initializeDatabase({migrate=true}={}) {
