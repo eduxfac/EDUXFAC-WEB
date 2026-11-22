@@ -5,7 +5,7 @@ import {readFileSync,readdirSync} from 'node:fs';import {randomUUID} from 'node:
 import pg from 'pg';import bcrypt from 'bcryptjs';import net from 'node:net';
 import {planGlobalRLS} from '../server/scripts/global-rls.js';
 const run=promisify(execFile),SECRET='FAKE_NATIVE_PROFIT_SESSION_ONLY_000000000000',PASS='FAKE_NATIVE_PROFIT_PASSWORD_ONLY';
-test('Rentabilidad Linux: servidor sin adaptador, roles mínimos y 44 FORCE RLS',{skip:process.platform!=='linux'||process.env.EDUXFAC_PROFIT_NATIVE!=='yes'},async t=>{
+test('Rentabilidad Linux: servidor sin adaptador, roles mínimos y FORCE RLS del esquema actual ',{skip:process.platform!=='linux'||process.env.EDUXFAC_PROFIT_NATIVE!=='yes'},async t=>{
  const n=await createProfitNativeCluster();let db,server;
  t.after(async()=>{if(server&&server.exitCode===null){server.kill('SIGTERM');await new Promise(r=>server.once('exit',r));}if(db)await db.end();await n.close();});
  const roles={tenant:'profit_app',auth:'profit_auth',service:'profit_service',migrator:'profit_migrator',backup:'profit_backup'};
@@ -18,6 +18,7 @@ test('Rentabilidad Linux: servidor sin adaptador, roles mínimos y 44 FORCE RLS'
  for(const file of readdirSync(new URL('../database/migrations/',import.meta.url)).filter(x=>x.endsWith('.sql')).sort())await db.query(readFileSync(new URL('../database/migrations/'+file,import.meta.url),'utf8'));
  await db.query('CREATE TABLE IF NOT EXISTS web_schema_migrations(version text PRIMARY KEY,applied_at timestamptz NOT NULL DEFAULT now())');
  const plan=await planGlobalRLS(db,{...roles,dataMode:'DEMO'});
+ for(const name of ['compra_documentos_unicos','inventario_inicial_importaciones'])assert.equal(plan.rows.find(r=>r.name===name)?.rls,true,'Tabla nueva sin RLS: '+name);
  await db.query('BEGIN');try{for(const sql of plan.statements)await db.query(sql);await db.query('COMMIT');}catch(e){await db.query('ROLLBACK');throw e;}
  const A=randomUUID(),B=randomUUID(),branchA=randomUUID(),branchB=randomUUID(),admin=randomUUID(),cashier=randomUUID(),other=randomUUID(),hash=await bcrypt.hash(PASS,4);
  const adminRole=(await db.query("SELECT id FROM roles WHERE nombre='Administrador'")).rows[0].id,cashRole=(await db.query("SELECT id FROM roles WHERE nombre='Cajero / Vendedor'")).rows[0].id;
@@ -53,8 +54,8 @@ test('Rentabilidad Linux: servidor sin adaptador, roles mínimos y 44 FORCE RLS'
  const item=(id,price,factor=1,kind='UNIDAD')=>({producto_id:id,precio_unitario:price,cantidad:1,factor_unidades:factor,tipo_venta:kind});
  const sale=(items,discount=0,token=tokenA,cash=cashA)=>request('/api/sales',{token,method:'POST',body:{sucursal_id:branchA,sesion_caja_id:cash.id,items,descuento:discount,pagos:[{metodo:'Efectivo',monto:items.reduce((s,x)=>s+x.precio_unitario*x.cantidad,0)-discount}]}});
  const snapshot=async()=>{const out={};for(const table of ['ventas','venta_detalles','venta_pagos','lotes','producto_sucursal','movimientos_inventario','movimientos_caja','sesiones_caja','auditoria'])out[table]=(await db.query('SELECT * FROM '+table)).rows.sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)));return out;};
- await t.test('49 tablas, 44 FORCE RLS y roles runtime sin superusuario/BYPASS/ownership',async()=>{
-  const flags=(await db.query("SELECT count(*)::int tables,count(*) FILTER(WHERE relrowsecurity AND relforcerowsecurity)::int force FROM pg_class WHERE relnamespace='public'::regnamespace AND relkind='r'")).rows[0];assert.equal(flags.tables,49);assert.equal(flags.force,44);
+ await t.test('FORCE RLS del esquema actual FORCE RLS del esquema actual  y roles runtime sin superusuario/BYPASS/ownership',async()=>{
+  const flags=(await db.query("SELECT count(*)::int tables,count(*) FILTER(WHERE relrowsecurity AND relforcerowsecurity)::int force FROM pg_class WHERE relnamespace='public'::regnamespace AND relkind='r'")).rows[0];assert.equal(flags.tables,plan.rows.length);assert.equal(flags.force,plan.rows.filter(r=>r.rls).length);
   const runtime=(await db.query('SELECT rolname,rolsuper,rolbypassrls FROM pg_roles WHERE rolname=ANY($1)',[[roles.tenant,roles.auth,roles.service]])).rows;assert.ok(runtime.every(r=>!r.rolsuper&&!r.rolbypassrls));
   assert.equal((await request('/api/health')).data.data_mode,'DEMO');
  });

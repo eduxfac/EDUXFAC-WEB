@@ -6,7 +6,7 @@ import {requirementChecks} from './helpers/purchase-requirement-checks.js';
 import pg from 'pg';import bcrypt from 'bcryptjs';import net from 'node:net';
 import {planGlobalRLS} from '../server/scripts/global-rls.js';
 const run=promisify(execFile),SECRET='FAKE_NATIVE_PROFIT_SESSION_ONLY_000000000000',PASS='FAKE_NATIVE_PROFIT_PASSWORD_ONLY';
-test('Requerimiento PostgreSQL nativo Linux: 44 FORCE RLS',{skip:process.platform!=='linux'||process.env.EDUXFAC_PROFIT_NATIVE!=='yes'},async t=>{
+test('Requerimiento PostgreSQL nativo Linux: FORCE RLS del esquema actual',{skip:process.platform!=='linux'||process.env.EDUXFAC_PROFIT_NATIVE!=='yes'},async t=>{
  const n=await createProfitNativeCluster();let db,server;
  t.after(async()=>{if(server&&server.exitCode===null){server.kill('SIGTERM');await new Promise(r=>server.once('exit',r));}if(db)await db.end();await n.close();});
  const roles={tenant:'profit_app',auth:'profit_auth',service:'profit_service',migrator:'profit_migrator',backup:'profit_backup'};
@@ -45,7 +45,7 @@ test('Requerimiento PostgreSQL nativo Linux: 44 FORCE RLS',{skip:process.platfor
 
  const ids={empresaA:A,empresaB:B,sucursalA:branchA,sucursalB:branchB,usuarioA:admin,usuarioB:other,productoB:randomUUID()};
  await db.query("insert into productos(id,empresa_id,codigo_interno,nombre) values($1,$2,'P-B','Producto B')",[ids.productoB,B]);await db.query("insert into producto_sucursal(producto_id,sucursal_id,origen) values($1,$2,'operacion')",[ids.productoB,branchB]);
- await t.test('44 tablas FORCE RLS conservadas antes del módulo',async()=>{assert.equal((await db.query("select count(*)::int n from pg_class where relnamespace='public'::regnamespace and relkind='r' and relforcerowsecurity")).rows[0].n,44)});
+ await t.test('FORCE RLS del esquema actual conservadas antes del módulo',async()=>{assert.equal((await db.query("select count(*)::int n from pg_class where relnamespace='public'::regnamespace and relkind='r' and relforcerowsecurity")).rows[0].n,plan.rows.filter(r=>r.rls).length)});
  await requirementChecks(t,{query:db.query.bind(db),request,tokenA,tokenB,base,password:PASS,companyCode:'PROFIT-A'},ids,{native:true});
- await t.test('44 tablas FORCE RLS intactas al finalizar',async()=>{assert.equal((await db.query("select count(*)::int n from pg_class where relnamespace='public'::regnamespace and relkind='r' and relforcerowsecurity")).rows[0].n,44)});
+ await t.test('FORCE RLS del esquema actual intactas al finalizar',async()=>{assert.equal((await db.query("select count(*)::int n from pg_class where relnamespace='public'::regnamespace and relkind='r' and relforcerowsecurity")).rows[0].n,plan.rows.filter(r=>r.rls).length)});
 });

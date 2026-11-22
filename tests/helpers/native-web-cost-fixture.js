@@ -12,7 +12,7 @@ export const ids={};for(const name of ['empresaA','empresaB','usuarioA','usuario
 export function serviceToken(scopes=['health:read','empresas:read','empresas:suspender','empresas:reactivar'],extra={}){
  return jwt.sign({type:'panel_service',scopes,...extra},TEST_SERVICE,{algorithm:'HS256',issuer:'panel-test',audience:'web-admin-test',subject:'panel-eduxfac',expiresIn:'2m',jwtid:randomUUID()});
 }
-export async function createFixture(){
+export async function createFixture({afterSaleCommit}={}){
  process.env.NODE_ENV='test';process.env.SESSION_SECRET=TEST_SESSION;
  delete process.env.DATABASE_URL;delete process.env.JWT_SECRET;
  process.env.PANEL_WEB_SERVICE_SECRET=TEST_SERVICE;process.env.PANEL_WEB_SERVICE_ISSUER='panel-test';process.env.PANEL_WEB_SERVICE_AUDIENCE='web-admin-test';
@@ -20,7 +20,7 @@ export async function createFixture(){
  let server;
  try{
  const raw=(sql,params)=>native.query(sql,params);
- const adapter={isolatedTestDatabase:true,query:raw,async connect(){const c=await native.pool.connect();return {query:async(sql,params)=>{const r=await c.query(sql,params);return Array.isArray(r)?r.at(-1):r;},release:()=>c.release()};},end:()=>native.close()};
+ const adapter={isolatedTestDatabase:true,query:raw,async connect(){const c=await native.pool.connect();let wroteSale=false;return {query:async(sql,params)=>{const r=await c.query(sql,params);if(typeof sql==='string'&&/^\s*insert into ventas\b/i.test(sql))wroteSale=true;if(typeof sql==='string'&&/^\s*COMMIT\b/i.test(sql)&&wroteSale&&afterSaleCommit)await afterSaleCommit();return Array.isArray(r)?r.at(-1):r;},release:()=>c.release()};},end:()=>native.close()};
  const {installTestDatabase}=await import('../../server/src/db.js');installTestDatabase(adapter);
  const root=fileURLToPath(new URL('../../',import.meta.url));
  // gen_random_uuid está en PostgreSQL core. Se omite únicamente la extensión no necesaria en WASM.

@@ -58,7 +58,7 @@ async function countExportRows(db,company,branch){
  }
  return rows;
 }
-export async function countWorkbook(db, company, branch) {
+export async function countWorkbook(db, company, branch, {showFinancials=true}={}) {
  const rows=await countExportRows(db,company,branch);
  const wb=new ExcelJS.Workbook(),ws=wb.addWorksheet('Conteo físico');
  wb.creator='EDUXFAC';wb.calcProperties.fullCalcOnLoad=true;
@@ -124,6 +124,7 @@ export async function countWorkbook(db, company, branch) {
   ['Protección','E es la única columna desbloqueada. Aunque se altere J o K, la importación ignora esos valores y utiliza los datos de la base.']]);
  info.columns=[{width:25},{width:115}];info.getColumn(2).alignment={wrapText:true,vertical:'top'};
  info.getRows(5,14).forEach(r=>r.height=32);
+ if(!showFinancials){ws.spliceColumns(8,5);ws.autoFilter='A1:G1';info.spliceRows(9,info.rowCount-8);info.addRow(['Privacidad','Conteo sin costos ni valores: solo cantidades. Vacío = omitir; cero = cero.']);}
  return Buffer.from(await wb.xlsx.writeBuffer());
 }
 

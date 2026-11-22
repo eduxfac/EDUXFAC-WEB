@@ -1,4 +1,9 @@
 import {frontendPaths} from './frontend-routes.js';
+import {inventoryReportPage,registerInventoryReportExports} from './inventory-report.js';
+import {salesProductReport} from './sales-product-report.js';
+import {salesProductsExport} from './sales-products-export.js';
+import {registerWebDailyCash,requireWebDailyCash} from './cash-daily.js';
+import {guardFinancial} from './financial-access.js';
 import {installRecoveryCompletion} from './admin-recovery.js';
 import {productAffectation} from './product-affectation.js';
 import {createHash} from 'node:crypto';
@@ -156,6 +161,7 @@ app.use(async (req, res, next) => {
         if (branch) await ensureBranchAccess(pool,req.user,branch);
         else if (!/^\/api\/reports\/(cancellations|purchases)\/[^/]+\/detail$/.test(req.path) && !(await canReportGlobally(pool,req.user))) return res.status(403).json({error:'Selecciona una sucursal autorizada. No tienes acceso a reportes de toda la empresa.'});
       }
+      if(!(await guardFinancial(pool,req,res)))return;
       return next();
     } catch (e) {
       if(e.status===403) return res.status(403).json({error:e.message});
@@ -212,7 +218,7 @@ app.post('/api/auth/login',async(req,res)=>{
 
 app.get('/api/bootstrap', requireAuth, async (req, res) => {
   const branches = await pool.query(`select s.id,s.codigo,s.nombre,s.direccion,r.nombre rol from sucursales s join usuario_sucursal us on us.sucursal_id=s.id join roles r on r.id=us.rol_id where s.empresa_id=$1 and us.usuario_id=$2 and s.activo=true order by s.nombre`, [req.user.empresa_id,req.user.sub]);
-  const uq=await pool.query(`select id,nombre,usuario from usuarios where id=$1 and empresa_id=$2`,[req.user.sub,req.user.empresa_id]);
+  const uq=await pool.query(`select id,empresa_id,nombre,usuario from usuarios where id=$1 and empresa_id=$2`,[req.user.sub,req.user.empresa_id]);
   const permissions=await effectivePermissions(pool,req.user);
   const reportBranches=await pool.query(`select s.id,s.codigo,s.nombre,s.activo from sucursales s join usuario_sucursal us on us.sucursal_id=s.id where s.empresa_id=$1 and us.usuario_id=$2 order by s.nombre`,[req.user.empresa_id,req.user.sub]);
   res.json({ branches: branches.rows, report_branches:reportBranches.rows, user: uq.rows[0]||null, permissions, report_global: await canReportGlobally(pool,req.user) });
@@ -268,72 +274,7 @@ app.get('/api/products/:id/presentations', requireAuth, async (req,res)=>{
   }catch(error){res.status(error.status||400).json({error:error.message});}
 });
 
-app.post('/api/cash/open', requireAuth, async (req, res) => {
-  try {
-    const { sucursal_id, caja_id, monto_apertura = 0 } = req.body || {};
-    const amount = numeric(monto_apertura, 'Monto de apertura');
-    if (amount < 0) throw new Error('El monto de apertura no puede ser negativo.');
-    const result = await tx(async c => {
-      await ensureBranchAccess(c, req.user, sucursal_id);
-
-      let selectedCaja = caja_id;
-      if (selectedCaja) {
-        const q = await c.query(`select id from cajas where id=$1 and sucursal_id=$2 and activo=true for update`, [selectedCaja,sucursal_id]);
-        if (!q.rows[0]) throw new Error('La caja seleccionada no está activa en esta sucursal.');
-      } else {
-        // A cash session is allowed to be the first cash record for a branch.
-        // Locking the branch prevents two simultaneous first openings from creating duplicate default boxes.
-        await c.query(`select id from sucursales where id=$1 for update`,[sucursal_id]);
-        let q = await c.query(`select id from cajas where sucursal_id=$1 and activo=true order by nombre,id limit 1 for update`, [sucursal_id]);
-        if (!q.rows[0]) q = await c.query(`insert into cajas(sucursal_id,nombre,activo) values($1,'Caja principal',true) returning id`,[sucursal_id]);
-        selectedCaja = q.rows[0].id;
-      }
-      const open = await c.query(`select id from sesiones_caja where caja_id=$1 and usuario_id=$2 and estado='ABIERTA' limit 1`, [selectedCaja, req.user.sub]);
-      if (open.rows[0]) return { id: open.rows[0].id, already_open: true };
-      const q = await c.query(`insert into sesiones_caja(caja_id,usuario_id,monto_apertura) values($1,$2,$3) returning *`, [selectedCaja, req.user.sub, amount]);
-      await writeAudit(c,req.user,'ABRIR_CAJA','sesiones_caja',q.rows[0].id,{sucursal_id,monto_apertura:amount});
-      return q.rows[0];
-    });
-    res.status(201).json(result);
-  } catch (error) { res.status(400).json({ error: error.message }); }
-});
-
-app.get('/api/cash/current', requireAuth, async (req, res) => {
-  const { sucursal_id } = req.query;
-  try { await ensureBranchAccess(pool, req.user, sucursal_id); } catch(error){ return res.status(error.status||400).json({error:error.message}); }
-  const { rows } = await pool.query(
-    `select sc.id,sc.abierto_en,sc.monto_apertura,sc.estado,c.nombre caja,
-            coalesce(sum(case when mc.tipo='INGRESO' and mc.metodo='Efectivo' then mc.monto when mc.tipo='EGRESO' and mc.metodo='Efectivo' then -mc.monto else 0 end),0) movimientos_efectivo
-       from sesiones_caja sc join cajas c on c.id=sc.caja_id
-       left join movimientos_caja mc on mc.sesion_caja_id=sc.id
-      where c.sucursal_id=$1 and sc.usuario_id=$2 and sc.estado='ABIERTA'
-      group by sc.id,c.nombre order by sc.abierto_en desc limit 1`, [sucursal_id,req.user.sub]
-  );
-  const row = rows[0];
-  if (!row) return res.json(null);
-  row.efectivo_esperado = money(Number(row.monto_apertura) + Number(row.movimientos_efectivo));
-  res.json(row);
-});
-
-app.post('/api/cash/close', requireAuth, async (req, res) => {
-  try {
-    const { sesion_caja_id, efectivo_contado } = req.body || {};
-    const counted = numeric(efectivo_contado, 'Efectivo contado');
-    if (counted < 0) throw new Error('El efectivo contado no puede ser negativo.');
-    const result = await tx(async c => {
-      const s = await c.query(`select sc.*, c.sucursal_id from sesiones_caja sc join cajas c on c.id=sc.caja_id where sc.id=$1 and sc.estado='ABIERTA' for update`, [sesion_caja_id]);
-      if (!s.rows[0]) throw new Error('La caja ya está cerrada o no existe.');
-      await ensureBranchAccess(c, req.user, s.rows[0].sucursal_id);
-      const m = await c.query(`select coalesce(sum(case when tipo='INGRESO' and metodo='Efectivo' then monto when tipo='EGRESO' and metodo='Efectivo' then -monto else 0 end),0) total from movimientos_caja where sesion_caja_id=$1`, [sesion_caja_id]);
-      const expected = money(Number(s.rows[0].monto_apertura) + Number(m.rows[0].total));
-      const diff = money(counted - expected);
-      const q = await c.query(`update sesiones_caja set cerrado_en=now(),efectivo_esperado=$2,efectivo_contado=$3,diferencia=$4,estado='CERRADA' where id=$1 returning *`, [sesion_caja_id, expected, counted, diff]);
-      await writeAudit(c,req.user,'CERRAR_CAJA','sesiones_caja',sesion_caja_id,{efectivo_esperado:expected,efectivo_contado:counted,diferencia:diff});
-      return q.rows[0];
-    });
-    res.json(result);
-  } catch (error) { res.status(400).json({ error: error.message }); }
-});
+registerWebDailyCash(app,{pool,tx,auth:requireAuth,branchAccess:ensureBranchAccess,audit:writeAudit,money});
 
 app.post('/api/purchases', requireAuth, async (req, res) => {
   try {
@@ -364,7 +305,7 @@ app.post('/api/purchases', requireAuth, async (req, res) => {
       return purchase.rows[0];
     });
     res.status(201).json(result);
-  } catch (error) { res.status(error.status||400).json({ error: error.message }); }
+  } catch (error) { if(error.constraint==='uq_compra_documento')return res.status(409).json({error:'Ya existe una compra con el mismo proveedor, documento, serie y número.',code:'PURCHASE_DUPLICATE'});res.status(error.status||400).json({ error: error.message }); }
 });
 
 app.get('/api/purchases/history', requireAuth, async (req, res) => {
@@ -428,6 +369,7 @@ app.get('/api/sales/today',requireAuth,async(req,res)=>{
 });
 
 app.post('/api/sales', requireAuth, async (req, res) => {
+  let saleCommitPossible=false;
   try {
     await ensureReturnsSchema(pool);
     const { sucursal_id, sesion_caja_id, cliente_id=null, tipo_comprobante='BOLETA', items=[], pagos=[] } = req.body || {};
@@ -436,12 +378,9 @@ app.post('/api/sales', requireAuth, async (req, res) => {
     if (!sucursal_id || !Array.isArray(items) || !items.length || !Array.isArray(pagos) || !pagos.length) throw new Error('Sucursal, productos y pago son obligatorios.');
     const result = await tx(async c => {
       await ensureBranchAccess(c, req.user, sucursal_id);
-      if(command){await c.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[req.user.empresa_id+':checkout:'+command]);const prior=(await c.query('SELECT request_hash,venta_id FROM venta_checkout_comandos WHERE empresa_id=$1 AND command_id=$2',[req.user.empresa_id,command])).rows[0];if(prior){if(prior.request_hash!==requestHash)throw Object.assign(Error('Este checkout ya corresponde a otro contenido.'),{status:409});const existing=(await c.query('SELECT * FROM ventas WHERE id=$1 AND empresa_id=$2',[prior.venta_id,req.user.empresa_id])).rows[0];return existing;}}
+      if(command){await c.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[req.user.empresa_id+':checkout:'+command]);const prior=(await c.query('SELECT request_hash,venta_id FROM venta_checkout_comandos WHERE empresa_id=$1 AND command_id=$2',[req.user.empresa_id,command])).rows[0];if(prior){if(prior.request_hash!==requestHash)throw Object.assign(Error('Este checkout ya corresponde a otro contenido.'),{status:409});const existing=(await c.query('SELECT * FROM ventas WHERE id=$1 AND empresa_id=$2',[prior.venta_id,req.user.empresa_id])).rows[0];await ensureBranchAccess(c,req.user,existing.sucursal_id);if(existing.usuario_id!==req.user.sub)throw Object.assign(Error('El intento corresponde a otro usuario.'),{status:403});saleCommitPossible=true;return existing;}}
       if(cliente_id){const cl=await c.query(`select id from clientes where id=$1 and empresa_id=$2 and activo=true`,[cliente_id,req.user.empresa_id]);if(!cl.rows[0])throw new Error('Cliente inválido para esta empresa.');}
-      if(sesion_caja_id){
-        const cash = await c.query(`select sc.id from sesiones_caja sc join cajas ca on ca.id=sc.caja_id where sc.id=$1 and ca.sucursal_id=$2 and sc.usuario_id=$3 and sc.estado='ABIERTA' for update`, [sesion_caja_id,sucursal_id,req.user.sub]);
-        if (!cash.rows[0]) throw new Error('La caja indicada no está abierta para este usuario.');
-      }
+      await requireWebDailyCash(c,req.user,sesion_caja_id,sucursal_id);
       let subtotal=0;
       const normalized = items.map(i=>{const cantidad=numeric(i.cantidad,'Cantidad'), precio=numeric(i.precio_unitario,'Precio'),factor=numeric(i.factor_unidades??1,'Equivalencia'); if(cantidad<=0||precio<0||factor<=0||!i.producto_id) throw new Error('Producto, cantidad, equivalencia y precio inválidos.'); const line=money(cantidad*precio);subtotal=money(subtotal+line);return {...i,cantidad,precio,factor,tipo_venta:String(i.tipo_venta||'UNIDAD').trim().toUpperCase(),line};});
       for(const item of normalized)await validateSalePresentation(c,req.user.empresa_id,sucursal_id,item);
@@ -478,11 +417,13 @@ app.post('/api/sales', requireAuth, async (req, res) => {
       await enqueueSaleCpe(c,req.user.empresa_id,sale.rows[0].id);
       if(command)await c.query('INSERT INTO venta_checkout_comandos(empresa_id,command_id,sucursal_id,venta_id,request_hash) VALUES($1,$2,$3,$4,$5)',[req.user.empresa_id,command,sucursal_id,sale.rows[0].id,requestHash]);
       await writeAudit(c,req.user,'REGISTRAR_VENTA','ventas',sale.rows[0].id,{sucursal_id,total});
+      // The transaction callback completed: a failed COMMIT acknowledgement may still mean a committed sale.
+      saleCommitPossible=true;
       return sale.rows[0];
     });
     const sunat=await completeCheckoutCpe(req.user.empresa_id,result.id);
     res.status(201).json({...result,...(sunat?{sunat}:{})});
-  } catch (error) { res.status(error.status||400).json({ error: error.message,...(error.code?{code:error.code}:{}),...(error.productos?{productos:error.productos}:{}) }); }
+  } catch (error) { if(saleCommitPossible)return res.status(503).json({error:'La confirmación de la venta requiere verificación. Reintente la misma operación.',code:'SALE_CONFIRMATION_REQUIRED'});res.status(error.status||400).json({ error: error.message,...(error.code?{code:error.code}:{}),...(error.productos?{productos:error.productos}:{}) }); }
 });
 
 
@@ -506,7 +447,7 @@ app.get('/api/settings', requireAuth, async (req,res)=>{
     await ensureAdvancedSettings(pool);
     const { rows }=await pool.query(`select e.ruc,e.razon_social,e.nombre_comercial,e.telefono,e.email,e.direccion_fiscal,e.logo_data,e.web,e.slogan,e.departamento,e.provincia,e.distrito,
       coalesce(ec.moneda,'PEN') moneda,coalesce(ec.impresion_ancho_mm,80) impresion_ancho_mm,coalesce(ec.mensaje_ticket,'Gracias por su compra') mensaje_ticket,
-      coalesce(a.exigir_apertura_caja,false) exigir_apertura_caja,coalesce(a.mostrar_aviso_caja,true) mostrar_aviso_caja,
+      true exigir_apertura_caja,coalesce(a.mostrar_aviso_caja,true) mostrar_aviso_caja,
       coalesce(a.saldo_inicial_sugerido,200) saldo_inicial_sugerido,coalesce(a.impresion_automatica,false) impresion_automatica,
       coalesce(a.mostrar_cajero_ticket,true) mostrar_cajero_ticket,coalesce(a.documentos_config,'{}'::jsonb) documentos_config
       from empresas e left join empresa_config ec on ec.empresa_id=e.id left join empresa_config_avanzada a on a.empresa_id=e.id where e.id=$1`,[req.user.empresa_id]);
@@ -585,10 +526,7 @@ app.post('/api/sales/:id/return', requireAuth, async (req,res)=>{
       const q=await c.query(`select * from ventas where id=$1 and empresa_id=$2 for update`,[req.params.id,req.user.empresa_id]);
       const sale=q.rows[0]; if(!sale) throw new Error('Venta no encontrada.');
       await ensureBranchAccess(c,req.user,sale.sucursal_id);
-      const refundCash=await c.query(`select sc.id from sesiones_caja sc join cajas ca on ca.id=sc.caja_id
-        where ca.sucursal_id=$1 and ca.activo=true and sc.usuario_id=$2 and sc.estado='ABIERTA'
-        and ($3::uuid is null or sc.id=$3) order by sc.abierto_en desc limit 1 for update of sc`,[sale.sucursal_id,req.user.sub,sesion_caja_id]);
-      if(!refundCash.rows[0]) throw new Error('Abre una caja en la sucursal de la venta para registrar el reembolso.');
+      const refundSession=await requireWebDailyCash(c,req.user,sesion_caja_id,sale.sucursal_id,{choose:true});const refundCash={rows:[{id:refundSession.id}]};
       if(sale.estado==='ANULADA') throw new Error('Esta venta ya está anulada totalmente.');
       // v28.4: una ANULACIÓN TOTAL solo puede realizarse el mismo día de la venta (hora Perú).
       // La validación vive en el servidor para que no pueda saltarse desde el navegador.
@@ -747,7 +685,7 @@ async function assertProductIdentityAvailable(db,empresaId,input,excludeId=null)
 }
 
 app.get('/api/admin/products/next-code', requireAuth, async (req,res)=>{
-  try{await requireAnyBranchRole(pool,req.user,['Administrador','Almacén']);res.json({codigo_interno:await nextProductCode(pool,req.user.empresa_id,false)});}catch(error){res.status(error.status||400).json({error:error.message});}
+  try{const permissions=await effectivePermissions(pool,req.user);if(!permissions.productsAdmin?.crear)throw Object.assign(Error('No tienes permiso para crear productos.'),{status:403});res.json({codigo_interno:await nextProductCode(pool,req.user.empresa_id,false)});}catch(error){res.status(error.status||400).json({error:error.message});}
 });
 
 app.get('/api/admin/products', requireAuth, async (req,res)=>{
@@ -828,7 +766,7 @@ async function validateProductFormFields(db,user,b,{create=false}={}){
 
 app.post('/api/admin/products', requireAuth, async (req,res)=>{
   try{
-    await requireAnyBranchRole(pool,req.user,['Administrador','Almacén']);
+    const permissions=await effectivePermissions(pool,req.user);if(!permissions.productsAdmin?.crear)throw Object.assign(Error('No tienes permiso para crear productos.'),{status:403});
     const b={...(req.body||{})}; b.tipo_afectacion_igv=productAffectation(b.tipo_afectacion_igv); await validateProductFormFields(pool,req.user,b,{create:true}); await ensureBranchAccess(pool,req.user,b.sucursal_id); const max=numeric(b.stock_maximo??0,'Stock máximo');if(max<0)throw new Error('Stock máximo inválido.'); if(!String(b.nombre||'').trim()) throw new Error('El nombre del producto es obligatorio.');
     if(!String(b.unidad_medida||'').trim()) throw new Error('Selecciona la unidad de medida.');
     const min=numeric(b.stock_minimo??0,'Stock mínimo'); const price=numeric(b.precio??0,'Precio'); const equivalencias=normalizeEquivalences(b.equivalencias); if(min<0||price<0) throw new Error('Stock mínimo y precio no pueden ser negativos.');
@@ -973,7 +911,7 @@ for (const cfg of [
   {path:'suppliers',table:'proveedores',name:'razon_social',doc:'ruc',roles:['Administrador','Almacén']}
 ]) {
   app.get('/api/admin/'+cfg.path,requireAuth,async(req,res)=>{const q=String(req.query.q||'').trim();const {rows}=await pool.query(`select * from ${cfg.table} where empresa_id=$1 and activo=true and ($2='' or coalesce(${cfg.name},'') ilike '%'||$2||'%' or coalesce(${cfg.doc},'') ilike '%'||$2||'%' ${cfg.path==='suppliers'?"or coalesce(contacto,'') ilike '%'||$2||'%'":''}) order by ${cfg.name} nulls last ${cfg.path==='suppliers'?'':'limit 500'}`,[req.user.empresa_id,q]);res.json(rows)});
-  app.post('/api/admin/'+cfg.path,requireAuth,async(req,res)=>{try{await requireAnyBranchRole(pool,req.user,cfg.roles);const b=req.body||{};b[cfg.name]=String(b[cfg.name]||'').trim();if(!b[cfg.name])throw new Error('Nombre / razón social es obligatorio.');let q;if(cfg.table==='clientes'){if(String(b.tipo_doc||'').toUpperCase()==='DNI'&&b.nro_doc){const dni=String(b.nro_doc).replace(/\D/g,'');if(!/^\d{8}$/.test(dni))throw new Error('El DNI debe tener 8 dígitos.');const dup=await pool.query(`select id,nombres from clientes where empresa_id=$1 and activo=true and upper(coalesce(tipo_doc,'DNI'))='DNI' and nro_doc=$2 limit 1`,[req.user.empresa_id,dni]);if(dup.rows[0])throw new Error('Ese DNI ya está registrado para '+(dup.rows[0].nombres||'otro cliente')+'.');b.nro_doc=dni;}q=await pool.query(`insert into clientes(empresa_id,tipo_doc,nro_doc,nombres,telefono,email,direccion) values($1,$2,$3,$4,$5,$6,$7) returning *`,[req.user.empresa_id,b.tipo_doc||null,b.nro_doc||null,b.nombres,b.telefono||null,b.email||null,b.direccion||null]);}else q=await pool.query(`insert into proveedores(empresa_id,ruc,razon_social,contacto,telefono,email,direccion) values($1,$2,$3,$4,$5,$6,$7) returning *`,[req.user.empresa_id,b.ruc||null,b.razon_social,b.contacto||null,b.telefono||null,b.email||null,b.direccion||null]);await writeAudit(pool,req.user,'CREAR_'+cfg.table.toUpperCase(),cfg.table,q.rows[0].id,{});res.status(201).json(q.rows[0]);}catch(error){res.status(error.status||400).json({error:error.message});}});
+  app.post('/api/admin/'+cfg.path,requireAuth,async(req,res)=>{try{if(cfg.path==='suppliers'){const permissions=await effectivePermissions(pool,req.user);if(!permissions.suppliers?.crear)throw Object.assign(Error('No tienes permiso para crear proveedores.'),{status:403});}else await requireAnyBranchRole(pool,req.user,cfg.roles);const b=req.body||{};b[cfg.name]=String(b[cfg.name]||'').trim();if(!b[cfg.name])throw new Error('Nombre / razón social es obligatorio.');let q;if(cfg.table==='clientes'){if(String(b.tipo_doc||'').toUpperCase()==='DNI'&&b.nro_doc){const dni=String(b.nro_doc).replace(/\D/g,'');if(!/^\d{8}$/.test(dni))throw new Error('El DNI debe tener 8 dígitos.');const dup=await pool.query(`select id,nombres from clientes where empresa_id=$1 and activo=true and upper(coalesce(tipo_doc,'DNI'))='DNI' and nro_doc=$2 limit 1`,[req.user.empresa_id,dni]);if(dup.rows[0])throw new Error('Ese DNI ya está registrado para '+(dup.rows[0].nombres||'otro cliente')+'.');b.nro_doc=dni;}q=await pool.query(`insert into clientes(empresa_id,tipo_doc,nro_doc,nombres,telefono,email,direccion) values($1,$2,$3,$4,$5,$6,$7) returning *`,[req.user.empresa_id,b.tipo_doc||null,b.nro_doc||null,b.nombres,b.telefono||null,b.email||null,b.direccion||null]);}else q=await pool.query(`insert into proveedores(empresa_id,ruc,razon_social,contacto,telefono,email,direccion) values($1,$2,$3,$4,$5,$6,$7) returning *`,[req.user.empresa_id,b.ruc||null,b.razon_social,b.contacto||null,b.telefono||null,b.email||null,b.direccion||null]);await writeAudit(pool,req.user,'CREAR_'+cfg.table.toUpperCase(),cfg.table,q.rows[0].id,{});res.status(201).json(q.rows[0]);}catch(error){res.status(error.status||400).json({error:error.message});}});
   app.put('/api/admin/'+cfg.path+'/:id',requireAuth,async(req,res)=>{try{await requireAnyBranchRole(pool,req.user,cfg.roles);const b=req.body||{};b[cfg.name]=String(b[cfg.name]||'').trim();if(!b[cfg.name])throw new Error('Nombre / razón social es obligatorio.');let q;if(cfg.table==='clientes'){if(String(b.tipo_doc||'').toUpperCase()==='DNI'&&b.nro_doc){const dni=String(b.nro_doc).replace(/\D/g,'');if(!/^\d{8}$/.test(dni))throw new Error('El DNI debe tener 8 dígitos.');const dup=await pool.query(`select id,nombres from clientes where empresa_id=$1 and activo=true and upper(coalesce(tipo_doc,'DNI'))='DNI' and nro_doc=$2 and id<>$3 limit 1`,[req.user.empresa_id,dni,req.params.id]);if(dup.rows[0])throw new Error('Ese DNI ya está registrado para '+(dup.rows[0].nombres||'otro cliente')+'.');b.nro_doc=dni;}q=await pool.query(`update clientes set tipo_doc=$3,nro_doc=$4,nombres=$5,telefono=$6,email=$7,direccion=$8,updated_at=now() where id=$1 and empresa_id=$2 returning *`,[req.params.id,req.user.empresa_id,b.tipo_doc||null,b.nro_doc||null,b.nombres,b.telefono||null,b.email||null,b.direccion||null]);}else q=await pool.query(`update proveedores set ruc=$3,razon_social=$4,contacto=$5,telefono=$6,email=$7,direccion=$8,updated_at=now() where id=$1 and empresa_id=$2 returning *`,[req.params.id,req.user.empresa_id,b.ruc||null,b.razon_social,b.contacto||null,b.telefono||null,b.email||null,b.direccion||null]);if(!q.rows[0])throw new Error('Registro no encontrado.');await writeAudit(pool,req.user,'EDITAR_'+cfg.table.toUpperCase(),cfg.table,req.params.id,{});res.json(q.rows[0]);}catch(error){res.status(error.status||400).json({error:error.message});}});
 }
 
@@ -1542,7 +1480,7 @@ registerInitialInventory(app,{pool,tx,auth:requireAuth,branchAccess:ensureBranch
 
 // ===== v22: Actualización EXCLUSIVA de stock desde Excel =====
 // No crea productos, no cambia precios/costos/maestros y no modifica ventas históricas.
-async function parseStockOnlyWorkbook(base64,branchId){
+async function parseStockOnlyWorkbook(base64,branchId,{allowEmpty=false}={}){
   if(!base64)throw new Error('Selecciona un archivo Excel.');
   const buffer=Buffer.from(String(base64).replace(/^data:.*?;base64,/,''),'base64');
   if(buffer.length>20*1024*1024)throw new Error('El archivo supera 20 MB.');
@@ -1552,9 +1490,9 @@ async function parseStockOnlyWorkbook(base64,branchId){
   if(String(info.getCell('B2').value)!==String(branchId))throw new Error('El Excel pertenece a otra sucursal.');
   const headers=['Código interno','Código de barras','Producto','Stock del sistema','Stock físico'];
   headers.forEach((h,i)=>{if(excelText(ws.getRow(1).getCell(i+1))!==h)throw new Error('No modifique los encabezados del conteo.');});
-  const rows=[],seen=new Set();
+  const rows=[],seen=new Set();let omitted=0;
   for(let r=2;r<=ws.rowCount;r++){
-    const row=ws.getRow(r);if(excelText(row.getCell(5))==='')continue;
+    const row=ws.getRow(r);if(excelText(row.getCell(5))===''){if([1,2,3,4].some(c=>excelText(row.getCell(c))!==''))omitted++;continue;}
     const item={row:r,codigo_interno:excelText(row.getCell(1)),codigo_barras:excelText(row.getCell(2)),nombre:excelText(row.getCell(3)),stock:excelNumber(row.getCell(5),NaN),stock_exportado:excelNumber(row.getCell(4),NaN),errors:[]};
     if(!item.codigo_interno)item.errors.push('Código interno obligatorio.');
     if(seen.has(item.codigo_interno))throw new Error('Producto repetido en el Excel: '+item.codigo_interno);
@@ -1563,8 +1501,8 @@ async function parseStockOnlyWorkbook(base64,branchId){
     if(!Number.isFinite(item.stock_exportado))item.errors.push('Stock del sistema inválido.');
     rows.push(item);
   }
-  if(!rows.length)throw new Error('Complete Stock físico en al menos una fila. Las celdas vacías se omiten.');
-  return {sheet:ws.name,rows};
+  if(!rows.length&&(!allowEmpty||omitted===0))throw new Error('Complete Stock físico en al menos una fila. Las celdas vacías se omiten.');
+  return {sheet:ws.name,rows,omitidos:omitted,filas_leidas:rows.length+omitted};
 }
 async function findStockOnlyProduct(db,empresaId,item,branchId){
   const q=await db.query(`select p.id,p.codigo_interno,p.nombre from productos p join producto_sucursal ps on ps.producto_id=p.id
@@ -1600,15 +1538,15 @@ async function applyStockOnlyTarget(c,user,branchId,product,target,reason,baseli
 }
 app.get('/api/import/stock-only/template',requireAuth,async(req,res)=>{
   try{const branch=req.query.sucursal_id;await ensureBranchAccess(pool,req.user,branch);
-    const b=await countWorkbook(pool,req.user.empresa_id,branch);
+    const b=await countWorkbook(pool,req.user.empresa_id,branch,{showFinancials:req.financialAccess?.cost===true});
     res.setHeader('Content-Type','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition','attachment; filename="Conteo_Fisico.xlsx"');res.send(b);
   }catch(error){res.status(error.status||400).json({error:error.message});}
 });
 app.post('/api/import/stock-only/preview',requireAuth,async(req,res)=>{
-  try{const {sucursal_id,file_base64}=req.body||{};await ensureBranchAccess(pool,req.user,sucursal_id);await requireAnyBranchRole(pool,req.user,['Administrador','Almacén']);const parsed=await parseStockOnlyWorkbook(file_base64,sucursal_id);const seen=new Set();let changes=0,same=0,errors=0;
+  try{const {sucursal_id,file_base64}=req.body||{};await ensureBranchAccess(pool,req.user,sucursal_id);await requireAnyBranchRole(pool,req.user,['Administrador','Almacén']);const parsed=await parseStockOnlyWorkbook(file_base64,sucursal_id,{allowEmpty:true});const seen=new Set();let changes=0,same=0,errors=0;
     for(const item of parsed.rows){if(item.errors.length){errors++;continue;}try{const p=await findStockOnlyProduct(pool,req.user.empresa_id,item,sucursal_id);if(!p){item.errors.push('Producto no encontrado; esta función NO crea productos');errors++;continue;}if(seen.has(p.id)){item.errors.push('Producto repetido en el Excel');errors++;continue;}seen.add(p.id);const inv=await currentProductStock(pool,p.id,sucursal_id,false);item.producto_id=p.id;item.codigo_interno=p.codigo_interno;item.nombre_base=p.nombre;item.stock_sistema=Number(inv.total.toFixed(3));item.diferencia=Number((Number(item.stock)-item.stock_sistema).toFixed(3));const plan=await countPlan(pool,p.id,sucursal_id,inv,Number(item.stock),item.stock_exportado);item.observacion=plan.observation;item.lote_destino=plan.lot?.id||null;item.action=Math.abs(item.diferencia)<0.0001?'SIN CAMBIO':'AJUSTAR';Math.abs(item.diferencia)<0.0001?same++:changes++;}catch(e){item.errors.push(e.message);errors++;}}
-    res.json({sheet:parsed.sheet,total:parsed.rows.length,cambios:changes,sin_cambio:same,errores:errors,rows:[...parsed.rows].sort((a,b)=>Number(!!b.errors.length)-Number(!!a.errors.length)).slice(0,500)});
+    res.json({sheet:parsed.sheet,total:parsed.rows.length,procesadas:parsed.rows.length,filas_leidas:parsed.filas_leidas,omitidos:parsed.omitidos,cambios:changes,sin_cambio:same,errores:errors,rows:[...parsed.rows].sort((a,b)=>Number(!!b.errors.length)-Number(!!a.errors.length)).slice(0,500)});
   }catch(error){res.status(error.status||400).json({error:error.message});}
 });
 app.post('/api/import/stock-only/commit',requireAuth,async(req,res)=>{
@@ -1644,8 +1582,8 @@ app.post('/api/import/stock-only/commit',requireAuth,async(req,res)=>{
         movements+=r.movimientos;net+=r.diferencia;
         Math.abs(r.diferencia)<0.0001?same++:changed++;
       }
-      if(changed>0)await writeAudit(c,req.user,'ACTUALIZAR_SOLO_STOCK_EXCEL','productos',null,{sucursal_id,filas:parsed.rows.length,filas_validas:valid.length,omitidos:omitted.length,productos_ajustados:changed,sin_cambio:same,movimientos:movements,unidades_netas:Number(net.toFixed(3)),errores_omitidos:omitted.slice(0,20)});
-      return {filas:parsed.rows.length,filas_validas:valid.length,omitidos:omitted.length,errores_omitidos:omitted.slice(0,20),productos_ajustados:changed,sin_cambio:same,movimientos:movements,unidades_netas:Number(net.toFixed(3))};
+      if(changed>0)await writeAudit(c,req.user,'ACTUALIZAR_SOLO_STOCK_EXCEL','productos',null,{sucursal_id,filas:parsed.rows.length,procesadas:parsed.rows.length,filas_leidas:parsed.filas_leidas,filas_validas:valid.length,omitidos:parsed.omitidos,productos_ajustados:changed,sin_cambio:same,movimientos:movements,unidades_netas:Number(net.toFixed(3)),errores_omitidos:omitted.slice(0,20)});
+      return {filas:parsed.rows.length,procesadas:parsed.rows.length,filas_leidas:parsed.filas_leidas,filas_validas:valid.length,omitidos:parsed.omitidos,errores_omitidos:omitted.slice(0,20),productos_ajustados:changed,sin_cambio:same,movimientos:movements,unidades_netas:Number(net.toFixed(3))};
     });
     res.status(201).json(result);
   }catch(error){res.status(error.status||400).json({error:error.message});}
@@ -1775,6 +1713,7 @@ app.get('/api/reports/:documentType/:id/detail', requireAuth, async (req,res)=>{
   catch(error){res.status(error.status||500).json({error:error.status?error.message:'No se pudo consultar el detalle del documento.'});}
 });
 
+registerInventoryReportExports(app,{pool,auth:requireAuth,branchAccess:ensureBranchAccess});
 app.get('/api/reports/center/:type', requireAuth, async (req,res)=>{
   try{
     const type=String(req.params.type||'').toLowerCase();
@@ -1800,6 +1739,7 @@ app.get('/api/reports/center/:type', requireAuth, async (req,res)=>{
       const params=[empresa,branch,from,to,q,seller];
       const where=`v.empresa_id=$1 and v.estado IN ('EMITIDA','DEVOLUCION_PARCIAL') and ($2::uuid is null or v.sucursal_id=$2) and ${saleDate} and ($6::uuid is null or v.usuario_id=$6)
         and ($5='' or coalesce(c.nombres,'') ilike '%'||$5||'%' or coalesce(c.nro_doc,'') ilike '%'||$5||'%' or coalesce(v.numero,'') ilike '%'||$5||'%' or exists(select 1 from reporte_detalles_netos vdx join productos px on px.id=vdx.producto_id where vdx.venta_id=v.id and (px.nombre ilike '%'||$5||'%' or px.codigo_interno ilike '%'||$5||'%')))`;
+      if(req.query.view==='products'){const query={...req.query,all:req.query.export?'1':'0'};const result=await salesProductReport(pool,{where,costExpr,params,query});if(req.query.export)return salesProductsExport(res,result,req.query.export,req.financialAccess);return res.json(result);}
       const base=`from reporte_ventas_netas v left join clientes c on c.id=v.cliente_id join usuarios u on u.id=v.usuario_id
         left join lateral (select coalesce(sum(vd.cantidad),0) unidades,coalesce(sum(vd.cantidad*${costExpr}),0) costo from reporte_detalles_netos vd left join lotes lv on lv.id=vd.lote_id where vd.venta_id=v.id) d on true
         left join lateral (select string_agg(metodo,', ' order by metodo) metodo_pago from reporte_pagos_netos where venta_id=v.id) pay on true where ${where}`;
@@ -1876,13 +1816,7 @@ app.get('/api/reports/center/:type', requireAuth, async (req,res)=>{
       return res.json({descripcion:'Ventas y utilidad generada por usuario',summary:sum.rows[0],rows:list.rows});
     }
 
-    if(type==='inventory'){
-      const p=[empresa,branch,q];
-      const base=`from productos p left join lateral (select coalesce(sum(cantidad_disponible),0) stock,coalesce(sum(cantidad_disponible*costo_unitario),0) valor,coalesce(sum(cantidad_disponible*costo_unitario)/nullif(sum(cantidad_disponible),0),0) costo from lotes where producto_id=p.id and ($2::uuid is null or sucursal_id=$2)) st on true left join (select distinct on (pp.producto_id) pp.producto_id,pp.precio_venta from precios_producto pp where (pp.sucursal_id=$2 or pp.sucursal_id is null) and pp.vigente_hasta is null order by pp.producto_id,(pp.sucursal_id is not null) desc,pp.vigente_desde desc) pr on pr.producto_id=p.id where ($2::uuid is null or exists(select 1 from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2 and ps.activo=true)) and p.empresa_id=$1 and ($2::uuid is not null or p.activo=true) and ($3='' or p.nombre ilike '%'||$3||'%' or p.codigo_interno ilike '%'||$3||'%')`;
-      const list=await pool.query(`select p.codigo_interno,p.nombre,p.unidad_medida,coalesce((select ps.stock_minimo from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2),p.stock_minimo) stock_minimo,coalesce(st.stock,0)::numeric(14,3) stock,coalesce(st.costo,0)::numeric(14,4) costo,coalesce(pr.precio_venta,0)::numeric(14,2) precio,coalesce(st.valor,0)::numeric(14,2) valor ${base} order by p.nombre limit 2000`,p);
-      const sum=await pool.query(`select count(*)::int productos,coalesce(sum(st.stock),0)::numeric(14,3) unidades,count(*) filter(where coalesce(st.stock,0)<=0)::int sin_stock,count(*) filter(where coalesce((select ps.stock_minimo from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2),p.stock_minimo)>0 and coalesce(st.stock,0)<=coalesce((select ps.stock_minimo from producto_sucursal ps where ps.producto_id=p.id and ps.sucursal_id=$2),p.stock_minimo))::int stock_bajo,coalesce(sum(st.valor),0)::numeric(14,2) valor ${base}`,p);
-      return res.json({descripcion:'Inventario actual y valorización de stock',summary:sum.rows[0],rows:list.rows});
-    }
+    if(type==='inventory')return res.json(await inventoryReportPage(pool,req.user,branch,q,req.query));
 
     if(type==='payments'){
       const p=[empresa,branch,from,to];
@@ -1949,6 +1883,9 @@ export async function initializeDatabase({migrate=true}={}) {
       and to_regclass('public.reporte_ventas_netas') is not null
       and to_regclass('public.reporte_detalles_netos') is not null
       and to_regclass('public.reporte_pagos_netos') is not null
+      and to_regclass('public.compra_documentos_unicos') is not null
+      and to_regclass('public.inventario_inicial_importaciones') is not null
+      and exists(select 1 from pg_attribute where attrelid='public.sesiones_caja'::regclass and attname='fecha_operativa' and not attisdropped)
       and to_regclass('public.uq_productos_empresa_codigo_interno_normalizado') is not null
       and to_regclass('public.uq_productos_empresa_barcode_normalizado') is not null
       and to_regclass('public.uq_productos_empresa_nombre_normalizado') is not null
@@ -1974,6 +1911,9 @@ export async function initializeDatabase({migrate=true}={}) {
   await pool.query(await readFile(path.resolve(here,'../../database/upgrade_count_unlotted.sql'),'utf8'));
   await pool.query(await readFile(path.resolve(here,'../../database/upgrade_product_identity.sql'),'utf8'));
   await pool.query(await readFile(path.resolve(here,'../../database/migrations/007_consistencia_costos.sql'),'utf8'));
+  await pool.query(await readFile(path.resolve(here,'../../database/migrations/014_web27_purchase_identity.sql'),'utf8'));
+  await pool.query(await readFile(path.resolve(here,'../../database/migrations/015_web27_initial_imports.sql'),'utf8'));
+  await pool.query(await readFile(path.resolve(here,'../../database/migrations/016_web27_daily_cash.sql'),'utf8'));
   runtimeSchemaReady=true;
 }
 app.use((error,_req,res,_next)=>{console.error('WEB_REQUEST_ERROR',/^[A-Z0-9_]{1,40}$/.test(error.code||'')?error.code:'CONTROLLED');if(!res.headersSent)res.status(503).json({error:'Servicio temporalmente no disponible.',code:'SERVICIO_NO_DISPONIBLE'});});

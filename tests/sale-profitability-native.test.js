@@ -138,7 +138,11 @@ test('Rentabilidad: API conserva datos y modal real muestra detalle sin HTML ni 
   productById:()=>({id:'p',factor_unidades:12,tipo_venta:'CAJA'}),salePrice:()=>10,
   focusSalesSearchIfReady(){},showAppNotice:async(message,options)=>shown.push({message,options}),
   fetch:async()=>({ok:false,status:422,json:async()=>data})};
+ elements.set('cart',{querySelectorAll:()=>[]});sandbox.renderSaleRecovery=()=>{};sandbox.webDailyCash={ensure:async()=>{}};
  sandbox.window=sandbox;vm.createContext(sandbox);
+ vm.runInContext(readFileSync(new URL('../public/price-validation.js',import.meta.url),'utf8'),sandbox);
+ vm.runInContext(readFileSync(new URL('../public/sale-recovery.js',import.meta.url),'utf8'),sandbox);
+ const store=new Map();sandbox.saleRecovery=sandbox.createWebSaleRecovery({storage:{getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,v),removeItem:k=>store.delete(k)},scope:()=>({empresa:'TEST',usuario:'USER',sucursal:'BRANCH_FICTICIO'}),send:p=>sandbox.api('/api/sales',{method:'POST',body:JSON.stringify(p)}),uuid:randomUUID,locks:{request:(k,o,fn)=>fn()}});
  vm.runInContext(readFileSync(new URL('../public/sale-profitability.js',import.meta.url),'utf8'),sandbox);
  vm.runInContext(html.split('\n').find(x=>x.startsWith('async function api(')),sandbox);
  await assert.rejects(()=>vm.runInContext("api('/api/sales',{method:'POST'})",sandbox),error=>error.code===data.code&&error.status===422&&error.productos===data.productos);
