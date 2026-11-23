@@ -877,6 +877,16 @@ app.delete('/api/admin/products/:id', requireAuth, async (req,res)=>{
 });
 
 
+app.get('/api/admin/clients/document-preview/:doc',requireAuth,async(req,res)=>{
+ try{
+  const doc=String(req.params.doc||'');
+  if(!/^(?:\d{8}|\d{11})$/.test(doc))return res.status(400).json({error:'Ingresa un DNI de 8 dígitos o RUC de 11 dígitos.'});
+  const {rows}=await pool.query('SELECT id,tipo_doc,nro_doc,nombres,telefono,email,direccion FROM clientes WHERE empresa_id=$1 AND activo=true AND nro_doc=$2 ORDER BY updated_at DESC NULLS LAST LIMIT 1',[req.user.empresa_id,doc]);
+  if(rows[0])return res.json(rows[0]);
+  const result=await lookupPerudevs(doc,req.user.empresa_id);
+  return res.json(result.found&&result.client?{...result.client,nro_doc:doc}:null);
+ }catch(error){res.status(error.status||503).json({error:error.message||'No se pudo consultar el documento.'});}
+});
 app.get('/api/admin/clients/by-doc/:doc',requireAuth,async(req,res)=>{
   try{
     const doc=String(req.params.doc||'').replace(/\D/g,'');
