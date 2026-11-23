@@ -39,3 +39,34 @@
 #reports#reports#reports#reports#reports .report-center-tab{min-height:62px;padding-top:14px!important;padding-bottom:14px!important;display:flex;align-items:center}
 #reports#reports#reports#reports#reports .report-center-tab:before{top:50%;transform:translateY(-50%)}
 #reports#reports#reports#reports#reports .report-center-tab b{font-size:12px;line-height:1.5}
+
+/* Reports: stronger blue hierarchy and tinted surfaces. Appearance only. */
+#reports#reports#reports#reports#reports .report-center-tabs{gap:11px;padding:14px;border:1px solid #d1e1f4;border-radius:18px;background:linear-gradient(130deg,#e4eefb,#edf5ff);box-shadow:inset 0 1px 0 #ffffffa6}
+#reports#reports#reports#reports#reports .report-center-tab{min-height:66px;background:linear-gradient(125deg,#f3f8ff,#e8f1ff)!important;border:1px solid #bfd3ec!important;box-shadow:0 3px 8px #194b8510!important;color:#17477e!important;transition:background .15s,border-color .15s,box-shadow .15s}
+#reports#reports#reports#reports#reports .report-center-tab b{color:inherit!important;font-size:12px!important}
+#reports#reports#reports#reports#reports .report-center-tab:hover{background:#dcecff!important;border-color:#82afe7!important;box-shadow:0 5px 12px #1b5ba521!important;transform:translateY(-1px)}
+#reports#reports#reports#reports#reports .report-center-tab.active{background:linear-gradient(110deg,#1359ba,#167bea)!important;border-color:#155fcb!important;color:#fff!important;box-shadow:0 6px 15px #176bd738!important}
+#reports#reports#reports#reports#reports .report-center-tab.active:before{background:#ffffff26!important;color:#fff!important;box-shadow:inset 0 0 0 1px #ffffff30}
+#reports#reports#reports#reports#reports>.card{border:1px solid #cbdcf0!important;background:linear-gradient(120deg,#edf5ff,#f7fbff)!important;box-shadow:0 5px 18px #244f7d0b!important;border-radius:16px!important}
+#reports#reports#reports#reports#reports .report-center-filter label{color:#27558a!important;font-weight:750;font-size:12px}
+#reports#reports#reports#reports#reports .report-center-filter .input{border:1px solid #b8cfe9!important;border-radius:9px;background:#fff!important;box-shadow:0 2px 4px #2a609208;min-height:41px}
+#reports#reports#reports#reports#reports .report-center-filter .input:focus{outline:2px solid #8fbdf4;outline-offset:2px}
+#reports#reports#reports#reports#reports .report-center-kpis{gap:12px}
+#reports#reports#reports#reports#reports .report-center-kpis .card{border:1px solid #c2d7f1!important;border-top:3px solid #347ee3!important;background:linear-gradient(125deg,#e6f0ff,#f1f7ff)!important;box-shadow:0 5px 14px #24588c0d!important}
+#reports#reports#reports#reports#reports .report-center-kpis .card:nth-child(2){background:linear-gradient(125deg,#e5f5ff,#effaff)!important;border-color:#bcdfee!important;border-top-color:#0b9ac6!important}
+#reports#reports#reports#reports#reports .report-center-kpis .card:nth-child(3){background:linear-gradient(125deg,#ede9ff,#f4f1ff)!important;border-color:#d2c9f2!important;border-top-color:#8161db!important}
+#reports#reports#reports#reports#reports .report-center-kpis .card:nth-child(4){background:linear-gradient(125deg,#fff1dd,#fff8ec)!important;border-color:#eed9b7!important;border-top-color:#d58a18!important}
+#reports#reports#reports#reports#reports .report-center-kpis .card:nth-child(5){background:linear-gradient(125deg,#e1f6ed,#eefbf5)!important;border-color:#b9e1cf!important;border-top-color:#10a176!important}
+#reports#reports#reports#reports#reports .report-center-kpis .kpi b{color:#135cb4!important;font-size:24px!important;font-weight:850!important}
+#reports#reports#reports#reports#reports .report-center-kpis .kpi:nth-child(3) b{color:#7650c3!important}
+#reports#reports#reports#reports#reports .report-center-kpis .kpi:nth-child(4) b{color:#a66b11!important}
+#reports#reports#reports#reports#reports .report-center-kpis .kpi:nth-child(5) b{color:#078461!important}
+#reports#reports#reports#reports#reports #rcTitle{color:#123f74!important;letter-spacing:.3px}
+#reports#reports#reports#reports#reports .report-center-table{border:1px solid #c4d7ef!important;border-radius:12px;background:#fff}
+#reports#reports#reports#reports#reports #rcTable thead th{background:#dceafb!important;color:#194a82!important;border-bottom:1px solid #b9cfe9;font-weight:800}
+#reports#reports#reports#reports#reports #rcTable tbody tr:nth-child(even){background:#f1f6fd}
+#reports#reports#reports#reports#reports #rcTable tbody tr:hover{background:#e3efff}
+#reports#reports#reports#reports#reports #rcTable tbody td{border-bottom-color:#dde8f5}
+#reports#reports#reports#reports#reports .report-center-table:has(tbody tr:only-child td[colspan]){background:#f4f8fe}
+@media(max-width:700px){#reports#reports#reports#reports#reports .report-center-tabs{padding:10px;gap:9px}#reports#reports#reports#reports#reports .report-center-tab{padding-left:48px!important}#reports#reports#reports#reports#reports .report-center-tab:before{left:8px;width:30px;height:30px}#reports#reports#reports#reports#reports .report-center-tab b{font-size:11px!important}}
+@media(prefers-reduced-motion:reduce){#reports#reports#reports#reports#reports .report-center-tab{transition:none!important}}
