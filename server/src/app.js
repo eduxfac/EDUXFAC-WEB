@@ -83,7 +83,7 @@ async function ensureBranchAccess(db, user, branchId) {
 }
 
 
-const PERMISSION_MODULES=['dashboard','sales','productsAdmin','inventory','purchases','suppliers','customers','cash','alerts','replenishment','transfers','reports','usersAdmin','settings'];
+const PERMISSION_MODULES=['dashboard','sales','productsAdmin','inventory','purchases','suppliers','customers','cash','alerts','replenishment','transfers','reports','usersAdmin','settings','financialCost','financialProfit'];
 async function ensureUserPermissions(db){
   if(runtimeSchemaReady) return;
   await db.query(`create table if not exists usuario_permisos(
@@ -261,7 +261,7 @@ app.get('/api/products', requireAuth, async (req, res) => {
         p.nombre,p.id
       limit $4 offset $6`, [req.user.empresa_id, branch, q, limit, searchActiveIngredient, offset]
   );
-  res.json(rows);
+  res.json(rows.map(p=>({...p,ganancia_porcentaje:Number(p.costo_compra)>0?(Number(p.precio)-Number(p.costo_compra))/Number(p.costo_compra)*100:null})));
 });
 
 app.get('/api/products/:id/presentations', requireAuth, async (req,res)=>{

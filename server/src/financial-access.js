@@ -16,8 +16,8 @@ export function sanitizeFinancialExport(payload,access={}){
  const out=block(payload);if(Array.isArray(payload.blocks))out.blocks=payload.blocks.map(block);if(Array.isArray(payload.kpis))out.kpis=payload.kpis.filter(k=>!forbidden(Array.isArray(k)?k[0]:k?.label||k?.title||k?.name));return out;
 }
 export async function financialAccess(db,user,branch=null) {
- const {rows}=await db.query(`select s.id,r.nombre rol from usuario_sucursal us join sucursales s on s.id=us.sucursal_id join roles r on r.id=us.rol_id where us.usuario_id=$1 and s.empresa_id=$2 and (s.activo=true or $4::boolean) and ($3::uuid is null or s.id=$3)`,[user.sub,user.empresa_id,branch,user.readOnlyBranchAccess===true]);
- const roles=rows.map(r=>r.rol);return {cost:roles.length>0&&roles.every(r=>['Administrador','Almacén'].includes(r)),profit:roles.length>0&&roles.every(r=>r==='Administrador')};
+ const {rows}=await db.query(`select s.id,r.nombre rol,exists(select 1 from usuario_permisos p where p.usuario_id=us.usuario_id and p.modulo='financialCost' and p.puede_ver=true) cost_granted,exists(select 1 from usuario_permisos p where p.usuario_id=us.usuario_id and p.modulo='financialProfit' and p.puede_ver=true) profit_granted from usuario_sucursal us join sucursales s on s.id=us.sucursal_id join roles r on r.id=us.rol_id where us.usuario_id=$1 and s.empresa_id=$2 and (s.activo=true or $4::boolean) and ($3::uuid is null or s.id=$3)`,[user.sub,user.empresa_id,branch,user.readOnlyBranchAccess===true]);
+ const roles=rows.map(r=>r.rol);return {cost:roles.length>0&&(roles.every(r=>['Administrador','Almacén'].includes(r))||rows.every(r=>r.cost_granted===true)),profit:roles.length>0&&(roles.every(r=>r==='Administrador')||rows.every(r=>r.profit_granted===true))};
 }
 export async function guardFinancial(db,req,res){
  const p=req.path;

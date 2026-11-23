@@ -30,6 +30,22 @@ test('Checks delegan operaciones sin cambiar el rol y revocan con la misma sesio
  await t.test('importacion valida permiso antes de procesar archivo',async()=>{const r=await request('/api/import/inventory/preview',{method:'POST',body:{sucursal_id:ids.sucursalA,file_base64:'invalid'}});assert.equal(r.status,400,JSON.stringify(r));});
  await t.test('no puede escalar roles ni administrar permisos',async()=>{assert.equal((await request('/api/admin/roles')).status,403);assert.equal((await request('/api/admin/users/'+user+'/permissions',{method:'PUT',body:{permissions:{}}})).status,403);});
  await t.test('no accede a sucursales o empresas ajenas',async()=>{const r=await request('/api/admin/products',{method:'POST',body:{...body,codigo_interno:'FOREIGN',sucursal_id:ids.sucursalB}});assert.equal(r.status,403,JSON.stringify(r));});
+ await t.test('costos y ganancias configurables por administrador sin cambiar rol',async()=>{
+  await f.query("INSERT INTO usuario_permisos(usuario_id,modulo,puede_ver) VALUES($1,'sales',true)",[user]);
+  await f.query('UPDATE lotes SET costo_unitario=2 WHERE producto_id=$1',[ids.productoA]);
+  await f.query('INSERT INTO precios_producto(producto_id,sucursal_id,precio_venta) VALUES($1,$2,5)',[ids.productoA,ids.sucursalA]);
+  const path='/api/products?sucursal_id='+ids.sucursalA;
+  const find=r=>r.data.find(p=>p.id===ids.productoA);
+  let row=find(await request(path));assert.ok(row);assert.equal(row.costo_compra,undefined);assert.equal(row.ganancia_porcentaje,undefined);
+  const perms=(await request('/api/auth/permissions')).data.permissions;
+  const save=async(cost,profit)=>{const r=await f.request('/api/admin/users/'+user+'/permissions',{token:f.tokenA,method:'PUT',body:{permissions:{...perms,financialCost:{ver:cost},financialProfit:{ver:profit}}}});assert.equal(r.status,200,JSON.stringify(r));};
+  await save(true,false);row=find(await request(path));assert.equal(Number(row.costo_compra),2);assert.equal(row.ganancia_porcentaje,undefined);
+  await save(false,true);row=find(await request(path));assert.equal(row.costo_compra,undefined);assert.equal(Number(row.ganancia_porcentaje),150);
+  await save(true,true);row=find(await request(path));assert.equal(Number(row.costo_compra),2);assert.equal(Number(row.ganancia_porcentaje),150);
+  assert.equal((await request('/api/admin/roles')).status,403);
+  assert.equal((await request('/api/products?sucursal_id='+ids.sucursalB)).status,403);
+  await save(false,false);row=find(await request(path));assert.equal(row.costo_compra,undefined);assert.equal(row.ganancia_porcentaje,undefined);
+ });
  await t.test('revocar crear bloquea inmediatamente incluso con JWT vigente',async()=>{
   await f.query("UPDATE usuario_permisos SET puede_crear=false WHERE usuario_id=$1 AND modulo='productsAdmin'",[user]);
   assert.equal((await request('/api/catalogs/laboratorios',{method:'POST',body:{nombre:'Bloqueado'}})).status,403);
