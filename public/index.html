@@ -1200,14 +1200,34 @@ function printDocumentHeader(v,vis={}){
   const enabled=(key,defaultValue)=>Object.prototype.hasOwnProperty.call(vis,key)?vis[key]===true:defaultValue;
   const companyName=v.nombre_comercial||v.razon_social||'';
   const showLogo=enabled('logo',true),showSlogan=enabled('slogan',true),showRuc=enabled('ruc',true),showAddress=enabled('direccion',true),showPhone=enabled('telefono',false),showWeb=enabled('web',false);
-  const logo=showLogo&&v.logo_data?`<img class="company-logo-full" src="${v.logo_data}" alt="Logo de empresa">`:(!v.logo_data?'<div class="ticket-logo">✚</div>':'');
+  const logo=showLogo&&v.logo_data?`<img class="company-logo-full" src="${v.logo_data}" alt="Logo de empresa">`:(showLogo&&!v.logo_data?'<div class="ticket-logo">✚</div>':'');
   const address=v.direccion||v.direccion_fiscal||'',phone=v.sucursal_telefono||v.telefono||'';
   return `<div class="ticket-brand ${showLogo&&v.logo_data?'has-company-logo':''}">${logo}<div class="brand-text"><strong>${esc(companyName)}</strong>${showSlogan&&v.slogan?`<small>${esc(v.slogan)}</small>`:''}</div></div>
       <div class="ticket-company">${showLogo&&v.logo_data?`<b>${esc(companyName)}</b>`:''}${showAddress&&address?`<span>${esc(address)}</span>`:''}${showRuc&&v.ruc?`<span>RUC: ${esc(v.ruc)}</span>`:''}${showPhone&&phone?`<span>Tel: ${esc(phone)}</span>`:''}${showWeb&&v.web?`<span>${esc(v.web)}</span>`:''}<span>${esc(v.sucursal||'')}</span></div>`;
 }
+let receiptLoadVersion=0,receiptLogoToken='';
+const receiptRequests=new Map(),receiptLogoCache=new Map();
+window.cancelReceiptLoad=()=>{++receiptLoadVersion};
+async function receiptLogoUrl(id,revision,token){
+  if(receiptLogoToken!==token){receiptLogoCache.clear();receiptLogoToken=token}
+  if(!receiptLogoCache.has(revision)){
+    const pending=fetch('/api/sales/'+encodeURIComponent(id)+'/receipt?view=logo',{headers:{Authorization:'Bearer '+token},cache:'no-store'}).then(async response=>{
+      if(!response.ok)throw Error('No se pudo cargar el logo. Cierre el comprobante y reintente.');
+      const blob=await response.blob();if(!blob.type.startsWith('image/'))throw Error('Formato de logo no valido.');return await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('No se pudo leer el logo.'));reader.readAsDataURL(blob)});
+    }).catch(error=>{receiptLogoCache.delete(revision);throw error});receiptLogoCache.set(revision,pending);
+    if(receiptLogoCache.size>4){const oldest=receiptLogoCache.keys().next().value;receiptLogoCache.delete(oldest)}
+  }
+  return receiptLogoCache.get(revision);
+}
 async function showReceipt(id){
+  const version=++receiptLoadVersion,token=state.token,branch=state.branchId,key=token+':'+branch+':'+id;
+  $('receiptContent').innerHTML='<div role="status" style="padding:28px;text-align:center;font-weight:700;color:#24558a">Preparando comprobante...</div>';
+  $('receiptModal').classList.remove('hidden');$('printReceipt').disabled=true;window.eduxfacSunat?.receipt?.(null);
   try{
-    const r=await api('/api/sales/'+id+'/receipt'),v=r.venta;
+    if(!receiptRequests.has(key))receiptRequests.set(key,api('/api/sales/'+encodeURIComponent(id)+'/receipt?view=print').finally(()=>receiptRequests.delete(key)));
+    const r=await receiptRequests.get(key),v={...r.venta};
+    if(v.logo_revision&&documentPrintVisibility(v.documentos_config||{}).logo)v.logo_data=await receiptLogoUrl(id,v.logo_revision,token);
+    if(version!==receiptLoadVersion||token!==state.token||branch!==state.branchId||$('receiptModal').classList.contains('hidden'))return;
     window.eduxfacSunat?.receipt?.(r.sunat);
     const rawType=String(v.tipo_comprobante||'ORDEN').toUpperCase();
     const dc=v.documentos_config||{}; const dk=rawType==='ORDEN'?'orden':rawType==='BOLETA'?'boleta':rawType==='FACTURA'?'factura':rawType.includes('NOTA')?'nota_credito':'cotizacion'; const dcfg=dc[dk]||{}; const vis=documentPrintVisibility(dc);
@@ -1245,7 +1265,9 @@ async function showReceipt(id){
     $('receiptModal').classList.remove('hidden');
     // v44.3: preparar el tamaño ANTES del clic. El botón Imprimir queda igual que la v43.0 estable: window.print() directo.
     requestAnimationFrame(()=>window.eduxPreparePrintPage?.());
-  }catch(e){$('saleStatus').textContent=e.message}
+    await Promise.all([...$('receiptContent').querySelectorAll('img')].map(img=>img.decode?.().catch(()=>{})));
+  }catch(e){if(version===receiptLoadVersion){$('receiptContent').innerHTML='<div role="alert" style="padding:24px">No se pudo preparar el comprobante: '+esc(e.message)+'</div>';$('saleStatus').textContent=e.message;return}}
+  finally{if(version===receiptLoadVersion)$('printReceipt').disabled=!$('receiptContent').querySelector('#printArea')}
 }
 
 
@@ -2187,6 +2209,7 @@ setTimeout(installReportCenter, 50);
     const modal=document.getElementById('receiptModal');
     if(!modal) return;
     modal.classList.add('hidden');
+    window.cancelReceiptLoad?.();
     setTimeout(focusSalesSearchIfReady,0);
   }
   window.closeReceiptModal=closeReceiptModal;

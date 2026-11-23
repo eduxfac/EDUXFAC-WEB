@@ -585,13 +585,22 @@ app.post('/api/sales/:id/return', requireAuth, async (req,res)=>{
 });
 
 app.get('/api/sales/:id/receipt', requireAuth, async (req,res)=>{
+  if(req.query.view==='logo'){
+    const sale=(await pool.query('select sucursal_id from ventas where id=$1 and empresa_id=$2',[req.params.id,req.user.empresa_id])).rows[0];
+    if(!sale)return res.status(404).json({error:'Venta no encontrada.'});
+    try{await ensureBranchAccess(pool,req.user,sale.sucursal_id)}catch(error){return res.status(error.status||403).json({error:error.message})}
+    const logo=(await pool.query('select logo_data from empresas where id=$1',[req.user.empresa_id])).rows[0]?.logo_data;
+    const match=/^data:(image\/(?:png|jpeg|jpg|gif|webp|bmp|svg\+xml));base64,([a-z0-9+/=\s]+)$/i.exec(logo||'');
+    if(!match)return res.status(404).json({error:'Logo no disponible.'});
+    res.set({'Content-Type':match[1],'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'});return res.send(Buffer.from(match[2],'base64'));
+  }
   await ensureReturnsSchema(pool);
-  const detailOnly=req.query.view==='detail';
+  const detailOnly=req.query.view==='detail',printOnly=req.query.view==='print';
   const h=await pool.query(detailOnly?`select v.id,v.serie,v.numero,v.tipo_comprobante,v.subtotal,v.descuento,v.total,v.estado,v.created_at,
     coalesce(c.nombres,'Público en general') cliente,coalesce(c.nro_doc,'') nro_doc,v.sucursal_id,u.nombre vendedor
     from ventas v join usuarios u on u.id=v.usuario_id left join clientes c on c.id=v.cliente_id
     where v.id=$1 and v.empresa_id=$2`:`select v.id,v.serie,v.numero,v.tipo_comprobante,v.subtotal,v.descuento,v.total,v.estado,v.created_at,coalesce(c.nombres,'Público en general') cliente,coalesce(c.nro_doc,'') nro_doc,
-      s.id sucursal_id,s.nombre sucursal,s.direccion,s.telefono sucursal_telefono,u.nombre vendedor,e.ruc,e.razon_social,e.nombre_comercial,e.telefono,e.direccion_fiscal,e.logo_data,e.web,e.slogan,e.departamento,e.provincia,e.distrito,
+      s.id sucursal_id,s.nombre sucursal,s.direccion,s.telefono sucursal_telefono,u.nombre vendedor,e.ruc,e.razon_social,e.nombre_comercial,e.telefono,e.direccion_fiscal,${printOnly?'null::text logo_data,md5(e.logo_data) logo_revision':'e.logo_data'},e.web,e.slogan,e.departamento,e.provincia,e.distrito,
       coalesce(ec.mensaje_ticket,'Gracias por su compra') mensaje_ticket,coalesce(ec.impresion_ancho_mm,80) impresion_ancho_mm,coalesce(eca.documentos_config,'{}'::jsonb) documentos_config
     from ventas v join sucursales s on s.id=v.sucursal_id join usuarios u on u.id=v.usuario_id join empresas e on e.id=v.empresa_id left join clientes c on c.id=v.cliente_id
     left join empresa_config ec on ec.empresa_id=e.id left join empresa_config_avanzada eca on eca.empresa_id=e.id where v.id=$1 and v.empresa_id=$2`,[req.params.id,req.user.empresa_id]);
