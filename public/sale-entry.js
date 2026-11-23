@@ -49,10 +49,12 @@
  };
  const sales=$('sales');sales.classList.add('sale-entry-screen');
  const workspace=sales.querySelector('.sale-workspace'),client=sales.querySelector('.sale-client-card');
- workspace.before(client);
+ const left=sales.querySelector('.sale-left');
+ left.append(client);
  const clientLine=sales.querySelector('.sale-client-line');
  const clear=document.createElement('button');clear.type='button';clear.className='btn secondary';clear.setAttribute('aria-label','Quitar cliente seleccionado');clear.textContent='×';clear.onclick=()=>clearSaleClient();clientLine.append(clear);
  const flow=sales.querySelector('.sale-doc-flow');
+ left.prepend(flow);
  const toolbar=document.createElement('div');toolbar.className='sale-entry-toolbar';
  toolbar.innerHTML='<label>Tipo de comprobante<select id="saleDocumentSelect" class="input"><option value="ORDEN">Orden</option><option value="BOLETA">Boleta</option><option value="FACTURA">Factura</option><option value="NOTA DE CREDITO">Nota de crédito</option><option value="COTIZACION">Cotización</option></select></label><label>Serie / Número<input class="input" value="Automático al emitir" readonly></label><label>Moneda<input class="input" value="Soles (PEN)" readonly></label><label>Fecha<input id="saleEntryDate" class="input" readonly></label>';
  flow.append(toolbar);$('saleDocumentSelect').value=$('saleDocType').value;
