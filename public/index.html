@@ -1634,7 +1634,7 @@ function addProductToPurchase(p){
   $('buySearch').value='';$('buySearchResults').classList.add('hidden');$('buySelectedHint').textContent='✓ '+p.nombre+' agregado.';renderPurchaseItems();
 }
 async function searchPurchaseProducts(){
-  const q=$('buySearch').value.trim();
+  const q=$('buySearch').value.trim(),branch=state.branchId;
   if(!q){$('buySearchResults').classList.add('hidden');purchaseSearchResults=[];return}
   try{const results=await api('/api/products?sucursal_id='+encodeURIComponent(branch)+'&q='+encodeURIComponent(q));if(q!==$('buySearch').value.trim()||branch!==state.branchId)return;purchaseSearchResults=results;const box=$('buySearchResults');box.innerHTML=(purchaseSearchResults.length?`<div style="padding:8px 12px;font-size:12px" class="muted">${purchaseSearchResults.length} coincidencia(s) en todo el catálogo</div>`:'')+purchaseSearchResults.map((p,i)=>`<button type="button" class="purchase-result" data-buy-result="${i}"><span><b>${esc(p.nombre)}</b><br><span class="muted">${esc([p.codigo_anterior||p.codigo_interno,p.presentacion,p.laboratorio].filter(Boolean).join(' · '))}${p.codigo_barras?' · EAN '+esc(p.codigo_barras):''}</span></span><span><b>${money(p.precio)}</b><br><span class="muted">Stock ${stockHtml(p.stock)}</span></span></button>`).join('')||'<div style="padding:12px" class="muted">No se encontraron productos. Puedes crear uno nuevo.</div>';box.classList.remove('hidden');box.querySelectorAll('[data-buy-result]').forEach(b=>b.onclick=()=>addProductToPurchase(purchaseSearchResults[Number(b.dataset.buyResult)]));}catch(e){$('buySelectedHint').textContent=e.message}
 }
