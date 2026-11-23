@@ -41,6 +41,8 @@ import { ensureCompanyProduct, ensureCompanyRequest } from './tenant-guard.js';
 import { lookupPerudevs } from './panel-perudevs-client.js';
 
 const app = express();
+const authorizedOperations=new WeakMap();
+const delegatedModules=new Set(['productsAdmin','customers','suppliers','inventory','purchases','replenishment','transfers','alerts']);
 app.use((_req,res,next)=>{res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Frame-Options','DENY');res.setHeader('Content-Security-Policy',contentSecurityPolicy);next();});
 app.use(backupMaintenance);
 
@@ -147,12 +149,15 @@ app.use(async (req, res, next) => {
       req.user.readOnlyBranchAccess = req.method==='GET';
       for(const values of [req.query,req.body])if(values&&typeof values==='object'&&Object.hasOwn(values,'empresa_id')&&String(values.empresa_id).toLowerCase()!==req.user.empresa_id.toLowerCase())return res.status(403).json({error:'Empresa distinta de la sesión.',code:'TENANT_MISMATCH'});
       if (req.path === '/api/bootstrap') return next();
+      if(req.method==='GET'&&req.path==='/api/auth/permissions')return res.json({permissions:await effectivePermissions(pool,req.user)});
       if(req.path.startsWith('/api/export/')){const supplied=req.body?.sucursal_id??req.query.sucursal_id;if(supplied)await ensureBranchAccess(pool,req.user,supplied);}
       const rule = routePermission(req.method, req.path, req.body);
       const permissions = await effectivePermissions(pool, req.user);
       if (!rule || !permissions[rule[0]]?.ver || !permissions[rule[0]]?.[rule[1]]) {
         return res.status(403).json({ error: 'No tienes permiso para esta operación.' });
       }
+      authorizedOperations.set(req.user,rule);
+      req.authorizedOperation=rule;
       if (req.path === '/api/dashboard' || req.path.startsWith('/api/dashboard/') || req.path.startsWith('/api/reports/')) {
         const branch = req.query.sucursal_id;
         if (branch !== undefined && (typeof branch !== 'string' || (branch !== '' && !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(branch)))) {
@@ -642,9 +647,10 @@ app.get('/api/dashboard', requireAuth, async (req, res) => {
 
 
 // ===== v5: Maestros administrables e inventario avanzado =====
-async function requireAnyBranchRole(db,user,allowed=['Administrador']) {
+async function requireAnyBranchRole(db,user,allowed=['Administrador'],allowDelegation=true) {
   const q=await db.query(`select r.nombre from usuario_sucursal us join roles r on r.id=us.rol_id join sucursales s on s.id=us.sucursal_id where us.usuario_id=$1 and s.empresa_id=$2 and s.activo=true`,[user.sub,user.empresa_id]);
   const roles=q.rows.map(x=>x.nombre);
+  if(allowDelegation&&roles.length&&delegatedModules.has(authorizedOperations.get(user)?.[0]))return;
   if(!roles.some(r=>allowed.includes(r))){const e=new Error('No tienes permisos para esta operación.');e.status=403;throw e;}
 }
 
@@ -1139,7 +1145,7 @@ app.patch('/api/purchase-orders/:id/status', requireAuth, async (req,res)=>{
 
 
 // ===== BoticaWeb 1.0: multi-sucursal, usuarios, reportes y operación final =====
-async function requireAdmin(db,user){ return requireAnyBranchRole(db,user,['Administrador']); }
+async function requireAdmin(db,user){ return requireAnyBranchRole(db,user,['Administrador'],false); }
 
 app.get('/api/admin/branches', requireAuth, async (req,res)=>{
   const {rows}=await pool.query(`select s.id,s.codigo,s.nombre,s.direccion,s.telefono,s.activo,
@@ -1486,7 +1492,7 @@ async function recordInventoryDiff(c,user,branchId,productId,lotId,diff,cost,rea
   else await c.query(`insert into movimientos_inventario(empresa_id,sucursal_id,producto_id,lote_id,tipo,cantidad,costo_unitario,referencia_tipo,referencia_id,usuario_id) values($1,$2,$3,$4,'IMPORTACION_EXCEL',$5,$6,'IMPORTACION_EXCEL',$7,$8)`,[user.empresa_id,branchId,productId,lotId,diff,cost||0,a.rows[0].id,user.sub]);
 }
 
-registerInitialInventory(app,{pool,tx,auth:requireAuth,branchAccess:ensureBranchAccess,catalog:getOrCreateCatalog,audit:writeAudit});
+registerInitialInventory(app,{pool,tx,auth:requireAuth,branchAccess:ensureBranchAccess,catalog:getOrCreateCatalog,audit:writeAudit,hasInventoryPermission:user=>authorizedOperations.get(user)?.[0]==='inventory'});
 
 // ===== v22: Actualización EXCLUSIVA de stock desde Excel =====
 // No crea productos, no cambia precios/costos/maestros y no modifica ventas históricas.

@@ -28,6 +28,9 @@ export async function guardFinancial(db,req,res){
  const doc=/^\/api\/reports\/(purchases|cancellations)\/([a-f0-9-]{36})\/detail$/.exec(p);if(doc){const table=doc[1]==='purchases'?'compras':'devoluciones_venta';const q=await db.query('select sucursal_id from '+table+' where id=$1 and empresa_id=$2',[doc[2],req.user.empresa_id]);branch=q.rows[0]?.sucursal_id||null;}
  req.financialAccess=await financialAccess(db,req.user,branch);
  const access=req.financialAccess;
+ // The module permission has already been checked by the API middleware.
+ // Delegated purchasing includes its operational costs, not profit or global reporting.
+ if(['purchases','replenishment'].includes(req.authorizedOperation?.[0]))access.cost=true;
  if(p.startsWith('/api/export/')&&!access.profit){req.body=sanitizeFinancialExport(req.body||{},access);const sections=req.body.blocks||[req.body];if(!sections.some(b=>Array.isArray(b.headers)&&b.headers.length)){res.status(403).json({error:'No hay columnas autorizadas para exportar.',code:'FINANCIAL_EXPORT_DENIED'});return false;}}
  if(p==='/api/inventory/export.xlsx'&&!access.cost){res.status(403).json({error:'Utilice la exportación autorizada del reporte de inventario.',code:'FINANCIAL_EXPORT_DENIED'});return false;}
  if(!access.cost&&(/^\/api\/reports\/(audit|purchases\/|center\/(purchases|suppliers|management))/.test(p)||p.startsWith('/api/purchases')||p.startsWith('/api/purchase-orders')||/^\/api\/purchasing\/(supplier-history|cost-history)/.test(p))){res.status(403).json({error:'No tiene autorización para este reporte financiero.',code:'FINANCIAL_REPORT_DENIED'});return false;}

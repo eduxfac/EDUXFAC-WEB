@@ -196,9 +196,9 @@ export async function applyInitialInventory(db,user,branch,parsed,{catalog,audit
  await db.query('insert into inventario_inicial_importaciones(id,empresa_id,sucursal_id,usuario_id,archivo_nombre,archivo_sha256,contenido_sha256,filas,productos,lotes,unidades,valor,resumen,detalle) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14::jsonb)',[batch,user.empresa_id,branch,user.sub,String(fileName).slice(0,240),parsed.sha256,parsed.semantic_sha256,summary.filas,summary.productos,lots,summary.stock_total,summary.valor_total,JSON.stringify(result),JSON.stringify(parsed.rows)]);
  return result;
 }
-export function registerInitialInventory(app,{pool,tx,auth,branchAccess,catalog,audit}){
+export function registerInitialInventory(app,{pool,tx,auth,branchAccess,catalog,audit,hasInventoryPermission=()=>false}){
  app.get('/api/import/inventory/history',auth,async(req,res)=>{try{await permission(pool,req.user,req.query.sucursal_id);res.json((await pool.query('select id,created_at,usuario_id,archivo_nombre,archivo_sha256,contenido_sha256,resumen from inventario_inicial_importaciones where empresa_id=$1 and sucursal_id=$2 order by created_at desc,id desc limit 100',[req.user.empresa_id,req.query.sucursal_id])).rows);}catch(e){res.status(e.status||400).json({error:e.message});}});
- const permission=async(db,user,branch)=>{const access=await branchAccess(db,user,branch);if(!['Administrador','Almacén'].includes(access.rol)){const e=new Error('Solo Administrador o Almacén de esta sucursal puede importar.');e.status=403;throw e;}};
+ const permission=async(db,user,branch)=>{const access=await branchAccess(db,user,branch);if(hasInventoryPermission(user))return;if(!['Administrador','Almacén'].includes(access.rol)){const e=new Error('Solo Administrador o Almacén de esta sucursal puede importar.');e.status=403;throw e;}};
  app.get('/api/import/inventory/template',auth,async(req,res)=>{try{
   await permission(pool,req.user,req.query.sucursal_id);
   res.setHeader('Content-Type','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');res.setHeader('Content-Disposition','attachment; filename="Plantilla_Inventario_Inicial_EDUXFAC.xlsx"');res.send(await initialTemplate());
