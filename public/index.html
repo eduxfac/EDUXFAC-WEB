@@ -657,7 +657,7 @@ input[type="search"]:focus,input[placeholder*="Buscar" i]:focus,input[placeholde
   </div>
   <div id="expiryBanner" class="expiry-alert hidden"><div><strong id="expiryBannerTitle">Alerta de vencimientos</strong><div id="expiryBannerText" class="muted"></div></div><button id="expiryBannerOpen" class="btn secondary" data-dash-go="alerts" data-alert-view="expiry">Revisar vencimientos</button></div>
   <div class="dash-main-grid">
-    <article class="dash-card dash-chart-card"><div class="dash-card-head"><div><span class="dash-card-icon">⌁</span><b>Ventas de los últimos 7 días</b><small>Importes reales por día</small></div><span class="dash-chip">7 días</span></div><div id="dashWeekChart" class="dash-chart"></div></article>
+    <article class="dash-card dash-chart-card"><div class="dash-card-head"><div><span class="dash-card-icon">⌁</span><b>Ventas de los últimos 15 días</b><small>Importes reales por día</small></div><span class="dash-chip">15 días</span></div><div id="dashWeekChart" class="dash-chart"></div></article>
     <article class="dash-card dash-cash-card"><div class="dash-card-head"><div><span class="dash-card-icon">▰</span><b>Estado de caja</b><small>Sesión del usuario conectado</small></div><span id="dashCashState" class="dash-chip neutral">Consultando</span></div><div class="dash-cash-grid"><div><small>Apertura</small><b id="dashCashOpening">S/ 0.00</b></div><div><small>Movimiento neto</small><b id="dashCashMoves">S/ 0.00</b></div><div class="wide"><small>Saldo esperado</small><strong id="dashCashExpected">S/ 0.00</strong></div></div><button class="dash-outline-action" data-dash-go="cash">Ir a caja <span>→</span></button></article>
   </div>
   <article id="dashMonthlyCard" class="dash-card monthly-sales-card" aria-labelledby="dashMonthlyTitle">
@@ -1115,7 +1115,7 @@ let dashboardLoading=false;
 function resetDashboardLoadingState(){
   if($('dashPayments')) $('dashPayments').innerHTML='<div class="dash-empty">Sin ventas registradas hoy.</div>';
   if($('dashRecent')) $('dashRecent').innerHTML='<div class="dash-empty">Sin ventas recientes.</div>';
-  if($('dashWeekChart')) $('dashWeekChart').innerHTML='<div class="dash-empty">Sin ventas en los últimos 7 días.</div>';
+  if($('dashWeekChart')) $('dashWeekChart').innerHTML='<div class="dash-empty">Sin ventas en los últimos 15 días.</div>';
   if($('dashExpiryList')) $('dashExpiryList').innerHTML='<div class="dash-empty">Consultando vencimientos...</div>';
   if($('dashLowStockList')) $('dashLowStockList').innerHTML='<div class="dash-empty">Consultando existencias...</div>';
 }
@@ -1134,7 +1134,7 @@ async function loadDashboard(){
     if($('dashBranchName'))$('dashBranchName').textContent=$('branch')?.selectedOptions?.[0]?.textContent||'Sucursal actual';
     const banner=$('expiryBanner'),expired=Number(d.vencidos||0),critical=Number(d.vencer_30||0);
     if(banner){if(expired>0||critical>0){banner.classList.remove('hidden');banner.classList.toggle('danger',expired>0);$('expiryBannerTitle').textContent=expired>0?'⚠ Hay productos vencidos':'⚠ Productos próximos a vencer';$('expiryBannerText').textContent=(expired?expired+' lote(s) vencido(s). ':'')+(critical?critical+' lote(s) vencen en los próximos 30 días.':'');}else banner.classList.add('hidden')}
-    try{renderDashWeek(Array.isArray(d.semana)?d.semana:[])}catch(e){console.error('Dashboard semana:',e);if($('dashWeekChart'))$('dashWeekChart').innerHTML='<div class="dash-empty">Sin ventas en los últimos 7 días.</div>'}
+    try{renderDashWeek(Array.isArray(d.semana)?d.semana:[])}catch(e){console.error('Dashboard semana:',e);if($('dashWeekChart'))$('dashWeekChart').innerHTML='<div class="dash-empty">Sin ventas en los últimos 15 días.</div>'}
     try{renderDashPayments(Array.isArray(d.pagos)?d.pagos:[])}catch(e){console.error('Dashboard pagos:',e);if($('dashPayments'))$('dashPayments').innerHTML='<div class="dash-empty">Sin ventas registradas hoy.</div>'}
     try{renderDashRecent(Array.isArray(d.ultimas_ventas)?d.ultimas_ventas:[])}catch(e){console.error('Dashboard recientes:',e);if($('dashRecent'))$('dashRecent').innerHTML='<div class="dash-empty">Sin ventas recientes.</div>'}
     const nowParts=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Lima',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
@@ -1160,7 +1160,7 @@ async function loadDashboard(){
     console.error('Dashboard:',e);
     if($('dSales'))$('dSales').textContent='S/ 0.00'; if($('dTickets'))$('dTickets').textContent='0';
     if($('dashPayments'))$('dashPayments').innerHTML='<div class="dash-empty">Sin ventas registradas hoy.</div>';
-    if($('dashWeekChart'))$('dashWeekChart').innerHTML='<div class="dash-empty">Sin ventas en los últimos 7 días.</div>';
+    if($('dashWeekChart'))$('dashWeekChart').innerHTML='<div class="dash-empty">Sin ventas en los últimos 15 días.</div>';
     if($('dashExpiryList'))$('dashExpiryList').innerHTML='<div class="dash-empty">Datos no disponibles.</div>';
     if($('dashLowStockList'))$('dashLowStockList').innerHTML='<div class="dash-empty">Datos no disponibles.</div>';
     if($('dashRecent'))$('dashRecent').innerHTML='<div class="dash-empty">Sin ventas recientes.</div>';
