@@ -32,3 +32,10 @@
 #dashboard .edux-sales-curve .curve-dot:focus-visible{outline:2px solid #174bd5;outline-offset:0;background:#1689f515}
 #dashboard .edux-sales-curve .curve-plot svg{overflow:visible}
 #dashboard .edux-sales-curve .sales-combo-bar{opacity:.93}
+
+/* Report headings: compact uppercase titles, without decorative descriptions. */
+#reports#reports#reports#reports#reports .report-center-head>div:first-child>.muted,#reports#reports#reports#reports#reports .report-center-tab small{display:none!important}
+#reports#reports#reports#reports#reports h2,#reports#reports#reports#reports#reports h3,#reports#reports#reports#reports#reports .report-center-tab b,#reports#reports#reports#reports#reports .report-center-kpis .kpi>span{ text-transform:uppercase;font-weight:850!important;letter-spacing:.2px}
+#reports#reports#reports#reports#reports .report-center-tab{min-height:62px;padding-top:14px!important;padding-bottom:14px!important;display:flex;align-items:center}
+#reports#reports#reports#reports#reports .report-center-tab:before{top:50%;transform:translateY(-50%)}
+#reports#reports#reports#reports#reports .report-center-tab b{font-size:12px;line-height:1.5}
