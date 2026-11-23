@@ -1155,7 +1155,15 @@ app.get('/api/admin/branches', requireAuth, async (req,res)=>{
 });
 app.post('/api/admin/branches', requireAuth, async (req,res)=>{
   try{await requireAdmin(pool,req.user);const b=req.body||{};if(!b.codigo||!b.nombre)throw new Error('Código y nombre son obligatorios.');
-    const result=await tx(async c=>{const q=await c.query(`insert into sucursales(empresa_id,codigo,nombre,direccion,telefono) values($1,$2,$3,$4,$5) returning *`,[req.user.empresa_id,String(b.codigo).trim(),String(b.nombre).trim(),b.direccion||null,b.telefono||null]);await c.query(`insert into cajas(sucursal_id,nombre) values($1,'Caja 1')`,[q.rows[0].id]);await writeAudit(c,req.user,'CREAR_SUCURSAL','sucursales',q.rows[0].id,{codigo:b.codigo,nombre:b.nombre});return q.rows[0];});res.status(201).json(result);
+    const result=await tx(async c=>{
+      const q=await c.query(`insert into sucursales(empresa_id,codigo,nombre,direccion,telefono) values($1,$2,$3,$4,$5) returning *`,[req.user.empresa_id,String(b.codigo).trim(),String(b.nombre).trim(),b.direccion||null,b.telefono||null]);
+      await c.query(`insert into usuario_sucursal(usuario_id,sucursal_id,rol_id) select $1,$2,id from roles where nombre='Administrador'`,[req.user.sub,q.rows[0].id]);
+      // Refresh transaction-local RLS scope from persisted assignments. The auth
+      // connection cannot see this new assignment until the transaction commits.
+      await c.query(`select set_config('app.sucursal_ids',coalesce(string_agg(s.id::text,','),''),true) from usuario_sucursal us join sucursales s on s.id=us.sucursal_id where us.usuario_id=$1 and s.empresa_id=$2 and s.activo=true`,[req.user.sub,req.user.empresa_id]);
+      await c.query(`insert into cajas(sucursal_id,nombre) values($1,'Caja 1')`,[q.rows[0].id]);
+      await writeAudit(c,req.user,'CREAR_SUCURSAL','sucursales',q.rows[0].id,{codigo:b.codigo,nombre:b.nombre});return q.rows[0];
+    });res.status(201).json(result);
   }catch(error){res.status(error.status||400).json({error:error.message});}
 });
 installBranchAdmin(app,{pool,tx,requireAuth,requireAdmin,ensureBranchAccess,writeAudit});
