@@ -586,7 +586,11 @@ app.post('/api/sales/:id/return', requireAuth, async (req,res)=>{
 
 app.get('/api/sales/:id/receipt', requireAuth, async (req,res)=>{
   await ensureReturnsSchema(pool);
-  const h=await pool.query(`select v.id,v.serie,v.numero,v.tipo_comprobante,v.subtotal,v.descuento,v.total,v.estado,v.created_at,coalesce(c.nombres,'Público en general') cliente,coalesce(c.nro_doc,'') nro_doc,
+  const detailOnly=req.query.view==='detail';
+  const h=await pool.query(detailOnly?`select v.id,v.serie,v.numero,v.tipo_comprobante,v.subtotal,v.descuento,v.total,v.estado,v.created_at,
+    coalesce(c.nombres,'Público en general') cliente,coalesce(c.nro_doc,'') nro_doc,v.sucursal_id,u.nombre vendedor
+    from ventas v join usuarios u on u.id=v.usuario_id left join clientes c on c.id=v.cliente_id
+    where v.id=$1 and v.empresa_id=$2`:`select v.id,v.serie,v.numero,v.tipo_comprobante,v.subtotal,v.descuento,v.total,v.estado,v.created_at,coalesce(c.nombres,'Público en general') cliente,coalesce(c.nro_doc,'') nro_doc,
       s.id sucursal_id,s.nombre sucursal,s.direccion,s.telefono sucursal_telefono,u.nombre vendedor,e.ruc,e.razon_social,e.nombre_comercial,e.telefono,e.direccion_fiscal,e.logo_data,e.web,e.slogan,e.departamento,e.provincia,e.distrito,
       coalesce(ec.mensaje_ticket,'Gracias por su compra') mensaje_ticket,coalesce(ec.impresion_ancho_mm,80) impresion_ancho_mm,coalesce(eca.documentos_config,'{}'::jsonb) documentos_config
     from ventas v join sucursales s on s.id=v.sucursal_id join usuarios u on u.id=v.usuario_id join empresas e on e.id=v.empresa_id left join clientes c on c.id=v.cliente_id
@@ -613,7 +617,7 @@ app.get('/api/sales/:id/receipt', requireAuth, async (req,res)=>{
   const rm=new Map(rr.rows.map(x=>[x.venta_detalle_id,Number(x.cantidad)]));
   d.rows.forEach(x=>{x.cantidad_devuelta=rm.get(x.venta_detalle_id)||0;x.cantidad_devolvible=Math.max(0,Number(x.cantidad)-x.cantidad_devuelta)});
   let sunat=null;
-  if(process.env.CPE_API_URL&&process.env.NODE_ENV!=='test')sunat=(await pool.query('SELECT id,documento_id,estado,error FROM sunat_outbox WHERE empresa_id=$1 AND venta_id=$2',[req.user.empresa_id,req.params.id])).rows[0]||null;
+  if(!detailOnly&&process.env.CPE_API_URL&&process.env.NODE_ENV!=='test')sunat=(await pool.query('SELECT id,documento_id,estado,error FROM sunat_outbox WHERE empresa_id=$1 AND venta_id=$2',[req.user.empresa_id,req.params.id])).rows[0]||null;
   res.json({venta:h.rows[0],items:d.rows,pagos:p.rows,sunat});
 });
 

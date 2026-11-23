@@ -1731,11 +1731,21 @@ async function loadRecentSales(page=1,refresh=true){
   $('recentSalesPrev').disabled=d.page<=1;$('recentSalesNext').disabled=d.page>=d.pages;
  }catch(e){if(request!==recentSalesRequest)return;recentSalesData={rows:[],details:[]};$('recentSaleRows').innerHTML='<tr><td colspan="4">No se pudieron cargar las ventas. Pulsa Actualizar.</td></tr>';$('recentSalesCount').textContent='';$('recentSalesPage').textContent='Página no disponible';}
 }
+let recentSaleDetailVersion=0;
+const recentSaleDetailPending=new Map();
+function closeRecentSaleDetail(){++recentSaleDetailVersion;$('saleDetailModal').classList.add('hidden');$('saleDetailBody').setAttribute('aria-busy','false')}
 async function openRecentSaleDetail(id){
   const sale=recentSalesData.rows.find(x=>recentSaleKey(x)===String(id));
   if(!sale)return await showAppNotice('No se encontró la venta seleccionada.');
+  const version=++recentSaleDetailVersion,branch=state.branchId,token=state.token,key=token+':'+branch+':'+id;
+  $('saleDetailTitle').textContent='Detalle de venta';$('saleDetailSubtitle').textContent='';
+  $('saleDetailBody').innerHTML='<div role="status" style="padding:28px;text-align:center;color:#24558a;font-weight:700">Cargando detalle de venta...</div>';
+  $('saleDetailBody').setAttribute('aria-busy','true');$('saleDetailModal').classList.remove('hidden');
   try{
-    const receipt=await api('/api/sales/'+encodeURIComponent(id)+'/receipt');
+    if(!recentSaleDetailPending.has(key))recentSaleDetailPending.set(key,api('/api/sales/'+encodeURIComponent(id)+'/receipt?view=detail').finally(()=>recentSaleDetailPending.delete(key)));
+    const receipt=await recentSaleDetailPending.get(key);
+    if(version!==recentSaleDetailVersion)return;
+    if(branch!==state.branchId||token!==state.token){closeRecentSaleDetail();return}
     const v=receipt.venta||{};
     const items=receipt.items||[];
     $('saleDetailTitle').textContent='Detalle de venta · '+([v.serie,v.numero].filter(Boolean).join('-')||sale.numero||String(id).slice(0,8));
@@ -1749,13 +1759,15 @@ async function openRecentSaleDetail(id){
     if(printBtn)printBtn.onclick=()=>{ $('saleDetailModal').classList.add('hidden'); showReceipt(id); };
     const btn=$('recentReturnSaleBtn');
     if(btn)btn.onclick=()=>{ $('saleDetailModal').classList.add('hidden'); openReturnSale(id); };
-  }catch(e){await showAppNotice('No se pudo abrir el detalle completo: '+e.message)}
+  }catch(e){if(version===recentSaleDetailVersion&&branch===state.branchId&&token===state.token)$('saleDetailBody').innerHTML='<div role="alert" style="padding:24px">No se pudo cargar el detalle: '+esc(e.message)+'</div>'}
+  finally{if(version===recentSaleDetailVersion)$('saleDetailBody').setAttribute('aria-busy','false')}
 }
 
 $('recentSalesRefresh').onclick=()=>loadRecentSales();$('recentSalesPrev').onclick=()=>loadRecentSales(recentSalesPage-1,false);$('recentSalesNext').onclick=()=>loadRecentSales(recentSalesPage+1,false);
 if($('recentSaleRows'))$('recentSaleRows').onclick=e=>{const b=e.target.closest('[data-sale-detail]');if(b)openRecentSaleDetail(b.dataset.saleDetail)};
-if($('saleDetailClose'))$('saleDetailClose').onclick=()=>$('saleDetailModal').classList.add('hidden');
-if($('saleDetailModal'))$('saleDetailModal').onclick=e=>{if(e.target===$('saleDetailModal'))$('saleDetailModal').classList.add('hidden')};
+if($('saleDetailClose'))$('saleDetailClose').onclick=closeRecentSaleDetail;
+$('branch').addEventListener('change',closeRecentSaleDetail);
+if($('saleDetailModal'))$('saleDetailModal').onclick=e=>{if(e.target===$('saleDetailModal'))closeRecentSaleDetail()};
 function updateChrome(){if(typeof saleRecovery!=='undefined')queueMicrotask(renderSaleRecovery);const branch=$('branch')?.selectedOptions?.[0]?.textContent||'—';if($('sideBranch'))$('sideBranch').textContent=branch;if($('topUser'))$('topUser').textContent=state.user?.nombre||'Usuario';if($('topRole'))$('topRole').textContent=state.branches.find(x=>x.id===state.branchId)?.rol||'EDUXFAC';const now=new Date();if($('sideDate'))$('sideDate').textContent=now.toLocaleDateString('es-PE',{timeZone:'America/Lima',weekday:'long',day:'numeric',month:'long'});if($('sideClock'))$('sideClock').textContent=now.toLocaleTimeString('es-PE',{timeZone:'America/Lima',hour:'2-digit',minute:'2-digit'});if($('sideCash'))$('sideCash').textContent=state.cash?'● Caja abierta':'● Caja cerrada'}
 function initReportDates(){const t=peruISODate();$('repTo').value=t;$('repFrom').value=t}
 const webRouter=window.createWebRouter({show:activateModule,isReady:()=>!!state.user&&!$('app').classList.contains('hidden'),can:module=>state.permissions?.[module==='sunat'?'sales':module]?.ver!==false,denied:showAccessDeniedNotice});
