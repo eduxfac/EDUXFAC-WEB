@@ -52,3 +52,9 @@
  .sn-period>div+div { border-left:0; border-top:1px solid #e1e8f0; padding:12px 0 0; }
 }
 @media(prefers-reduced-motion:reduce) { .sn-continue { transition:none; } }
+.sn-payments{padding:17px 18px;margin:0 0 20px;border:1px solid #dfe9ef;border-radius:15px;background:#f8fbfc}
+.sn-payment-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}.sn-payment-title b{font-size:12px;color:#183853}.sn-payment-title>span{font-size:8px;letter-spacing:1px;color:#77919d}
+.sn-payment-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0}.sn-payment-row+.sn-payment-row{border-top:1px solid #e5edf2}.sn-method{font-size:11px;font-weight:650;color:#685090}.sn-bcp{color:#194b92}.sn-account{font-size:13px;font-weight:650;letter-spacing:.5px;font-variant-numeric:tabular-nums;user-select:all;color:#213c53}
+.sn-owner{margin:9px 0 14px;font-size:10px;line-height:1.6;color:#64798b}.sn-owner b{font-weight:600;color:#41596f}
+.sn-whatsapp{display:flex;align-items:center;justify-content:center;gap:9px;min-height:43px;padding:10px 12px;border:1px solid #c8e7d8;border-radius:10px;background:#eaf8f0;color:#176343!important;text-decoration:none!important;font-size:12px;font-weight:700;font-family:inherit;transition:background .18s}.sn-whatsapp svg{width:20px;height:20px;flex-shrink:0}.sn-whatsapp>span:last-child{margin-left:auto;font-size:16px}.sn-whatsapp>span:nth-child(2){margin-right:auto}.sn-whatsapp:hover{background:#dcf3e6}.sn-whatsapp:focus-visible{outline:2px solid #248b63;outline-offset:3px}.sn-payments>small{display:block;text-align:center;margin-top:10px;font-size:9px;line-height:1.6;color:#798b99}
+@media(max-width:480px){.sn-payments{padding:14px}.sn-account{font-size:12px;letter-spacing:.2px}.sn-whatsapp{font-size:11px}.sn-owner{font-size:9px}}
