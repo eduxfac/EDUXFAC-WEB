@@ -50,7 +50,7 @@
  const sales=$('sales');sales.classList.add('sale-entry-screen');
  const workspace=sales.querySelector('.sale-workspace'),client=sales.querySelector('.sale-client-card');
  const left=sales.querySelector('.sale-left');
- left.append(client);
+ left.insertBefore(client,$('saleProductSearchPanel'));
  const clientLine=sales.querySelector('.sale-client-line');
  const clear=document.createElement('button');clear.type='button';clear.className='btn secondary';clear.setAttribute('aria-label','Quitar cliente seleccionado');clear.textContent='×';clear.onclick=()=>clearSaleClient();clientLine.append(clear);
  const flow=sales.querySelector('.sale-doc-flow');
