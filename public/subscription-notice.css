@@ -58,3 +58,15 @@
 .sn-owner{margin:9px 0 14px;font-size:10px;line-height:1.6;color:#64798b}.sn-owner b{font-weight:600;color:#41596f}
 .sn-whatsapp{display:flex;align-items:center;justify-content:center;gap:9px;min-height:43px;padding:10px 12px;border:1px solid #c8e7d8;border-radius:10px;background:#eaf8f0;color:#176343!important;text-decoration:none!important;font-size:12px;font-weight:700;font-family:inherit;transition:background .18s}.sn-whatsapp svg{width:20px;height:20px;flex-shrink:0}.sn-whatsapp>span:last-child{margin-left:auto;font-size:16px}.sn-whatsapp>span:nth-child(2){margin-right:auto}.sn-whatsapp:hover{background:#dcf3e6}.sn-whatsapp:focus-visible{outline:2px solid #248b63;outline-offset:3px}.sn-payments>small{display:block;text-align:center;margin-top:10px;font-size:9px;line-height:1.6;color:#798b99}
 @media(max-width:480px){.sn-payments{padding:14px}.sn-account{font-size:12px;letter-spacing:.2px}.sn-whatsapp{font-size:11px}.sn-owner{font-size:9px}}
+/* Clearer type and local payment brand assets. */
+.subscription-notice h2{font-weight:800}
+.subscription-notice #subscriptionNoticeDescription{font-size:14px;font-weight:600;color:#455d76}
+.sn-brand b,.sn-tag{font-weight:800}.sn-brand>span:last-child{font-weight:700}
+.sn-period span{font-size:11px;font-weight:650;color:#536b83}.sn-period strong{font-size:13px;font-weight:800}
+.sn-reassurance p{font-size:12px;font-weight:650;color:#276451}
+.sn-payment-title b{font-size:14px;font-weight:800}.sn-payment-title>span{font-weight:700}
+.sn-method{display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:750}.sn-method img{display:block;object-fit:contain;flex-shrink:0}.sn-logo-bcp{width:60px;height:22px}.sn-wallets{gap:8px}.sn-wallets img{width:36px;height:36px;border-radius:9px}.sn-wallets>span{color:#718099;font-size:13px}
+.sn-account{font-size:15px;font-weight:800;letter-spacing:.4px}.sn-owner{font-size:11px;font-weight:600;color:#536a7f}.sn-owner b{font-weight:800;color:#263f58}
+.sn-whatsapp{font-size:13px;font-weight:800}.sn-whatsapp img{width:23px;height:23px;flex-shrink:0}.sn-payments>small{font-size:10px;font-weight:600;color:#536b7f}
+.sn-continue{font-size:14px;font-weight:800}.sn-footer{font-size:10px;font-weight:600;color:#63788e}
+@media(max-width:480px){.sn-account{font-size:14px;letter-spacing:0}.sn-method{gap:6px;font-size:11px}.sn-wallets{gap:6px}.sn-wallets img{width:32px;height:32px}.sn-logo-bcp{width:52px}.sn-owner{font-size:10px}.sn-whatsapp{font-size:12px}}

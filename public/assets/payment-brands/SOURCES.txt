@@ -1,0 +1,10 @@
+﻿Asset sources
+
+BCP: inline bank logo from https://www.viabcp.com/
+Yape: https://www.yape.com.pe/images/components/component-25/logo.png
+Plin: https://plin.pe/wp-content/themes/plin/imgs/logo.png
+WhatsApp icon: https://github.com/twbs/icons/blob/main/icons/whatsapp.svg
+Bootstrap Icons is licensed under MIT; see LICENSE-bootstrap-icons.txt.
+The brand names and marks remain the property of their respective owners.
+Retrieved 2026-11-23.
+WhatsApp glyph recolored green for the contact button.
