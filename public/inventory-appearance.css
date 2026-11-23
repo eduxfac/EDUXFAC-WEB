@@ -59,3 +59,28 @@
 #inventory#inventory#inventory#inventory#inventory .inv-projected b{color:#09ad8a}
 @media(max-width:1150px){#inventory#inventory#inventory#inventory#inventory .inv293-kpis{grid-template-columns:repeat(4,minmax(0,1fr))!important}#inventory#inventory#inventory#inventory#inventory .inv293-kpi.inv293-purple{grid-column:1/-1;margin:0 16px;display:grid;grid-template-columns:1fr}#inventory#inventory#inventory#inventory#inventory .inv293-purple>div{display:grid;grid-template-columns:1fr 1fr}#inventory#inventory#inventory#inventory#inventory .inv293-purple>div>small,#inventory#inventory#inventory#inventory#inventory .inv293-purple>div>b,#inventory#inventory#inventory#inventory#inventory .inv293-purple>div>em{grid-column:1}#inventory#inventory#inventory#inventory#inventory .inv-projected{grid-column:2;grid-row:1/4;margin:0;padding:0 0 0 20px;border-top:0;border-left:1px solid #e2e5f3}}
 @media(max-width:600px){#inventory#inventory#inventory#inventory#inventory .inv293-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}#inventory#inventory#inventory#inventory#inventory .inv293-purple>div{display:block}#inventory#inventory#inventory#inventory#inventory .inv-projected{margin-top:13px;padding:13px 0 0;border-left:0;border-top:1px solid #e2e5f3}}
+
+/* Violet and teal appearance belongs to Inventory. */
+#inventory#inventory#inventory#inventory#inventory{--ia-border:#e3daf4;--ia-blue:#8551ed}
+#inventory#inventory#inventory#inventory#inventory>.top:first-child{padding:20px 22px!important;margin-bottom:16px!important;border:1px solid #e1d4fc!important;border-radius:16px!important;background:linear-gradient(120deg,#f3edff,#f2fffb)!important}
+#inventory#inventory#inventory#inventory#inventory>.top:first-child h2{color:#7045b7!important}
+#inventory#inventory#inventory#inventory#inventory>.top:first-child [data-excel-module]{background:#8551ed!important;border-color:#8551ed!important}
+#inventory#inventory#inventory#inventory#inventory .inv293-excel-card,#inventory#inventory#inventory#inventory#inventory .inv293-current,#inventory#inventory#inventory#inventory#inventory>.card{background:linear-gradient(125deg,#faf7ff,#fff 55%,#f5fffc)!important;border-color:#e1d5f6!important;box-shadow:0 4px 18px #7553ae07!important}
+#inventory#inventory#inventory#inventory#inventory .inv293-excel-card h3,#inventory#inventory#inventory#inventory#inventory .inv293-current h3,#inventory#inventory#inventory#inventory#inventory>.card h3{color:#7045b7!important}
+#inventory#inventory#inventory#inventory#inventory .inv293-excel-icon{background:#e8f9f1;color:#009e7f}
+#inventory#inventory#inventory#inventory#inventory .inv293-blue-x{background:#ede4ff;color:#8551ed}
+#inventory#inventory#inventory#inventory#inventory .inv293-excel-card>.grid>.primary{background:linear-gradient(105deg,#8551ed,#7444d3)!important;border-color:#8050d9!important}
+#inventory#inventory#inventory#inventory#inventory .inv293-stock-card>.grid>.primary{background:linear-gradient(105deg,#09b590,#009f84)!important;border-color:#00a88a!important}
+#inventory#inventory#inventory#inventory#inventory .inv293-excel-card>.top>.btn,#inventory#inventory#inventory#inventory#inventory>.top:first-child .btn{border-color:#dacbed!important;color:#7351a5!important}
+#inventory#inventory#inventory#inventory#inventory>.top:first-child [data-excel-module]{color:#fff!important}
+#inventory#inventory#inventory#inventory#inventory .inv293-excel-card input[type=file]{background:#f8f4ff!important;border-color:#d8c7ee!important}
+#inventory#inventory#inventory#inventory#inventory .inv293-excel-card input[type=file]::file-selector-button{color:#7752ac;border-color:#dfd0f0}
+#inventory#inventory#inventory#inventory#inventory .inv293-current #inventorySearch{background:#f3fffb!important;border-color:#a9e2d4!important}
+#inventory#inventory#inventory#inventory#inventory #inventoryTableWrap thead th,#inventory#inventory#inventory#inventory#inventory>.card thead th{background:#eee7fa!important;color:#77559a!important}
+#inventory#inventory#inventory#inventory#inventory #inventoryTableWrap tbody tr:nth-child(even){background:#faf7ff}
+#inventory#inventory#inventory#inventory#inventory .input:focus,#inventory#inventory#inventory#inventory#inventory .stock-edit:focus{outline:2px solid #b59be6;outline-offset:2px}
+#inventory#inventory#inventory#inventory#inventory .inv293-kpi.inv293-blue b{color:#8551ed}
+#inventory#inventory#inventory#inventory#inventory .inv293-kpi.inv293-green b{color:#00aa89}
+#inventory#inventory#inventory#inventory#inventory .inv293-kpi.inv293-red b{color:#d15179}
+#inventory#inventory#inventory#inventory#inventory>.card .btn.primary{background:#8551ed!important;color:#fff!important}
+#inventory#inventory#inventory#inventory#inventory>.card .btn.secondary{background:#fff!important;color:#7751a9!important;border-color:#dfd0f1!important}
