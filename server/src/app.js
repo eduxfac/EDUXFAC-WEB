@@ -1,3 +1,4 @@
+import {subscriptionNotice} from './subscription-policy.js';
 import {frontendPaths} from './frontend-routes.js';
 import {inventoryReportPage,registerInventoryReportExports} from './inventory-report.js';
 import {salesProductReport} from './sales-product-report.js';
@@ -226,7 +227,7 @@ app.get('/api/bootstrap', requireAuth, async (req, res) => {
   const uq=await pool.query(`select id,empresa_id,nombre,usuario from usuarios where id=$1 and empresa_id=$2`,[req.user.sub,req.user.empresa_id]);
   const permissions=await effectivePermissions(pool,req.user);
   const reportBranches=await pool.query(`select s.id,s.codigo,s.nombre,s.activo from sucursales s join usuario_sucursal us on us.sucursal_id=s.id where s.empresa_id=$1 and us.usuario_id=$2 order by s.nombre`,[req.user.empresa_id,req.user.sub]);
-  res.json({ branches: branches.rows, report_branches:reportBranches.rows, user: uq.rows[0]||null, permissions, report_global: await canReportGlobally(pool,req.user) });
+  res.json({ branches: branches.rows, report_branches:reportBranches.rows, user: uq.rows[0]||null, permissions, subscription_notice:subscriptionNotice(await getCompanyAccess(pool,req.user.empresa_id)), report_global: await canReportGlobally(pool,req.user) });
 });
 
 app.get('/api/products', requireAuth, async (req, res) => {

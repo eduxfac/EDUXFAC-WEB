@@ -1,0 +1,20 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {readFileSync} from 'node:fs';
+import {createFixture,ids,PASSWORD} from './helpers/native-web-cost-fixture.js';
+import {expireDueSubscriptions} from '../server/src/subscription-service.js';
+const DAY=86400000;
+test('Suscripción: login, sesión abierta, aviso y worker respetan 3 días de gracia',async t=>{
+ const f=await createFixture();t.after(()=>f.close());
+ await f.query(readFileSync(new URL('../database/migrations/004_planes_limites.sql',import.meta.url),'utf8'));
+ await f.query(readFileSync(new URL('../database/migrations/005_suscripciones_vigencia.sql',import.meta.url),'utf8'));
+ const now=Date.now(),setEnd=async end=>f.query("update empresa_acceso set estado='ACTIVO',suscripcion_requerida=true,suscripcion_id=coalesce(suscripcion_id,$2),version_suscripcion=1,estado_suscripcion='ACTIVA',fecha_inicio=$3,fecha_vencimiento=$4 where empresa_id=$1",[ids.empresaA,randomUUID(),new Date(now-40*DAY).toISOString(),new Date(end).toISOString()]);
+ const login=()=>f.request('/api/auth/login',{method:'POST',body:{empresa_codigo:'EMPRESA-A',usuario:'admin',password:PASSWORD}});
+ let token;
+ for(const days of [3,2,1])await t.test('aviso previo '+days+' días',async()=>{await setEnd(Date.now()+days*DAY-1000);const r=await login();assert.equal(r.status,200);token=r.data.token;const b=await f.request('/api/bootstrap',{token});assert.equal(b.data.subscription_notice.dias_restantes,days);assert.equal(b.data.subscription_notice.tipo,'POR_VENCER');});
+ const before=(await f.query('select auth_version::text v from empresa_acceso where empresa_id=$1',[ids.empresaA])).rows[0].v;
+ for(const days of [1,2,3])await t.test('gracia día '+days+' no bloquea ni revoca tokens',async()=>{await setEnd(Date.now()-(days-0.9)*DAY);assert.equal((await login()).status,200);const b=await f.request('/api/bootstrap',{token});assert.equal(b.status,200,JSON.stringify(b));assert.equal(b.data.subscription_notice.dias_vencidos,days);assert.equal(b.data.subscription_notice.tipo,'GRACIA');assert.equal((await expireDueSubscriptions()).vencidas,0);assert.equal((await f.query('select auth_version::text v from empresa_acceso where empresa_id=$1',[ids.empresaA])).rows[0].v,before);});
+ await t.test('suspensión manual sigue bloqueando durante gracia',async()=>{await f.query("update empresa_acceso set estado='SUSPENDIDO' where empresa_id=$1",[ids.empresaA]);assert.equal((await login()).status,403);assert.equal((await f.request('/api/bootstrap',{token})).status,403);});
+ await t.test('al terminar gracia, bloquea incluso sin worker y worker registra una sola vez',async()=>{await setEnd(Date.now()-3*DAY-1000);assert.equal((await login()).status,403);assert.equal((await f.request('/api/bootstrap',{token})).status,403);assert.equal((await expireDueSubscriptions()).vencidas,1);assert.equal((await expireDueSubscriptions()).vencidas,0);const r=(await f.query('select estado,estado_suscripcion,auth_version::text v from empresa_acceso where empresa_id=$1',[ids.empresaA])).rows[0];assert.equal(r.estado,'VENCIDO');assert.equal(r.estado_suscripcion,'VENCIDA');assert.equal(BigInt(r.v),BigInt(before)+1n);});
+});

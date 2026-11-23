@@ -1,3 +1,4 @@
+import {SUBSCRIPTION_GRACE_MS} from '../src/subscription-policy.js';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {pool} from '../src/db.js';
@@ -14,7 +15,7 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   if(!process.env.DATABASE_URL)throw Error('Declara explícitamente la base objetivo.');
   const apply=process.argv.includes('--apply');
   if(apply&&process.env.EDUXFAC_SUBSCRIPTION_WORKER_ALLOW_MUTATION!=='yes')throw Error('Se requiere autorización explícita del worker.');
-  const run=async()=>{if(apply)console.log(await expireDueSubscriptions());else console.log({dry_run:true,pendientes:(await pool.query("select count(*)::int n from empresa_acceso where estado_suscripcion='ACTIVA' and fecha_vencimiento<=now()")).rows[0].n});};
+  const run=async()=>{if(apply)console.log(await expireDueSubscriptions());else console.log({dry_run:true,pendientes:(await pool.query("select count(*)::int n from empresa_acceso where estado_suscripcion='ACTIVA' and fecha_vencimiento<=$1",[new Date(Date.now()-SUBSCRIPTION_GRACE_MS).toISOString()])).rows[0].n});};
   try{
    await run();
    if(process.argv.includes('--watch')){

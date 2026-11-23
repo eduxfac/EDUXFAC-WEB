@@ -1,3 +1,4 @@
+import {subscriptionTiming,SUBSCRIPTION_GRACE_MS} from './subscription-policy.js';
 import {createHash} from 'node:crypto';
 import {pool,tx} from './db.js';
 import {accessError,getCompanyAccess} from './company-access.js';
@@ -35,16 +36,16 @@ export async function commercialSubscriptionAction(db,id,action,command,administ
 function expiryCommand(id,date){const hex=createHash('sha256').update('EDUXFAC-EXPIRY|'+id+'|'+new Date(date).toISOString()).digest('hex');return hex.slice(0,8)+'-'+hex.slice(8,12)+'-4'+hex.slice(13,16)+'-8'+hex.slice(17,20)+'-'+hex.slice(20,32);}
 export async function expireDueSubscriptions({now=new Date(),limit=100,onEvent=null}={}){
  const at=new Date(now);if(!Number.isFinite(at.getTime())||!Number.isInteger(limit)||limit<1||limit>1000)throw Error('Parámetros de worker inválidos.');
- const candidates=(await pool.query("select empresa_id,suscripcion_id,fecha_vencimiento from empresa_acceso where estado_suscripcion='ACTIVA' and fecha_vencimiento<=$1 order by fecha_vencimiento limit $2",[at.toISOString(),limit])).rows;
+ const candidates=(await pool.query("select empresa_id,suscripcion_id,fecha_vencimiento from empresa_acceso where estado_suscripcion='ACTIVA' and fecha_vencimiento<=$1 order by fecha_vencimiento limit $2",[new Date(at.getTime()-SUBSCRIPTION_GRACE_MS).toISOString(),limit])).rows;
  let applied=0;
  for(const c of candidates){const started=Date.now();let event=null;await tx(async db=>{
   const command=expiryCommand(c.suscripcion_id,c.fecha_vencimiento);
   await db.query('select pg_advisory_xact_lock(hashtextextended($1,0))',[command]);
   await db.query('select id from empresas where id=$1 for update',[c.empresa_id]);
   const before=await subscriptionSnapshot(db,c.empresa_id,{lock:true});
-  if(before.estado!=='ACTIVA'||Date.parse(before.fecha_vencimiento)>at.getTime()||Date.parse(before.fecha_vencimiento)!==new Date(c.fecha_vencimiento).getTime())return;
+  if(before.estado!=='ACTIVA'||!subscriptionTiming(before.fecha_vencimiento,at)?.bloqueo_por_fecha||Date.parse(before.fecha_vencimiento)!==new Date(c.fecha_vencimiento).getTime())return;
   await db.query("update empresa_acceso set estado_suscripcion='VENCIDA',estado=case when estado='ACTIVO' then 'VENCIDO' else estado end,version_suscripcion=version_suscripcion+1,auth_version=auth_version+1,updated_at=now() where empresa_id=$1",[c.empresa_id]);
-  await subscriptionEvent(db,{before,after:await subscriptionSnapshot(db,c.empresa_id),event:'VENCIMIENTO',command,administrator:'worker-local',reason:'Fin de vigencia comercial.'});applied++;event={command_id:command,empresa_id:c.empresa_id,estado:'APLICADO'};
+  await subscriptionEvent(db,{before,after:await subscriptionSnapshot(db,c.empresa_id),event:'VENCIMIENTO',command,administrator:'worker-local',reason:'Fin de vigencia comercial y de los 3 días de gracia.'});applied++;event={command_id:command,empresa_id:c.empresa_id,estado:'APLICADO'};
  });if(event&&typeof onEvent==='function')try{await onEvent({...event,duracion_ms:Date.now()-started});}catch{/* La auditoría transaccional ya se confirmó; logging externo no cambia la vigencia. */}}
  return {revisadas:candidates.length,vencidas:applied};
 }

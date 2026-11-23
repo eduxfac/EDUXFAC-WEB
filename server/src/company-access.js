@@ -1,3 +1,4 @@
+import {subscriptionTiming} from './subscription-policy.js';
 export const UUID_PATTERN=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 export const accessError=(status,code,message)=>Object.assign(new Error(message),{status,code});
 export async function getCompanyAccess(db,empresaId,{lock=false}={}) {
@@ -18,7 +19,7 @@ export function assertCompanyAccess(access,{authVersion,now=Date.now()}={}) {
  if(access.estado!=='ACTIVO')throw accessError(403,'EMPRESA_'+(messages[access.estado]?access.estado:'PENDIENTE'),access.estado==='VENCIDO'&&access.suscripcion_requerida?'Tu suscripción EDUXFAC WEB ha vencido. Comunícate con soporte para renovar.':messages[access.estado]||messages.PENDIENTE);
  if(access.suscripcion_requerida){if(!access.suscripcion_id||access.estado_suscripcion==='PENDIENTE')throw accessError(403,'SUSCRIPCION_PENDIENTE','Suscripción pendiente de activación.');if(access.estado_suscripcion!=='ACTIVA')throw accessError(403,'SUSCRIPCION_'+access.estado_suscripcion,access.estado_suscripcion==='VENCIDA'?'Tu suscripción EDUXFAC WEB ha vencido. Comunícate con soporte para renovar.':'Suscripción bloqueada administrativamente.');}
  if(access.fecha_inicio && new Date(access.fecha_inicio).getTime()>now)throw accessError(403,'VIGENCIA_PENDIENTE','La vigencia todavía no ha comenzado.');
- if(access.fecha_vencimiento && new Date(access.fecha_vencimiento).getTime()<=now)throw accessError(403,'EMPRESA_VENCIDO',access.suscripcion_requerida?'Tu suscripción EDUXFAC WEB ha vencido. Comunícate con soporte para renovar.':messages.VENCIDO);
+ if(access.fecha_vencimiento && subscriptionTiming(access.fecha_vencimiento,now)?.bloqueo_por_fecha)throw accessError(403,'EMPRESA_VENCIDO',access.suscripcion_requerida?'Tu suscripción EDUXFAC WEB ha vencido. Comunícate con soporte para renovar.':messages.VENCIDO);
  if(!/^\d+$/.test(String(access.auth_version))||BigInt(access.auth_version)<1n)throw accessError(403,'ACCESO_INVALIDO','Configuración de acceso inválida.');
  if(authVersion!==undefined && String(authVersion)!==String(access.auth_version))throw accessError(401,'SESION_REVOCADA','Sesión revocada. Inicia sesión nuevamente.');
  return access;
