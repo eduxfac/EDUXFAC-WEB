@@ -12,7 +12,11 @@ export async function inventorySummary(db, company, branch) {
   return (await db.query(`with inventory as (${stockQuery}) select count(*)::int total,
     count(*) filter(where stock>0)::int con_stock,
     count(*) filter(where stock>0 and stock<=stock_minimo)::int stock_bajo,
-    count(*) filter(where stock<=0)::int sin_stock,coalesce(sum(valor),0) valor
+    count(*) filter(where stock<=0)::int sin_stock,coalesce(sum(valor),0) valor,
+    coalesce(sum(greatest(stock,0)*coalesce((select pp.precio_venta from precios_producto pp
+      where pp.producto_id=inventory.id and (pp.sucursal_id=$2 or pp.sucursal_id is null)
+        and pp.vigente_hasta is null and pp.factor_unidades=1
+      order by pp.sucursal_id nulls last,pp.vigente_desde desc,pp.id desc limit 1),0)),0) valor_venta_proyectado
     from inventory`,[company,branch])).rows[0];
 }
 

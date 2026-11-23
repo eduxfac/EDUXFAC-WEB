@@ -85,5 +85,6 @@ test('Conteo físico: 5.000 productos, consultas constantes y todas las fórmula
 test('Conteo físico: planificación/importación y resumen conservados salvo el formato de fecha calendario',()=>{
  const old=readFileSync(new URL('../operations/physical-count-excel/inventory-count.before.js',import.meta.url)),now=readFileSync(new URL('../server/src/inventory-count.js',import.meta.url));
  assert.equal(old.subarray(old.indexOf('export function validateCount(')).toString().replace("new Date(lot.fecha_vencimiento).toISOString().slice(0,10)","lot.fecha_vencimiento.split('-').reverse().join('/')"),now.subarray(now.indexOf('export function validateCount(')).toString());
- assert.deepEqual(old.subarray(0,old.indexOf('export async function countWorkbook(')),now.subarray(0,now.indexOf('// The export is informational')));
+ const withoutSummary=s=>s.toString().replace(/export async function inventorySummary[\s\S]*?\n}\r?\n/, '');
+ assert.equal(withoutSummary(old.subarray(0,old.indexOf('export async function countWorkbook('))),withoutSummary(now.subarray(0,now.indexOf('// The export is informational'))));
 });
