@@ -1,0 +1,41 @@
+/* Purchases: approved violet and teal visual language. Styling only. */
+#purchases#purchases#purchases#purchases#purchases{--pc-ink:#173552;--pc-muted:#627b93;--pc-line:#e2dcf6;--pc-purple:#8551ed;--pc-teal:#00aa89;color:var(--pc-ink)}
+#purchases#purchases#purchases#purchases#purchases>.top:first-of-type{padding:22px 24px!important;border:1px solid #e2d7ff!important;border-radius:16px!important;background:linear-gradient(120deg,#f3edff,#f2fffb)!important;box-shadow:0 5px 20px #7751ba09!important;color:var(--pc-ink)!important}
+#purchases#purchases#purchases#purchases#purchases>.top:first-of-type h2{color:#6941b0!important;font-weight:850!important;letter-spacing:-.6px}
+#purchases#purchases#purchases#purchases#purchases>.top:first-of-type h2:before{background:#ebe0ff!important;color:#8050ce!important}
+#purchases#purchases#purchases#purchases#purchases>.top:first-of-type .muted,#purchases#purchases#purchases#purchases#purchases>.top:first-of-type>div{color:var(--pc-muted)!important}
+#purchases#purchases#purchases#purchases#purchases .card{padding:22px!important;border:1px solid var(--pc-line)!important;border-radius:16px!important;background:linear-gradient(125deg,#faf7ff 0%,#fff 55%,#f5fffc 100%)!important;box-shadow:0 4px 18px #7553ae07!important}
+#purchases#purchases#purchases#purchases#purchases h3{font-weight:850!important;color:#6941b0!important;font-size:17px;letter-spacing:-.25px}
+#purchases#purchases#purchases#purchases#purchases .muted{color:var(--pc-muted)!important;line-height:1.65;font-size:13px}
+#purchases#purchases#purchases#purchases#purchases label{color:#654f83!important;font-size:12px;font-weight:750;line-height:1.7}
+#purchases#purchases#purchases#purchases#purchases .input{margin-top:5px;padding:11px 13px;border:1px solid #deddeb!important;border-radius:10px!important;background:#ffffffeb!important;color:var(--pc-ink)!important;font-weight:550;min-width:0;box-shadow:none!important}
+#purchases#purchases#purchases#purchases#purchases .input:focus,#purchases#purchases#purchases#purchases#purchases .purchase-table input:focus,#purchases#purchases#purchases#purchases#purchases .purchase-table select:focus{outline:2px solid #b19ae8!important;outline-offset:2px;border-color:#9f7de3!important}
+#purchases#purchases#purchases#purchases#purchases .purchase-tabs{margin:16px 0;padding:5px;background:#f0ebfa;border:1px solid #e3d9f4;border-radius:12px;gap:5px}
+#purchases#purchases#purchases#purchases#purchases .purchase-tab{padding:11px 17px;border-radius:9px;color:#6c5689!important;font-weight:800;background:transparent!important;box-shadow:none!important}
+#purchases#purchases#purchases#purchases#purchases .purchase-tab.active{background:#fff!important;color:#8050d4!important;border-color:#d6c5f5!important;box-shadow:0 2px 7px #73549b12!important}
+#purchases#purchases#purchases#purchases#purchases .btn{border-radius:10px!important;font-weight:800!important;padding:11px 15px;transition:background .15s,box-shadow .15s}
+#purchases#purchases#purchases#purchases#purchases .btn.secondary,#purchases#purchases#purchases#purchases#purchases .excel-btn{background:#fff!important;border:1px solid #dcd0f2!important;color:#7351a5!important;box-shadow:none!important}
+#purchases#purchases#purchases#purchases#purchases .btn.primary{background:linear-gradient(105deg,#8551ed,#7043ce)!important;border:1px solid #7950cd!important;color:#fff!important;box-shadow:0 4px 12px #8551ed1a!important}
+#purchases#purchases#purchases#purchases#purchases .btn:disabled{opacity:.5;cursor:not-allowed}
+#purchases#purchases#purchases#purchases#purchases #buyNewProduct{background:#e9faf4!important;color:#008c72!important;border-color:#bde9dc!important;box-shadow:none!important}
+#purchases#purchases#purchases#purchases#purchases #buySearch{background:#f5fffc!important;border-color:#a9e4d4!important;min-height:46px}
+#purchases#purchases#purchases#purchases#purchases .purchase-results{border:1px solid #d9cced;border-radius:12px;box-shadow:0 12px 28px #67488519}
+#purchases#purchases#purchases#purchases#purchases .purchase-result:hover,#purchases#purchases#purchases#purchases#purchases .purchase-result.active{background:#f2ecff!important}
+#purchases#purchases#purchases#purchases#purchases table thead th{background:#eee8fa!important;color:#705195!important;font-size:11px;font-weight:850!important;padding:12px 10px;border-bottom:1px solid #ded2f0!important}
+#purchases#purchases#purchases#purchases#purchases table tbody td{padding:12px 10px;border-bottom:1px solid #ebe7f2;font-size:12px;color:var(--pc-ink)}
+#purchases#purchases#purchases#purchases#purchases table tbody tr:nth-child(even){background:#faf8ff}
+#purchases#purchases#purchases#purchases#purchases .purchase-table input,#purchases#purchases#purchases#purchases#purchases .purchase-table select{border:1px solid #e0d8ec;border-radius:8px;background:#fff;padding:8px;font-weight:600;color:var(--pc-ink)}
+#purchases#purchases#purchases#purchases#purchases .purchase-table input[data-purchase-cost],#purchases#purchases#purchases#purchases#purchases .purchase-table input[data-purchase-price]{color:#7651bd}
+#purchases#purchases#purchases#purchases#purchases .purchase-summary{margin-top:18px;padding:18px 20px;border:1px solid #ddd0fa;border-radius:13px;background:linear-gradient(120deg,#f3ecff,#f1fffa);color:#7351a4;font-size:13px;font-weight:750;align-items:center}
+#purchases#purchases#purchases#purchases#purchases #purchaseItemCount{font-size:21px;color:#8551ed}
+#purchases#purchases#purchases#purchases#purchases #purchaseGrandTotal{display:inline-block;margin-left:9px;font-size:28px;font-weight:850;letter-spacing:-.7px;color:#00aa89}
+#purchases#purchases#purchases#purchases#purchases #addPurchase{min-height:48px;background:linear-gradient(105deg,#08b38f,#009c82)!important;border-color:#00a383!important;box-shadow:0 4px 13px #00aa8920!important}
+#purchases#purchases#purchases#purchases#purchases .purchase-history-kpis{gap:14px}
+#purchases#purchases#purchases#purchases#purchases .purchase-history-kpis .card{padding:18px 20px!important}
+#purchases#purchases#purchases#purchases#purchases .purchase-history-kpis .card .muted{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#8059b3!important}
+#purchases#purchases#purchases#purchases#purchases .purchase-history-kpis b{display:block;margin-top:8px;font-size:27px;font-weight:850;color:#8551ed}
+#purchases#purchases#purchases#purchases#purchases .purchase-history-kpis .card:nth-child(even) b{color:#00aa89}
+#purchases#purchases#purchases#purchases#purchases .purchase-detail-box{border:1px solid #e1d5f6;border-radius:12px;padding:18px;background:linear-gradient(120deg,#f8f3ff,#f3fffb)}
+#purchases#purchases#purchases#purchases#purchases .status{font-weight:600}
+@media(max-width:760px){#purchases#purchases#purchases#purchases#purchases .card{padding:16px!important}#purchases#purchases#purchases#purchases#purchases>.top:first-of-type{padding:18px!important}#purchases#purchases#purchases#purchases#purchases .purchase-head{grid-template-columns:repeat(2,minmax(0,1fr))!important}#purchases#purchases#purchases#purchases#purchases .purchase-summary{padding:15px}#purchases#purchases#purchases#purchases#purchases #purchaseGrandTotal{font-size:25px}}
+@media(max-width:480px){#purchases#purchases#purchases#purchases#purchases .purchase-head{grid-template-columns:1fr!important}#purchases#purchases#purchases#purchases#purchases #purchaseRegisterPanel>.card>.grid:not(.purchase-head){grid-template-columns:1fr!important}#purchases#purchases#purchases#purchases#purchases .purchase-tabs{display:flex;width:100%}#purchases#purchases#purchases#purchases#purchases .purchase-tab{flex:1;padding:10px 8px;font-size:12px}#purchases#purchases#purchases#purchases#purchases .purchase-history-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}#purchases#purchases#purchases#purchases#purchases .purchase-history-filters{grid-template-columns:1fr!important}}
